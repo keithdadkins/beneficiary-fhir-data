@@ -1,6 +1,7 @@
 package gov.cms.bfd.pipeline.rda.grpc.server;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Strings;
 import gov.cms.mpsm.rda.v1.fiss.FissAdjustmentMedicareBeneficiaryIdentifierIndicator;
 import gov.cms.mpsm.rda.v1.fiss.FissAdjustmentRequestorCode;
 import gov.cms.mpsm.rda.v1.fiss.FissAssignmentOfBenefitsIndicator;
@@ -129,7 +130,12 @@ public class RandomFissClaimGenerator extends AbstractRandomClaimGenerator {
   }
 
   private void addRandomFieldValues(FissClaim.Builder claim) {
-    claim.setDcn(randomDigit(5, 8)).setHicNo(randomDigit(12, 12));
+    final String beneId = randomDigit(8, 8);
+    final String claimId = randomDigit(5, 5);
+    final String mbi = "00000" + beneId;
+    final String hicn = "0000" + beneId;
+    final String dcn = beneId + Strings.repeat("0", 10) + claimId;
+    claim.setDcn(dcn).setHicNo(hicn);
     claim.setCurrStatusEnum(randomEnum(FissClaimStatusEnums));
     oneOf(
         () -> claim.setCurrLoc1Enum(randomEnum(FissProcessingTypeEnums)),
@@ -143,7 +149,7 @@ public class RandomFissClaimGenerator extends AbstractRandomClaimGenerator {
     optional(() -> claim.setCurrTranDtCymd(randomDate()));
     optional(() -> claim.setAdmDiagCode(randomLetter(1, 7)));
     optional(() -> claim.setNpiNumber(randomDigit(10, 10)));
-    optional(() -> claim.setMbi(randomAlphaNumeric(13, 13)));
+    optional(() -> claim.setMbi(mbi));
     optional(() -> claim.setFedTaxNb(randomDigit(10, 10)));
     optional(() -> claim.setPracLocAddr1(randomAlphaNumeric(1, 100)));
     optional(() -> claim.setPracLocAddr2(randomAlphaNumeric(1, 100)));

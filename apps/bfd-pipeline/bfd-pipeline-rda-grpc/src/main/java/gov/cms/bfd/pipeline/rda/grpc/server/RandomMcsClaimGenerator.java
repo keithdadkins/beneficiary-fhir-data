@@ -100,9 +100,13 @@ public class RandomMcsClaimGenerator extends AbstractRandomClaimGenerator {
 
   public McsClaim randomClaim() {
     final int detailCount = 1 + randomInt(MAX_DETAILS);
-    final String idrClmHdIcn = randomDigit(5, 8);
+    final String beneId = randomDigit(8, 8);
+    final String claimId = randomDigit(5, 5);
+    final String mbi = "00000" + beneId;
+    final String idrHic = "0000" + beneId;
+    final String idrClmHdIcn = claimId + "00" + claimId;
     McsClaim.Builder claim = McsClaim.newBuilder();
-    addRandomFieldValues(claim, idrClmHdIcn, detailCount);
+    addRandomFieldValues(claim, idrClmHdIcn, mbi, idrHic, detailCount);
     addAdjustments(claim);
     addAudits(claim);
     addDiagnosisCodes(claim, idrClmHdIcn);
@@ -112,10 +116,11 @@ public class RandomMcsClaimGenerator extends AbstractRandomClaimGenerator {
     return claim.build();
   }
 
-  private void addRandomFieldValues(McsClaim.Builder claim, String idrClmHdIcn, int detailCount) {
+  private void addRandomFieldValues(
+      McsClaim.Builder claim, String idrClmHdIcn, String mbi, String idrHic, int detailCount) {
     claim.setIdrClmHdIcn(idrClmHdIcn);
     claim.setIdrContrId(randomDigit(1, 5));
-    optional(() -> claim.setIdrHic(randomDigit(1, 12)));
+    optional(() -> claim.setIdrHic(idrHic));
     oneOf(
         () -> claim.setIdrClaimTypeEnum(randomEnum(McsClaimTypeEnums)),
         () -> claim.setIdrClaimTypeUnrecognized(randomLetter(1, 1)));
@@ -147,7 +152,7 @@ public class RandomMcsClaimGenerator extends AbstractRandomClaimGenerator {
         () -> claim.setIdrBillProvStatusCdUnrecognized(randomLetter(1, 1)));
     optional(() -> claim.setIdrTotBilledAmt(randomAmount()));
     optional(() -> claim.setIdrClaimReceiptDate(randomDate()));
-    optional(() -> claim.setIdrClaimMbi(randomAlphaNumeric(1, 13)));
+    optional(() -> claim.setIdrClaimMbi(mbi));
     // IdrHdrFromDos will be set later
     // IdrHdrToDos will be set later
     oneOf(
