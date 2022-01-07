@@ -1,7 +1,6 @@
 package gov.cms.bfd.pipeline.rda.grpc.sink.direct;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
 import gov.cms.bfd.model.rda.PreAdjMbi;
 import gov.cms.bfd.model.rda.PreAdjMcsClaim;
@@ -38,7 +37,7 @@ public class McsClaimRdaSinkIT {
           claim.setIdrContrId("c1");
           claim.setIdrHic("hc");
           claim.setIdrClaimType("c");
-          claim.setIdrClaimMbi("1234567890123");
+          claim.setMbiRecord(new PreAdjMbi("1234567890123", "hash-of-1234567890123"));
 
           final PreAdjMcsDetail detail = new PreAdjMcsDetail();
           detail.setIdrClmHdIcn(claim.getIdrClmHdIcn());
