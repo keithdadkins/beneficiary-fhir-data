@@ -1,0 +1,55 @@
+site_url: https://localhost:8000
+site_name: 'BFD'
+docs_dir: ../../../runbooks
+site_dir: .docs
+extra_css:
+  - mkdocs.css
+theme:
+  name: material
+  locale: en
+  font:
+    code:
+  features:
+    - navigation.instant
+    - navigation.sections
+    - navigation.indexes
+    - navigation.top
+  palette:
+    - scheme: lightmode
+      primary: light blue
+      accent: indigo
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: dark
+    - scheme: darkmode
+      primary: dark blue
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+markdown_extensions:
+  - toc:
+      baselevel: 1
+      title: On this page
+      permalink: True
+  - attr_list
+  - meta
+  - abbr
+  - admonition
+  - pymdownx.mark
+  - pymdownx.tilde
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.inlinehilite
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      clickable_checkbox: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+plugins:
+  - tags
