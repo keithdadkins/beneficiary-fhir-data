@@ -1,4 +1,5 @@
-# Beneficary FHIR Server RFCs
+# RFCs
+
 [header-and-summary]: #header-and-summary
 
 Each "Request for Comment (RFC)" is a proposal for a substantial change to our systems and/or processes.
@@ -11,15 +12,15 @@ Pragmatically: such decisions need review and input, and GitHub pull requests ar
 ## Table of Contents
 [table-of-contents]: #table-of-contents
 
-* [Beneficiary FHIR Server RFCs](#header-and-summary)
-* [Table of Contents](#table-of-contents)
-* [When Is An RFC Needed](#when-is-an-rfc-needed)
-* [Before Creating an RFC](#before-creating-an-rfc)
-* [The RFC Process](#the-rfc-process)
-    * [Motion for Final Comment](#motion-for-final-comment)
-    * [Postponement](#postponement)
-    * [Implementation](#implementation)
-* [Inspiration](#inspiration)
+- [RFCs](#rfcs)
+  - [Table of Contents](#table-of-contents)
+  - [When Is an RFC Needed?](#when-is-an-rfc-needed)
+  - [Before Creating an RFC](#before-creating-an-rfc)
+  - [The RFC Process](#the-rfc-process)
+    - [Motion for Final Comment](#motion-for-final-comment)
+    - [Postponement](#postponement)
+    - [Implementation](#implementation)
+  - [Inspiration](#inspiration)
 
 ## When Is an RFC Needed?
 [when-is-an-rfc-needed]: #when-is-an-rfc-needed

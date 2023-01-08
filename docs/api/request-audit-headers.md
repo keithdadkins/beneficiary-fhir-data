@@ -1,3 +1,7 @@
+---
+tags:
+  - api
+---
 # BFD Audit Headers
 
 This document details the HTTP headers that should be included when calling BFD,

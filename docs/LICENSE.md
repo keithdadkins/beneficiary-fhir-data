@@ -1,6 +1,8 @@
 ---
+title: License
 tags:
-    - License
+    - license
+    - legal
 hide:
     - tags
 ---

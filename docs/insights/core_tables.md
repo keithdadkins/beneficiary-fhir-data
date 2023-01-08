@@ -1,35 +1,42 @@
+---
+tags:
+  - insights
+hide:
+  - tags
+---
+
 # Introduction
 In the initial Insights design, there are three tiers of tables:
 - Raw - Raw data imported from specific projects. Semi-structured
-- Core - Structured DASG-tables that consolidate all 
-- Marts - Per project summaries of the core and raw tables 
+- Core - Structured DASG-tables that consolidate all
+- Marts - Per project summaries of the core and raw tables
 
-In a grandiose sense, these tiers are examples of the data lake, the data warehouse, and data mart architectures. This note discusses early thoughts on the design of the core tables. 
+In a grandiose sense, these tiers are examples of the data lake, the data warehouse, and data mart architectures. This note discusses early thoughts on the design of the core tables.
 
 ## Purpose
-DASG is a family of projects which provide CMS data to a variety of data consumers at a high level. The core tables provide a DASG-wide view of the activities of all DASG projects. The core tables have to combine and generalize the records from each project. 
+DASG is a family of projects which provide CMS data to a variety of data consumers at a high level. The core tables provide a DASG-wide view of the activities of all DASG projects. The core tables have to combine and generalize the records from each project.
 
-Some common use-cases drive the design of the core tables: 
+Some common use-cases drive the design of the core tables:
 - The ability to tie a release of data to all the software that impacted the release of data.
 - The ability to present DASG with standard metrics for each project
 - The ability to give to a beneficiary a report about accesses to their CMS data by DASG
 
 ## Common Concepts
 For this discussion, here are few terms:
-- Entity - The information that is referenced by an event. A typical entity is an FHIR resource for a specific beneficiary 
+- Entity - The information that is referenced by an event. A typical entity is an FHIR resource for a specific beneficiary
 - Agent - The external software that receives data from DASG
 - Source - The DASG software that generates an event
-- Organization - The external entity that runs the agents that receive CMS data. An Agent is a piece of software, while Organizations are people and legal entities. 
+- Organization - The external entity that runs the agents that receive CMS data. An Agent is a piece of software, while Organizations are people and legal entities.
 
 ## Prior Work
 Two standards inspire the design of the core tables:
-- FHRI Audit Events - Provide a very general way to express audit events. FHIR Audit Events build on previous work done on auditing. 
-- OpenTracing - The OpenTracing standard builds on the work of Zipkin and other distributed tracing standards. 
+- FHRI Audit Events - Provide a very general way to express audit events. FHIR Audit Events build on previous work done on auditing.
+- OpenTracing - The OpenTracing standard builds on the work of Zipkin and other distributed tracing standards.
 
-In essence, the core table design is a combination of these two standards molded to be specific to the DASG use-case. 
+In essence, the core table design is a combination of these two standards molded to be specific to the DASG use-case.
 
 ## Events Table
-The events table has been designed to combine both FHIR Audit Event and the OpenTracing standards. 
+The events table has been designed to combine both FHIR Audit Event and the OpenTracing standards.
 
 | category    | name               | Type               | Comments                                              | Required                 | FHIR               | OpenTracing           |
 |-------------|--------------------|--------------------|-------------------------------------------------------|--------------------------|--------------------|-----------------------|
@@ -65,10 +72,10 @@ The events table has been designed to combine both FHIR Audit Event and the Open
 
 ## Other Tables
 ### Beneficiary Table
-There will most likely be several bene tables: a cross-walk table that correlates different beneficiary identifiers; a lookup table with demographics enrich reports; a table to calculate DPC's BAC. 
+There will most likely be several bene tables: a cross-walk table that correlates different beneficiary identifiers; a lookup table with demographics enrich reports; a table to calculate DPC's BAC.
 ### Agents Table
-A list of all software that receives DASG data. 
+A list of all software that receives DASG data.
 ### Sources Table
-A list of all the software that runs in DASG systems. 
+A list of all the software that runs in DASG systems.
 ### Organizations Table
 A common table with entries for all organizations.

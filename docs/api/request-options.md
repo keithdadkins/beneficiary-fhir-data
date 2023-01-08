@@ -1,3 +1,9 @@
+tags:
+  - api
+hide:
+  - tags
+---
+
 # BFD Request Options
 
 This document details the request options that can be used when calling BFD.

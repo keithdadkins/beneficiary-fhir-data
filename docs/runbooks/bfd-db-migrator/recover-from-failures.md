@@ -1,21 +1,22 @@
-# How to Recover from `migrator` Failures
+---
+title: Recover from Failures
+---
+# How to Recover from `bfd-db-migrator` Failures
 
-Follow this runbook if the the deployment of `migrator` fails pre-deployment checks **or** results in a non-zero (0) exit status. The `migrator` only runs during the course of a deployment, and this runbook covers troubleshooting steps for application and non-application failures that we may encounter during a deployment.
+Follow this runbook if the the deployment of `migrator` fails pre-deployment checks **or** results in a non-zero (0) exit status.
 
-**Table of Contents**
+The `migrator` only runs during the course of a deployment, and this runbook covers troubleshooting steps for application and non-application failures that we may encounter during a deployment.
 
-- [Failures](#failures)
-    - [Undeployable State](#undeployable-state)
-    - [Invalid App Configuration (1)](#invalid-app-configuration-1)
-    - [Migration Failed (2)](#migration-failed-2)
-    - [Validation Failed (3)](#validation-failed-3)
-- [References](#references)
 
 ## Failures
 
 ### Undeployable State
 
-**NOTE**: _The failure modes impacting the deployability of the migrator are numerous and can include problems with AWS IAM permissions, network access, other outages in the AWS environment, availability of the Cloudbees Jenkins deployment services, and lingering issues in the logic serving the various Jenkinsfile resources, and supporting global libraries. The troubleshooting steps below only deals with the most common error where errant messages persist in the SQS queue used for signaling between the BFD environments and Cloudbees Jenkins. For other areas of investigation, please see [the References section](#references) for a list of links to resources that might assist in investigating errors not covered here._
+The failure modes impacting the deployability of the migrator are numerous and may include problems with AWS IAM permissions, network access, other outages in the AWS environment, availability of the Cloudbees Jenkins deployment services, and lingering issues in the logic serving the various Jenkinsfile resources, and supporting global libraries.
+
+!!! Note
+
+    The troubleshooting steps below only deals with the most common error where errant messages persist in the SQS queue used for signaling between the BFD environments and Cloudbees Jenkins. For other areas of investigation, please see [the References section](#references) for a list of links to resources that might assist in investigating errors not covered here.
 
 The CI process failed to even attempt deployment of the migrator, resulting in message like one or more of the following:
 > Queue bfd-${env}-migrator has messages. Is there an old bfd-db-migrator instance running? Migrator deployment cannot proceed.
@@ -33,7 +34,7 @@ Causes might include:
 
 <details><summary>More...</summary>
 
-1. Identify the problematic AWS SQS Queue from the relevant Jenkins log message, e.g. `bfd-${env}-migrator` 
+1. Identify the problematic AWS SQS Queue from the relevant Jenkins log message, e.g. `bfd-${env}-migrator`
 2. Fetch messages if they exist
     - <details><summary>through the console</summary>
 
@@ -53,7 +54,7 @@ Causes might include:
         ```sh
         queue_name=bfd-test-migrator # CHANGE AS NECESSARY
         url="$(aws sqs get-queue-url --queue-name "$queue_name" --region us-east-1 --output text)"
-        aws sqs receive-message --region us-east-1 --queue-url "$url" 
+        aws sqs receive-message --region us-east-1 --queue-url "$url"
         ```
 
         </details>
@@ -78,7 +79,7 @@ Causes might include:
 4. Purge the AWS SQS Queue of **all** messages
 
     - <details><summary>through the console</summary>
-   
+
         1. navigate to the [SQS panel](https://us-east-1.console.aws.amazon.com/sqs/v2/home?region=us-east-1#/queues)
         2. select the appropriate SQS queue `bfd-<env>-migrator`, e.g. `bfd-test-migrator`
         3. next, select the `Purge` action
@@ -87,11 +88,11 @@ Causes might include:
         </details>
 
     - <details><summary>through the cli</summary>
-   
+
         ```sh
         queue_name=bfd-test-migrator # CHANGE AS NECESSARY
         url="$(aws sqs get-queue-url --queue-name "$queue_name" --region us-east-1 --output text)"
-        aws sqs purge-queue --region us-east-1 --queue-url "$url" 
+        aws sqs purge-queue --region us-east-1 --queue-url "$url"
         ```
 
         </details>
@@ -110,7 +111,7 @@ The application failed to resolve full, error-free configuration for the given e
 > Migrator completed with exit status 1
 
 Common causes might include:
-- permissions, connectivity problems in resolution of AWS SSM Parameter Store configuration values 
+- permissions, connectivity problems in resolution of AWS SSM Parameter Store configuration values
 - permissions, connectivity problems in accessing the AWS Key Management Service (KMS) Customer Managed Key (CMK)
 - erroneous or missing configuration from the `base` module
 - erroneous [`ansible`][migrator-ansible-role] or [`terraform`][migrator-terraform] templates
@@ -180,7 +181,7 @@ Causes might include:
 
     - <details><summary>through the console</summary>
 
-        1. SSH to the instance 
+        1. SSH to the instance
         2. `view /bluebutton-data-pipeline/bluebutton-data-pipeline.log`
 
         </details>

@@ -1,3 +1,13 @@
+---
+tags:
+  - ab2d
+  - kinesis
+  - firehose
+  - bfd-insights
+hide:
+  - tags
+---
+
 # AB2D Firehose Setup
 
 # Bucket
@@ -8,7 +18,7 @@ The CMK for the bucket is `arn:aws:kms:us-east-1:BFDACCTNUM:key/KEYID`
 
 # Kinesis Firehose Setup
 
-Here's the terraform template for setting up a firehose. 
+Here's the terraform template for setting up a firehose.
 
 ```
 resource "aws_kinesis_firehose_delivery_stream" "main" {
@@ -19,7 +29,7 @@ resource "aws_kinesis_firehose_delivery_stream" "main" {
   # Encrypt while processing
   server_side_encryption {
     enabled = true
-  } 
+  }
 
   extended_s3_configuration {
     role_arn            = aws_iam_role.firehose.arn
@@ -39,10 +49,10 @@ Key aspects include:
 - Use a stream name that is the table name
 - Put all tables under the `ab2d` database
 - Use the "GZIP" compression format. Saves $.
-- Don't mix error files with the stream data 
+- Don't mix error files with the stream data
 
-## Policy 
-Here's the template for the firehose IAM policy. The sections on getting S3 and KMS access is critical. 
+## Policy
+Here's the template for the firehose IAM policy. The sections on getting S3 and KMS access is critical.
 
 ```
 resource "aws_iam_policy" "firehose" {
