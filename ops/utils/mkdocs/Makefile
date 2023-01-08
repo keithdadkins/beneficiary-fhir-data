@@ -5,25 +5,7 @@
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-OSFLAG :=
-ifeq ($(OS),Windows_NT)
-	OSFLAG := windows
-else
-	UNAME_S := $(shell uname -s)
-	ifeq ($(UNAME_S),Linux)
-		OSFLAG := linux
-	endif
-	ifeq ($(UNAME_S),Darwin)
-		OSFLAG := macos
-	endif
-endif
-
-
-#################################################
-# NATIVE DOCS
-#################################################
-
-docs: .venv/bin/activate ## Build and serve the docs locally (with live reload)
+docs: .venv/bin/activate ## Build and serve the docs using python3 virtualenv (live reload)
 	@sleep 2 && open http://localhost:8000 >/dev/null 2>&1 &
 	@source .venv/bin/activate && mkdocs serve
 .PHONY: docs
@@ -33,7 +15,7 @@ docs: .venv/bin/activate ## Build and serve the docs locally (with live reload)
 	source .venv/bin/activate && \
 	pip3 install -r requirements.txt
 
-build: .venv/bin/activate .docs/index.html ## Build the docs -> utils/mkdocs/.docs
+build: .venv/bin/activate .docs/index.html ## Just build the docs
 	@echo "Building docs..."
 	@source .venv/bin/activate && mkdocs build
 .PHONY: build
@@ -46,13 +28,13 @@ annotations:
 	@ABBREVIATIONS_FILE=../../runbooks/glossary/abbreviations.md ANNOTATIONS_FILE=includes/annotations.md includes/build-and-include-annotations.sh
 .PHONY: annotations
 
-## Serve the docs from the build directory
+## Serve built docs
 serve: .docs/index.html
 	@sleep 2 && open http://localhost:8001 >/dev/null 2>&1 &
 	@python3 -m http.server 8001 --bind 127.0.0.1 --directory .docs
 .PHONY: serve
 
-clean: ## Remove mkdocs artifacts
+clean: ## Remove all mkdocs artifacts
 	@printf "Removing mkdocs artifacts.. "
 	@rm -rf .docs
 	@rm -rf .venv

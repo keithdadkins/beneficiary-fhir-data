@@ -5,7 +5,7 @@ site_name: 'BFD'
 docs_dir: ../../../docs
 site_dir: .docs
 extra_css:
-  - mkdocs.css
+  - assets/mkdocs.css
 theme:
   name: material
   # logo: assets/logo.svg
@@ -44,6 +44,7 @@ markdown_extensions:
       baselevel: 1
       title: On this page
       permalink: True
+      toc_depth: 3
   - meta
   - abbr
   - tables
@@ -71,7 +72,7 @@ markdown_extensions:
       anchor_linenums: true
 plugins:
   - tags:
-        tags_file: about/tags.md
+        tags_file: tags/index.md
   - search:
       lang: en
   - offline
