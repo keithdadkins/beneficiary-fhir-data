@@ -6,13 +6,13 @@
   set_fact:
     launch_enabled: true
   tags:
-    - post-ami
+      - post-ami
 
 - name: Import Install Tasks
   import_tasks: install.yml
   tags:
-    - pre-ami
+      - pre-ami
 - name: Import Launch Tasks
   import_tasks: launch.yml
   tags:
-    - post-ami
+      - post-ami

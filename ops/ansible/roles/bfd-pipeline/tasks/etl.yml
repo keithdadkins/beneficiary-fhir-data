@@ -9,14 +9,14 @@
     - java-11-openjdk
   become: true
   tags:
-    - pre-ami
+      - pre-ami
 
 - name: Create ETL Service User
   user:
     name: "{{ data_pipeline_user }}"
     shell: /bin/false
   become: true
-  tags: 
+  tags:
     - pre-ami
 
 - name: Create ETL Service Directory
@@ -27,7 +27,7 @@
     group: "{{ data_pipeline_user }}"
     mode: u=rwx,g=rx,o=rx
   become: true
-  tags: 
+  tags:
     - pre-ami
 
 # Create the temp directory iff it's missing. (Don't want to accidentally
@@ -38,7 +38,7 @@
   become: true
   register: stat_tmp
   when: data_pipeline_tmp_dir is defined
-  tags: 
+  tags:
     - pre-ami
 
 - name: Create Custom Temp Directory
@@ -50,7 +50,7 @@
     mode: u=rwx,g=rx,o=rx
   become: true
   when: data_pipeline_tmp_dir is defined and stat_tmp.stat.exists == false
-  tags: 
+  tags:
     - pre-ami
 
 - name: Copy and Unzip Pipeline Application
@@ -61,7 +61,7 @@
     group: "{{ data_pipeline_user }}"
   become: true
   tags:
-    - pre-ami
+      - pre-ami
 
 - name: Create Pipeline Service Wrapper Script
   template:
@@ -73,7 +73,7 @@
   become: true
   notify:
     - 'Restart Pipeline Service'
-  tags: 
+  tags:
     - post-ami
 
 - name: Create Pipeline Service Definition
@@ -87,5 +87,5 @@
   notify:
     - 'Enable Pipeline Service'
     - 'Restart Pipeline Service'
-  tags: 
+  tags:
     - post-ami

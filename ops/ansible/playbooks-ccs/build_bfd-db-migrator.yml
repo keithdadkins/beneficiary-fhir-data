@@ -45,4 +45,4 @@
       import_role:
         name: ssh_users
       tags:
-        - pre-ami
+          - pre-ami

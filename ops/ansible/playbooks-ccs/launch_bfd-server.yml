@@ -19,10 +19,10 @@
         mode: u=rw,g=r,o=r
       become: true
       tags:
-        - post-ami
+          - post-ami
 
     - name: Reconfigure and relaunch CloudWatch unified agent
       shell: "/opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a append-config -m ec2 -c file:/tmp/cwagent-data-server.json -s"
       become: true
       tags:
-        - post-ami
+          - post-ami

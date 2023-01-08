@@ -30,7 +30,7 @@
     - name: Apply base Cloudwatch Agent Role
       import_role:
         name: cloudwatch-agent-instrumented
-    
+
     - name: Apply latest host security patches
       import_role:
         name: base_patch
@@ -45,4 +45,4 @@
       import_role:
         name: ssh_users
       tags:
-        - pre-ami
+          - pre-ami

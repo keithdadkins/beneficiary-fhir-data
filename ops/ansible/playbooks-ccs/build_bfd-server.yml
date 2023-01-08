@@ -30,7 +30,7 @@
     - name: Apply latest host security patches
       import_role:
         name: base_patch
-      
+
     - name: Apply Blue Button Data Server Role
       import_role:
         name: bfd-server
@@ -45,4 +45,4 @@
       import_role:
         name: ssh_users
       tags:
-        - pre-ami
+          - pre-ami
