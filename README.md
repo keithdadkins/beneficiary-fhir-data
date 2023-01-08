@@ -1,6 +1,8 @@
 # Beneficiary FHIR Data Server (BFD)
 ====================================
 
+Live docs are available at [https://keithdadkins.github.io/beneficiary-fhir-data/](https://keithdadkins.github.io/beneficiary-fhir-data/).
+
 ## About
 
 Beneficiary FHIR Data (BFD) Server: The BFD Server is an internal backend system used at CMS to represent Medicare beneficiaries' demographic, enrollment, and claims data in [FHIR](https://www.hl7.org/fhir/overview.html) format.
@@ -89,7 +91,7 @@ git clone git@github.com:CMSgov/beneficiary-fhir-data.git ~/workspaces/bfd/benef
 1. Install pre-commit hooks `mvn -f apps initialize`
 
 ### Native Setup
-1. Change to the `apps/bfd-data-fda` directory and run `mvn clean install`. 
+1. Change to the `apps/bfd-data-fda` directory and run `mvn clean install`.
 2. Change to the `apps/bfd-data-npi` directory and run `mvn clean install`.
 3. Change to the `apps/` directory and `mvn clean install -DskipITs`. The flag to skip the integration tests is important here. You will need to have AWS access for the integration tests to work correctly.
 4. Set up a Postgres 14 database with the following command. Data will be persisted between starts and stops in the `bfd_pgdata` volume.
@@ -113,9 +115,9 @@ git clone git@github.com:CMSgov/beneficiary-fhir-data.git ~/workspaces/bfd/benef
       -e "MINIO_ROOT_PASSWORD=bfdLocalS3Dev" \
       minio/minio server /data --console-address ":9001"
     ```
-6. Run mvn install with the following 
+6. Run mvn install with the following
     ```
-     mvn -Ds3.local=true -Ds3.localUser=bfdLocalS3Dev -Ds3.localPass=bfdLocalS3Dev clean install 
+     mvn -Ds3.local=true -Ds3.localUser=bfdLocalS3Dev -Ds3.localPass=bfdLocalS3Dev clean install
     ```
    You can leave off the -Ds3.localUser=bfdLocalS3Dev -Ds3.localPass=bfdLocalS3Dev if you use the docker run command from above.  You only need these if the User name or the password are different in the docker run command.
 
@@ -144,7 +146,7 @@ git clone git@github.com:CMSgov/beneficiary-fhir-data.git ~/workspaces/bfd/benef
     mvn -Dits.db.url="jdbc:postgresql://localhost:5432/fhirdb?user=bfd&password=InsecureLocalDev" --projects bfd-server-war package dependency:copy antrun:run org.codehaus.mojo:exec-maven-plugin:exec@server-stop
     ```
 
-### Adding Reference to AWS CodeArtifact 
+### Adding Reference to AWS CodeArtifact
 (This step is optional, if you want to not use AWS Code artifact, you need to run the bfd-data-fda project first by changing to the `apps/bfd-data-fda` directory and running `mvn clean install`.)
 1.  In your bash_profile or your preferred shell script: add the following line to export a CodeArtifact authorization token for authorization to your repository from your preferred shell (token expires in 12 hours or you will experience a 401 unauthorized error from AWS CodeArtifact).  Replace {aws account id goes here} with the aws account id
 
