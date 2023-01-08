@@ -1,19 +1,27 @@
 site_url: https://localhost:8000
+repo_url: https://github.com/keithdadkins/beneficiary-fhir-data
+repo_name: beneficiary-fhir-data
 site_name: 'BFD'
-docs_dir: ../../../runbooks
+docs_dir: ../../../docs
 site_dir: .docs
 extra_css:
   - mkdocs.css
 theme:
   name: material
+  # logo: assets/logo.svg
   locale: en
   font:
     code:
+  icon:
+    repo: fontawesome/brands/github
   features:
     - navigation.instant
     - navigation.sections
     - navigation.indexes
-    - navigation.top
+    # - navigation.top
+    - header.autohide
+    - navigation.tracking
+    # - navigation.tabs
   palette:
     - scheme: lightmode
       primary: light blue
@@ -21,26 +29,36 @@ theme:
       toggle:
         icon: material/toggle-switch-off-outline
         name: dark
-    - scheme: darkmode
-      primary: dark blue
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
       toggle:
         icon: material/toggle-switch
         name: Switch to light mode
+    # - scheme: darkmode
+    #   primary: dark blue
+    #   toggle:
+    #     icon: material/toggle-switch
+    #     name: Switch to light mode
 markdown_extensions:
   - toc:
       baselevel: 1
       title: On this page
       permalink: True
-  - attr_list
   - meta
   - abbr
+  - tables
+  - attr_list
   - admonition
   - pymdownx.mark
   - pymdownx.tilde
   - pymdownx.caret
   - pymdownx.critic
   - pymdownx.snippets
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.inlinehilite
   - pymdownx.emoji:
       emoji_index: !!python/name:materialx.emoji.twemoji
@@ -52,4 +70,8 @@ markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true
 plugins:
-  - tags
+  - tags:
+        tags_file: about/tags.md
+  - search:
+      lang: en
+  - offline
