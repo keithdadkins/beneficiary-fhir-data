@@ -3,7 +3,7 @@ repo_url: https://github.com/keithdadkins/beneficiary-fhir-data
 repo_name: beneficiary-fhir-data
 site_name: 'BFD'
 docs_dir: docs
-# site_dir: .docs
+site_dir: .docs
 extra_css:
   - assets/mkdocs.css
 theme:
