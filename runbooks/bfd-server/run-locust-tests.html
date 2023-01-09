@@ -1,0 +1,2668 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://keithdadkins.github.io/beneficiary-fhir-data/runbooks/bfd-server/run-locust-tests.html">
+      
+      
+        <link rel="prev" href="recreate-regression-dashboards.html">
+      
+      
+        <link rel="next" href="../snyk/ignore-findings.html">
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.3">
+    
+    
+      
+        <title>How to Run the Regression and Load Test Suites - BFD</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6b71719e.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.2505c338.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/mkdocs.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="lightmode" data-md-color-primary="light-blue" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#how-to-run-the-regression-and-load-test-suites" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../index.html" title="BFD" class="md-header__button md-logo" aria-label="BFD" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BFD
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              How to Run the Regression and Load Test Suites
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="lightmode" data-md-color-primary="light-blue" data-md-color-accent="indigo"  aria-label="dark"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="dark" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+            </label>
+          
+        
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/keithdadkins/beneficiary-fhir-data" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    beneficiary-fhir-data
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../index.html" title="BFD" class="md-nav__button md-logo" aria-label="BFD" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    BFD
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/keithdadkins/beneficiary-fhir-data" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    beneficiary-fhir-data
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../index.html" class="md-nav__link">
+        Welcome
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LICENSE.html" class="md-nav__link">
+        License
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_3" tabindex="0" aria-expanded="false">
+          Api
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Api" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Api
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/request-audit-headers.html" class="md-nav__link">
+        BFD Audit Headers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/request-options.html" class="md-nav__link">
+        BFD Request Options
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../changelog/index.html">Changelog</a>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Changelog" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Changelog
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+        
+          
+            
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../contributing/index.html">Contributing</a>
+          
+            <label for="__nav_5">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Contributing" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Contributing
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5_2" type="checkbox" id="__nav_5_2" >
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../contributing/style-guide/index.html">Style guide</a>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Style guide" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_2">
+          <span class="md-nav__icon md-icon"></span>
+          Style guide
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+        
+          
+            
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../insights/index.html">Insights</a>
+          
+            <label for="__nav_6">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Insights" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Insights
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/ab2d_firehose.html" class="md-nav__link">
+        AB2D Firehose Setup
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/bb2_notes.html" class="md-nav__link">
+        BB2 Project information
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/core_tables.html" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/data_organization.html" class="md-nav__link">
+        Organization
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/lessons_learned.html" class="md-nav__link">
+        Lessons Learned
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/onboarding.html" class="md-nav__link">
+        Onboarding
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/security.html" class="md-nav__link">
+        Security Model
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/terraform.html" class="md-nav__link">
+        Terraform Scripts
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/typical_workflow.html" class="md-nav__link">
+        Example Workflow
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+      
+      
+        
+          
+            
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../rfcs/index.html">Rfcs</a>
+          
+            <label for="__nav_7">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Rfcs" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          Rfcs
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_2" type="checkbox" id="__nav_7_2" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_7_2" tabindex="0" aria-expanded="false">
+          Deferred
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Deferred" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_2">
+          <span class="md-nav__icon md-icon"></span>
+          Deferred
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/deferred/0008-partial-backfill-ccw.html" class="md-nav__link">
+        0008-partial-backfill-ccw
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/deferred/0012-rda-claims-jsonb-DEFERRED.html" class="md-nav__link">
+        0012-rda-claims-jsonb
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/deferred/0016-cursor-paging.html" class="md-nav__link">
+        0016-cursor-paging.md
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/deferred/0017-filtering.html" class="md-nav__link">
+        0007-filtering-fields
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_3" type="checkbox" id="__nav_7_3" >
+      
+      
+        
+          
+            
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../rfcs/howto/index.html">Howto</a>
+          
+            <label for="__nav_7_3">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Howto" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_3">
+          <span class="md-nav__icon md-icon"></span>
+          Howto
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/howto/template.html" class="md-nav__link">
+        rfc-template
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_4" type="checkbox" id="__nav_7_4" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_7_4" tabindex="0" aria-expanded="false">
+          Implemented
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Implemented" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_4">
+          <span class="md-nav__icon md-icon"></span>
+          Implemented
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/implemented/0000-jboss-replacement.html" class="md-nav__link">
+        0000-bye-bye-jboss
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/implemented/0001-beneficiary-fhir-server-rfc-process-v1.html" class="md-nav__link">
+        0001-beneficiary-fhir-server-rfc-process-v1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/implemented/0002-monorepo.html" class="md-nav__link">
+        0002-monorepo
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/implemented/0004-since-parameter.html" class="md-nav__link">
+        0004-since-parameter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/implemented/0005-mbi-search.html" class="md-nav__link">
+        0005-mbi-search
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/implemented/0007-service-date-filter.html" class="md-nav__link">
+        0007-service-date-filter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/implemented/0009-pipeline-orchestration-baby-steps.html" class="md-nav__link">
+        0009-pipeline-orchestration-baby-steps
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/implemented/0011-separate-flyway-from-pipeline.html" class="md-nav__link">
+        0011-separate-flyway-from-pipeline
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/implemented/0013-bfd-server-startup-check.html" class="md-nav__link">
+        0013-bfd-server-startup-check
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/implemented/0015-centralized-configuration-management.html" class="md-nav__link">
+        0015-centralized-configuration-management
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_4_11" type="checkbox" id="__nav_7_4_11" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_7_4_11" tabindex="0" aria-expanded="false">
+          BFDv2
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="BFDv2" data-md-level="3">
+        <label class="md-nav__title" for="__nav_7_4_11">
+          <span class="md-nav__icon md-icon"></span>
+          BFDv2
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/implemented/BFDv2/0001-bfd-v2-coverage.html" class="md-nav__link">
+        RFC Proposal
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/implemented/BFDv2/0001-bfd-v2-patient.html" class="md-nav__link">
+        RFC Proposal
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/implemented/BFDv2/BFDv2%20RFC.html" class="md-nav__link">
+        RFC Proposal
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_5" type="checkbox" id="__nav_7_5" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_7_5" tabindex="0" aria-expanded="false">
+          Proposed
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Proposed" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_5">
+          <span class="md-nav__icon md-icon"></span>
+          Proposed
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/proposed/0010-custom-system-uris.html" class="md-nav__link">
+        0010-custom-system-uris
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/proposed/0013-synthea-future-claims-and-automation.html" class="md-nav__link">
+        0013-Synthea-future-claims-and-automation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/proposed/0014-dsl-driven-rda-code-generation.html" class="md-nav__link">
+        0014-dsl-driven-rda-code-generation
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_6" type="checkbox" id="__nav_7_6" >
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_7_6" tabindex="0" aria-expanded="false">
+          Rejected
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Rejected" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_6">
+          <span class="md-nav__icon md-icon"></span>
+          Rejected
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/rejected/0006-or-condition.html" class="md-nav__link">
+        0006-or-condition
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8" type="checkbox" id="__nav_8" checked>
+      
+      
+        
+          
+            
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../index.html">Runbooks</a>
+          
+            <label for="__nav_8">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Runbooks" data-md-level="1">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          Runbooks
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8_2" type="checkbox" id="__nav_8_2" >
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_2" tabindex="0" aria-expanded="false">
+          Bfd db migrator
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Bfd db migrator" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_2">
+          <span class="md-nav__icon md-icon"></span>
+          Bfd db migrator
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bfd-db-migrator/recover-from-failures.html" class="md-nav__link">
+        Recover from Failures
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8_3" type="checkbox" id="__nav_8_3" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_3" tabindex="0" aria-expanded="false">
+          Bfd insights
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Bfd insights" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_3">
+          <span class="md-nav__icon md-icon"></span>
+          Bfd insights
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bfd-insights/firehose-failures.html" class="md-nav__link">
+        How to Investigate Firehose Ingestion Processing Failures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bfd-insights/load-cw-logs.html" class="md-nav__link">
+        Load cw logs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bfd-insights/new-quicksight-dashboards.html" class="md-nav__link">
+        How to Create BFD Insights QuickSight Dashboards
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8_4" type="checkbox" id="__nav_8_4" >
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_4" tabindex="0" aria-expanded="false">
+          Bfd pipeline
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Bfd pipeline" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_4">
+          <span class="md-nav__icon md-icon"></span>
+          Bfd pipeline
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bfd-pipeline/rerun-failed-pipeline-load.html" class="md-nav__link">
+        How to Re-run a Failed BFD Pipeline Load
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8_5" type="checkbox" id="__nav_8_5" checked>
+      
+      
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_5" tabindex="0" aria-expanded="true">
+          Bfd server
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Bfd server" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_5">
+          <span class="md-nav__icon md-icon"></span>
+          Bfd server
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="recreate-regression-dashboards.html" class="md-nav__link">
+        Recreating `server-regression` QuickSight Dashboards
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          How to Run the Regression and Load Test Suites
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="run-locust-tests.html" class="md-nav__link md-nav__link--active">
+        How to Run the Regression and Load Test Suites
+      </a>
+      
+        
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#glossary" class="md-nav__link">
+    Glossary
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#faq" class="md-nav__link">
+    FAQ
+  </a>
+  
+    <nav class="md-nav" aria-label="FAQ">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#i-specified-host-with-a-valid-url-like-so-examplecom-but-my-tests-arent-running-what-am-i-doing-wrong" class="md-nav__link">
+    I specified --host with a valid URL like so example.com, but my tests aren't running. What am I doing wrong?
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    Prerequisites
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#instructions" class="md-nav__link">
+    Instructions
+  </a>
+  
+    <nav class="md-nav" aria-label="Instructions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-to-run-the-regression-suite-locally-against-a-local-bfd-server" class="md-nav__link">
+    How to Run the Regression Suite Locally Against a Local BFD Server
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-to-run-the-regression-suite-locally-against-any-bfd-server-sdlc-environment" class="md-nav__link">
+    How to Run the Regression Suite Locally Against any BFD Server SDLC Environment
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-to-run-the-regression-suite-on-a-detached-instance-against-any-bfd-server-sdlc-environment" class="md-nav__link">
+    How to Run the Regression Suite On a Detached Instance Against any BFD Server SDLC Environment
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-to-run-a-scaling-load-test-using-the-bfd-run-server-load-jenkins-job" class="md-nav__link">
+    How to Run a Scaling Load Test Using the bfd-run-server-load Jenkins Job
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-to-run-a-static-load-test-using-the-bfd-run-server-load-jenkins-job" class="md-nav__link">
+    How to Run a Static Load Test Using the bfd-run-server-load Jenkins Job
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8_6" type="checkbox" id="__nav_8_6" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_6" tabindex="0" aria-expanded="false">
+          Snyk
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Snyk" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_6">
+          <span class="md-nav__icon md-icon"></span>
+          Snyk
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../snyk/ignore-findings.html" class="md-nav__link">
+        Ignore findings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../snyk/resolve-snyk-bot-prs.html" class="md-nav__link">
+        Resolve snyk bot prs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../snyk/resolve-snyk-report-findings.html" class="md-nav__link">
+        Resolve snyk report findings
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8_7" type="checkbox" id="__nav_8_7" >
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_7" tabindex="0" aria-expanded="false">
+          Synthea
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Synthea" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_7">
+          <span class="md-nav__icon md-icon"></span>
+          Synthea
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../synthea/run-automation.html" class="md-nav__link">
+        How to Run Synthea Automation
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_9" type="checkbox" id="__nav_9" >
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../tags/index.html">Tags</a>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Tags" data-md-level="1">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          Tags
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#glossary" class="md-nav__link">
+    Glossary
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#faq" class="md-nav__link">
+    FAQ
+  </a>
+  
+    <nav class="md-nav" aria-label="FAQ">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#i-specified-host-with-a-valid-url-like-so-examplecom-but-my-tests-arent-running-what-am-i-doing-wrong" class="md-nav__link">
+    I specified --host with a valid URL like so example.com, but my tests aren't running. What am I doing wrong?
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    Prerequisites
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#instructions" class="md-nav__link">
+    Instructions
+  </a>
+  
+    <nav class="md-nav" aria-label="Instructions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-to-run-the-regression-suite-locally-against-a-local-bfd-server" class="md-nav__link">
+    How to Run the Regression Suite Locally Against a Local BFD Server
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-to-run-the-regression-suite-locally-against-any-bfd-server-sdlc-environment" class="md-nav__link">
+    How to Run the Regression Suite Locally Against any BFD Server SDLC Environment
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-to-run-the-regression-suite-on-a-detached-instance-against-any-bfd-server-sdlc-environment" class="md-nav__link">
+    How to Run the Regression Suite On a Detached Instance Against any BFD Server SDLC Environment
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-to-run-a-scaling-load-test-using-the-bfd-run-server-load-jenkins-job" class="md-nav__link">
+    How to Run a Scaling Load Test Using the bfd-run-server-load Jenkins Job
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-to-run-a-static-load-test-using-the-bfd-run-server-load-jenkins-job" class="md-nav__link">
+    How to Run a Static Load Test Using the bfd-run-server-load Jenkins Job
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+  
+
+
+
+  
+  
+
+
+
+<h1 id="how-to-run-the-regression-and-load-test-suites">How to Run the Regression and Load Test Suites<a class="headerlink" href="#how-to-run-the-regression-and-load-test-suites" title="Permanent link">&para;</a></h1>
+<p>Follow this runbook to run the regression and load test suites either locally or against a
+particular BFD Server host.</p>
+<ul>
+<li><a href="#how-to-run-the-regression-and-load-test-suites">How to Run the Regression and Load Test Suites</a></li>
+<li><a href="#glossary">Glossary</a></li>
+<li><a href="#faq">FAQ</a><ul>
+<li><a href="#i-specified---host-with-a-valid-url-like-so-examplecom-but-my-tests-arent-running-what-am-i-doing-wrong">I specified <code>--host</code> with a valid URL like so <code>example.com</code>, but my tests aren't running. What am I doing wrong?</a></li>
+</ul>
+</li>
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#instructions">Instructions</a><ul>
+<li><a href="#how-to-run-the-regression-suite-locally-against-a-local-bfd-server">How to Run the Regression Suite Locally Against a Local BFD Server</a></li>
+<li><a href="#how-to-run-the-regression-suite-locally-against-any-bfd-server-sdlc-environment">How to Run the Regression Suite Locally Against any BFD Server SDLC Environment</a></li>
+<li><a href="#how-to-run-the-regression-suite-on-a-detached-instance-against-any-bfd-server-sdlc-environment">How to Run the Regression Suite On a Detached Instance Against any BFD Server SDLC Environment</a></li>
+<li><a href="#how-to-run-a-scaling-load-test-using-the-bfd-run-server-load-jenkins-job">How to Run a Scaling Load Test Using the <code>bfd-run-server-load</code> Jenkins Job</a></li>
+<li><a href="#how-to-run-a-static-load-test-using-the-bfd-run-server-load-jenkins-job">How to Run a Static Load Test Using the <code>bfd-run-server-load</code> Jenkins Job</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="glossary">Glossary<a class="headerlink" href="#glossary" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th align="center">Term</th>
+<th align="center">Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><a href="https://locust.io/">Locust</a></td>
+<td align="center">A load testing library that allows for performance tests to be written in Python</td>
+</tr>
+</tbody>
+</table>
+<h2 id="faq">FAQ<a class="headerlink" href="#faq" title="Permanent link">&para;</a></h2>
+<h3 id="i-specified-host-with-a-valid-url-like-so-examplecom-but-my-tests-arent-running-what-am-i-doing-wrong">I specified <code>--host</code> with a valid URL like so <code>example.com</code>, but my tests aren't running. What am I doing wrong?<a class="headerlink" href="#i-specified-host-with-a-valid-url-like-so-examplecom-but-my-tests-arent-running-what-am-i-doing-wrong" title="Permanent link">&para;</a></h3>
+<p>Firstly, <code>--host</code> is a default <a href="https://docs.locust.io/en/stable/configuration.html">Locust argument</a> that is a <em>bit</em> of a misnomer; valid
+<code>--host</code> values <em>must</em> include the protocol (i.e. <code>https</code>), hostname (i.e. <code>example.com</code>) and,
+optionally, the port in the following format: <code>PROTOCOL://HOSTNAME:PORT</code>. Be aware that <em>Locust</em>
+does not trim trailing slashes after the <code>PORT</code>; however, we have implemented a check for trailing
+slashes in <code>--host</code> and remove them ourselves. So, it is recommended that <code>--host</code> does not include
+any trailing characters after <code>PORT</code> as well.</p>
+<h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
+<ul>
+<li>A global installation of Python 3</li>
+<li>An installation of the AWS CLI that is configured properly for access to the BFD/CMS AWS account</li>
+<li>An installation of <a href="https://stedolan.github.io/jq/"><code>jq</code></a></li>
+<li>A tool for creating virtual environments (<code>virtualenv</code>s) such as
+  <a href="https://virtualenv.pypa.io/en/latest/"><code>virtualenv</code></a> or <a href="https://github.com/berdario/pew"><code>pew</code></a></li>
+<li>This runbook will assume you are using <code>pew</code> as it is fairly simple to work with and has a
+    relatively intuitive UX</li>
+<li>Access to AWS</li>
+<li>Access to the CMS VPN</li>
+</ul>
+<h2 id="instructions">Instructions<a class="headerlink" href="#instructions" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><strong>Note:</strong> This runbook assumes you have cloned the <code>beneficiary-fhir-data</code> repository locally and
+are relatively comfortable with the command-line (CLI).</p>
+</blockquote>
+<h3 id="how-to-run-the-regression-suite-locally-against-a-local-bfd-server">How to Run the Regression Suite Locally Against a Local BFD Server<a class="headerlink" href="#how-to-run-the-regression-suite-locally-against-a-local-bfd-server" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p><strong>Note:</strong> These steps assume you have followed the top-level README.md's steps for running BFD
+locally (including running the database using PostgreSQL in Docker).</p>
+<p>Additionally, it is <em>highly</em> recommended to read the entirety of the <code>locust_test</code> <code>README.md</code>
+before continuing.</p>
+</blockquote>
+<ol>
+<li>Navigate to the root of the <code>beneficiary-fhir-data</code> repository in any terminal application</li>
+<li>From the root of the <code>beneficiary-fhir-data</code> repository, set <code>BFD_ROOT</code> to the current working
+   directory:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nv">BFD_ROOT</span><span class="o">=</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>
+</code></pre></div>
+<ol>
+<li>Navigate to <code>apps/utils/locust_tests</code>:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nb">cd</span><span class="w"> </span><span class="nv">$BFD_ROOT</span>/apps/utils/locust_tests
+</code></pre></div>
+<ol>
+<li><em>If not already created</em>, create a new virtual environment for <code>locust_tests</code>:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>pew<span class="w"> </span>new<span class="w"> </span>-p<span class="w"> </span><span class="m">3</span>.8<span class="w"> </span>-a<span class="w"> </span>.<span class="w"> </span>-r<span class="w"> </span>requirements.txt<span class="w"> </span>py3.8__locust_tests
+</code></pre></div>
+<ol>
+<li>
+<p>This will create a new virtual environment using Python 3.8 named <code>py3.8__locust_tests</code> and
+      will automatically install the necessary Python dependencies to <em>run</em> the various Locust test
+      suites in the <code>locust_tests</code> directory. It will also associate this new virtual environment
+      to the <code>$BFD_ROOT/apps/utils/locust_tests</code> directory</p>
+</li>
+<li>
+<p>Open a new <em>subshell</em> that uses the <code>py3.8__locust_tests</code> virtual environment:</p>
+</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>pew<span class="w"> </span>workon<span class="w"> </span>py3.8__locust_tests
+</code></pre></div>
+<ol>
+<li>Set <code>CLIENT_CERT_PATH</code> to the unsecured certificate available in the repository:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nv">CLIENT_CERT_PATH</span><span class="o">=</span><span class="nv">$BFD_ROOT</span>/apps/bfd-server/dev/ssl-stores/client-unsecured.pem
+</code></pre></div>
+<ol>
+<li>Set <code>DATABASE_CONSTR</code> to the database connection string pointing to your locally running
+   PostgreSQL instance:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nv">DATABASE_CONSTR</span><span class="o">=</span><span class="s2">&quot;postgres://bfd:InsecureLocalDev@localhost:5432/fhirdb&quot;</span>
+</code></pre></div>
+<ol>
+<li>
+<p>Running the above command assumes you have followed the README.md's "Native Setup" section
+      and are running your local PostgreSQL instance in a Docker container with the defaults
+      provided in that section. If you are not, you will need to change the connection string above
+      to point to your local BFD database instance</p>
+</li>
+<li>
+<p>Run the Locust tests using <code>locust</code>. Replace <code>&lt;NUM_USERS&gt;</code> with the number of simulated users
+   (amount of load) to run with, <code>&lt;SPAWN_RATE&gt;</code> with the rate at which you would like the simulated
+   users to spawn per-second, and <code>&lt;RUNTIME&gt;</code> with the amount of time you would like to run the
+   performance tests for <em>once all users have spawned</em> (you can specify runtime like "10m30s" or
+   "30s"):</p>
+</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>locust<span class="w"> </span>-f<span class="w"> </span>v2/regression_suite.py<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span>--users<span class="o">=</span>&lt;NUM_USERS&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span>--host<span class="o">=</span><span class="s2">&quot;localhost:</span><span class="nv">$BFD_PORT</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span>--spawn-rate<span class="o">=</span>&lt;SPAWN_RATE&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">  </span>--spawned-runtime<span class="o">=</span><span class="s2">&quot;&lt;RUNTIME&gt;&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">  </span>--client-cert-path<span class="o">=</span><span class="s2">&quot;</span><span class="nv">$CLIENT_CERT_PATH</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">  </span>--database-connection-string<span class="o">=</span><span class="s2">&quot;</span><span class="nv">$DATABASE_CONSTR</span><span class="s2">&quot;</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">  </span>--headless
+</code></pre></div>
+<ol>
+<li>Once the regression tests have ended, Locust will print a summary table with the performance
+   statistics of the previous run for each endpoint as well as an aggregated total of all endpoint
+   performance</li>
+</ol>
+<h3 id="how-to-run-the-regression-suite-locally-against-any-bfd-server-sdlc-environment">How to Run the Regression Suite Locally Against any BFD Server SDLC Environment<a class="headerlink" href="#how-to-run-the-regression-suite-locally-against-any-bfd-server-sdlc-environment" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p><strong>Note:</strong> These steps assume you will be testing against the <code>TEST</code> environment, but you are able
+to test against <em>all</em> SDLC environments following these instructions.</p>
+<p>Additionally, it is <em>highly</em> recommended to read the entirety of the <code>locust_test</code> <code>README.md</code>
+before continuing.</p>
+</blockquote>
+<ol>
+<li>Set <code>BFD_ENV</code> to the environment you want to test:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nv">BFD_ENV</span><span class="o">=</span><span class="s2">&quot;test&quot;</span>
+</code></pre></div>
+<ol>
+<li>
+<p>Other valid values are <code>"prod-sbx"</code> and <code>"prod"</code>, however it is unlikely you will need to run
+      the regression suite <em>manually</em> against environments other than <code>TEST</code></p>
+</li>
+<li>
+<p>Navigate to the root of the <code>beneficiary-fhir-data</code> repository in any terminal application</p>
+</li>
+<li>From the root of the <code>beneficiary-fhir-data</code> repository, set <code>BFD_ROOT</code> to the current working
+   directory:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nv">BFD_ROOT</span><span class="o">=</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>
+</code></pre></div>
+<ol>
+<li>Navigate to <code>apps/utils/locust_tests</code>:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nb">cd</span><span class="w"> </span><span class="nv">$BFD_ROOT</span>/apps/utils/locust_tests
+</code></pre></div>
+<ol>
+<li><em>If not already created</em>, create a new virtual environment for <code>locust_tests</code>:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>pew<span class="w"> </span>new<span class="w"> </span>-p<span class="w"> </span><span class="m">3</span>.8<span class="w"> </span>-a<span class="w"> </span>.<span class="w"> </span>-r<span class="w"> </span>requirements.txt<span class="w"> </span>py3.8__locust_tests
+</code></pre></div>
+<ol>
+<li>
+<p>This will create a new virtual environment using Python 3.8 named <code>py3.8__locust_tests</code> and
+      will automatically install the necessary Python dependencies to <em>run</em> the various Locust test
+      suites in the <code>locust_tests</code> directory. It will also associate this new virtual environment
+      to the <code>$BFD_ROOT/apps/utils/locust_tests</code> directory</p>
+</li>
+<li>
+<p>Open a new <em>subshell</em> that uses the <code>py3.8__locust_tests</code> virtual environment:</p>
+</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>pew<span class="w"> </span>workon<span class="w"> </span>py3.8__locust_tests
+</code></pre></div>
+<ol>
+<li>Ensure your AWS credentials are valid</li>
+<li>Ensure you are connected to the CMS VPN</li>
+<li>Download and decrypt the testing certificate from SSM and store it to a local file:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>aws<span class="w"> </span>ssm<span class="w"> </span>get-parameter<span class="w"> </span>--name<span class="w"> </span><span class="s2">&quot;/bfd/</span><span class="nv">$BFD_ENV</span><span class="s2">/server/sensitive/test_client_key&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">   </span>--region<span class="w"> </span><span class="s2">&quot;us-east-1&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">   </span>--with-decryption<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.Parameter.Value&#39;</span><span class="w"> </span>&gt;<span class="w"> </span><span class="nv">$HOME</span>/bfd-test-cert.pem
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>aws<span class="w"> </span>ssm<span class="w"> </span>get-parameter<span class="w"> </span>--name<span class="w"> </span><span class="s2">&quot;/bfd/</span><span class="nv">$BFD_ENV</span><span class="s2">/server/sensitive/test_client_cert&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">   </span>--region<span class="w"> </span><span class="s2">&quot;us-east-1&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="w">   </span>--with-decryption<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.Parameter.Value&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span><span class="nv">$HOME</span>/bfd-test-cert.pem
+</code></pre></div>
+<ol>
+<li>
+<p>Running the above commands assume you have appropriate permissions to <em>read</em> and <em>decrypt</em>
+      sensitive SSM parameters in the environment under test</p>
+</li>
+<li>
+<p>Set <code>CLIENT_CERT_PATH</code> to the downloaded testing certificate from the previous step:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="nv">CLIENT_CERT_PATH</span><span class="o">=</span><span class="nv">$HOME</span>/bfd-test-cert.pem
+</code></pre></div>
+</li>
+<li>
+<p>Set <code>DATABASE_CONSTR</code> to the database connection string for the reader endpoint of the
+    environment under test:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="nv">DB_CLUSTER_ID</span><span class="o">=</span><span class="k">$(</span>aws<span class="w"> </span>ssm<span class="w"> </span>get-parameter<span class="w"> </span>--name<span class="w"> </span><span class="s2">&quot;/bfd/</span><span class="nv">$BFD_ENV</span><span class="s2">/common/nonsensitive/rds_cluster_identifier&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">                 </span>--region<span class="w"> </span><span class="s2">&quot;us-east-1&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.Parameter.Value&#39;</span><span class="k">)</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="nv">DB_USERNAME</span><span class="o">=</span><span class="k">$(</span>aws<span class="w"> </span>ssm<span class="w"> </span>get-parameter<span class="w"> </span>--name<span class="w"> </span><span class="s2">&quot;/bfd/</span><span class="nv">$BFD_ENV</span><span class="s2">/server/sensitive/vault_data_server_db_username&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="w">                 </span>--with-decryption<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="w">                 </span>--region<span class="w"> </span><span class="s2">&quot;us-east-1&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.Parameter.Value&#39;</span><span class="k">)</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="nv">DB_RAW_PASSWORD</span><span class="o">=</span><span class="k">$(</span>aws<span class="w"> </span>ssm<span class="w"> </span>get-parameter<span class="w"> </span>--name<span class="w"> </span><span class="s2">&quot;/bfd/</span><span class="nv">$BFD_ENV</span><span class="s2">/server/sensitive/vault_data_server_db_password&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="w">                 </span>--with-decryption<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="w">                 </span>--region<span class="w"> </span><span class="s2">&quot;us-east-1&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.Parameter.Value&#39;</span><span class="k">)</span>
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="nv">DB_PASSWORD</span><span class="o">=</span><span class="k">$(</span><span class="nb">printf</span><span class="w"> </span>%s<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DB_RAW_PASSWORD</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-sRr<span class="w"> </span>@uri<span class="k">)</span>
+<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="nv">DB_READER_URI</span><span class="o">=</span><span class="k">$(</span>aws<span class="w"> </span>rds<span class="w"> </span>describe-db-clusters<span class="w"> </span>--db-cluster-identifier<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DB_CLUSTER_ID</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a><span class="w">                 </span>--region<span class="w"> </span><span class="s2">&quot;us-east-1&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.DBClusters[0].ReaderEndpoint&#39;</span><span class="k">)</span>
+<a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a><span class="nv">DATABASE_CONSTR</span><span class="o">=</span><span class="s2">&quot;postgres://</span><span class="nv">$DB_USERNAME</span><span class="s2">:</span><span class="nv">$DB_PASSWORD</span><span class="s2">@</span><span class="nv">$DB_READER_URI</span><span class="s2">:5432/fhirdb&quot;</span>
+</code></pre></div>
+<ol>
+<li>Running the above commands assume you have appropriate permissions to <em>read</em> and <em>decrypt</em>
+   sensitive SSM parameters in the environment under test</li>
+</ol>
+</li>
+<li>
+<p>Run the Locust tests using <code>locust</code>. Replace <code>&lt;NUM_USERS&gt;</code> with the number of simulated users
+    (amount of load) to run with, <code>&lt;SPAWN_RATE&gt;</code> with the rate at which you would like the simulated
+    users to spawn per-second, and <code>&lt;RUNTIME&gt;</code> with the amount of time you would like to run the
+    performance tests for <em>once all users have spawned</em> (you can specify runtime like "10m30s" or
+    "30s"):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>locust<span class="w"> </span>-f<span class="w"> </span>v2/regression_suite.py<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">  </span>--users<span class="o">=</span>&lt;NUM_USERS&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">  </span>--host<span class="o">=</span><span class="s2">&quot;https://</span><span class="nv">$BFD_ENV</span><span class="s2">.bfd.cms.gov&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="w">  </span>--spawn-rate<span class="o">=</span>&lt;SPAWN_RATE&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="w">  </span>--spawned-runtime<span class="o">=</span><span class="s2">&quot;&lt;RUNTIME&gt;&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="w">  </span>--client-cert-path<span class="o">=</span><span class="s2">&quot;</span><span class="nv">$CLIENT_CERT_PATH</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="w">  </span>--database-connection-string<span class="o">=</span><span class="s2">&quot;</span><span class="nv">$DATABASE_CONSTR</span><span class="s2">&quot;</span>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="w">  </span>--headless
+</code></pre></div>
+<ol>
+<li>Note that <code>--host</code> can be anything (including the IP address of another instance that you
+   would like to target specifically). However, if you are targeting a particular environment,
+   you should stick with only testing instances under that environment (or the default provided
+   here)</li>
+</ol>
+</li>
+<li>
+<p>Once the regression tests have ended, Locust will print a summary table with the performance
+    statistics of the previous run for each endpoint as well as an aggregated total of all endpoint
+    performance</p>
+</li>
+<li>
+<p>Delete the <code>bfd-test-cert.pem</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>rm<span class="w"> </span>-f<span class="w"> </span><span class="nv">$CLIENT_CERT_PATH</span>
+</code></pre></div>
+</li>
+</ol>
+<h3 id="how-to-run-the-regression-suite-on-a-detached-instance-against-any-bfd-server-sdlc-environment">How to Run the Regression Suite On a Detached Instance Against any BFD Server SDLC Environment<a class="headerlink" href="#how-to-run-the-regression-suite-on-a-detached-instance-against-any-bfd-server-sdlc-environment" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p><strong>Note:</strong> These steps assume you will be testing against the <code>TEST</code> environment, but you are able
+to test against <em>all</em> SDLC environments following these instructions.</p>
+<p>Additionally, it is <em>highly</em> recommended to read the entirety of the <code>locust_test</code> <code>README.md</code>
+before continuing.</p>
+</blockquote>
+<ol>
+<li>First, detach an instance from the desired environment under test's auto-scaling group:</li>
+<li>Go to the AWS website and sign-in</li>
+<li>Click Services &gt; EC2</li>
+<li>Click Auto scaling groups</li>
+<li>Click an active group corresponding to the desired environment under test within this list<ol>
+<li>I.e. if <code>TEST</code> is the desired environment, click on <code>bfd-test-fhir...</code></li>
+</ol>
+</li>
+<li>In the Details area below the node you clicked, click the Instance Management tab</li>
+<li>Pick one of the instances here using the checkbox on the left</li>
+<li>In the actions dropdown, click Detach</li>
+<li>In the popup, check the Add a new instance to the Auto Scaling group to balance the load
+      checkbox to add a new instance in its place</li>
+<li>Confirm the detachment by clicking Detach instance</li>
+<li>In the list, the detached instance will still exist in the group; open the detached instance
+       in a new tab to keep track of it</li>
+<li>Go to Services &gt; EC2 and click Instances</li>
+<li>Find the detached instance by comparing its ID in the tab you opened against the ID in the
+       list</li>
+<li>Click the Edit button near the ID of the detached instance and rename it something that
+       indicates your name so the instance is marked as yours for others information</li>
+<li>Click on the newly-created Instance ID to open a details page</li>
+<li>Copy the private IP address from "Private IPv4 addresses"</li>
+<li>Ensure you are connected to the CMS VPN</li>
+<li>SSH into the detached instance using the private IP address copied from the previous step:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>ssh<span class="w"> </span>-i<span class="w"> </span>&lt;YOUR<span class="w"> </span>PRIVATE<span class="w"> </span>KEY<span class="w"> </span>HERE&gt;<span class="w"> </span>&lt;YOUR<span class="w"> </span>USER<span class="w"> </span>HERE&gt;@&lt;DETACHED<span class="w"> </span>IP<span class="w"> </span>ADDRESS<span class="w"> </span>HERE&gt;
+</code></pre></div>
+<ol>
+<li>Become the <code>root</code> user on the detached instance:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>sudo<span class="w"> </span>su
+</code></pre></div>
+<ol>
+<li>
+<p>As the <code>root</code> user you are able to do many dangerous things, <em>especially</em> if you are connected
+      to a detached instance from <code>PROD-SBX</code> or <code>PROD</code>. Be <em><strong>very</strong></em> careful while logged-in as the
+      <code>root</code> user!</p>
+</li>
+<li>
+<p>Set <code>BFD_ENV</code> to the environment under test:</p>
+</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="nv">BFD_ENV</span><span class="o">=</span><span class="s2">&quot;test&quot;</span>
+</code></pre></div>
+<ol>
+<li>Navigate to the root of the <code>beneficiary-fhir-data</code> repository in any terminal application</li>
+<li>For detached instances, this will be at <code>/beneficiary-fhir-data</code></li>
+<li>From the root of the <code>beneficiary-fhir-data</code> repository, set <code>BFD_ROOT</code> to the current working
+   directory:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="nv">BFD_ROOT</span><span class="o">=</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>
+</code></pre></div>
+<ol>
+<li>Navigate to <code>apps/utils/locust_tests</code>:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="nb">cd</span><span class="w"> </span><span class="nv">$BFD_ROOT</span>/apps/utils/locust_tests
+</code></pre></div>
+<ol>
+<li>Install the Python dependencies necessary to run the regression suite:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>pip3<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</code></pre></div>
+<ol>
+<li>
+<p>The instance comes with an installation of Python 3, and since we will be destroying the
+      instance after running the regression suite we do not need to use virtual environments</p>
+</li>
+<li>
+<p>Download and decrypt the testing certificate from SSM and store it to a local file:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>aws<span class="w"> </span>ssm<span class="w"> </span>get-parameter<span class="w"> </span>--name<span class="w"> </span><span class="s2">&quot;/bfd/</span><span class="nv">$BFD_ENV</span><span class="s2">/server/sensitive/test_client_key&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="w">   </span>--region<span class="w"> </span><span class="s2">&quot;us-east-1&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="w">   </span>--with-decryption<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.Parameter.Value&#39;</span><span class="w"> </span>&gt;<span class="w"> </span><span class="nv">$BFD_ROOT</span>/bfd-test-cert.pem
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a>aws<span class="w"> </span>ssm<span class="w"> </span>get-parameter<span class="w"> </span>--name<span class="w"> </span><span class="s2">&quot;/bfd/</span><span class="nv">$BFD_ENV</span><span class="s2">/server/sensitive/test_client_cert&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a><span class="w">   </span>--region<span class="w"> </span><span class="s2">&quot;us-east-1&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a><span class="w">   </span>--with-decryption<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.Parameter.Value&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span><span class="nv">$BFD_ROOT</span>/bfd-test-cert.pem
+</code></pre></div>
+</li>
+<li>
+<p>Running the above commands assume you have appropriate permissions to <em>read</em> and <em>decrypt</em>
+    sensitive SSM parameters in the environment under test</p>
+</li>
+<li>
+<p>Set <code>CLIENT_CERT_PATH</code> to the testing certificate from the previous step:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="nv">CLIENT_CERT_PATH</span><span class="o">=</span><span class="nv">$BFD_ROOT</span>/bfd-test-cert.pem
+</code></pre></div>
+</li>
+<li>
+<p>Set <code>DATABASE_CONSTR</code> to the database connection string for the reader endpoint of the
+    environment under test:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="nv">DB_CLUSTER_ID</span><span class="o">=</span><span class="k">$(</span>aws<span class="w"> </span>ssm<span class="w"> </span>get-parameter<span class="w"> </span>--name<span class="w"> </span><span class="s2">&quot;/bfd/</span><span class="nv">$BFD_ENV</span><span class="s2">/common/nonsensitive/rds_cluster_identifier&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="w">                 </span>--region<span class="w"> </span><span class="s2">&quot;us-east-1&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.Parameter.Value&#39;</span><span class="k">)</span>
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="nv">DB_USERNAME</span><span class="o">=</span><span class="k">$(</span>aws<span class="w"> </span>ssm<span class="w"> </span>get-parameter<span class="w"> </span>--name<span class="w"> </span><span class="s2">&quot;/bfd/</span><span class="nv">$BFD_ENV</span><span class="s2">/server/sensitive/vault_data_server_db_username&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="w">                 </span>--with-decryption<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a><span class="w">                 </span>--region<span class="w"> </span><span class="s2">&quot;us-east-1&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.Parameter.Value&#39;</span><span class="k">)</span>
+<a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a><span class="nv">DB_RAW_PASSWORD</span><span class="o">=</span><span class="k">$(</span>aws<span class="w"> </span>ssm<span class="w"> </span>get-parameter<span class="w"> </span>--name<span class="w"> </span><span class="s2">&quot;/bfd/</span><span class="nv">$BFD_ENV</span><span class="s2">/server/sensitive/vault_data_server_db_password&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-25-7" name="__codelineno-25-7" href="#__codelineno-25-7"></a><span class="w">                 </span>--with-decryption<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-25-8" name="__codelineno-25-8" href="#__codelineno-25-8"></a><span class="w">                 </span>--region<span class="w"> </span><span class="s2">&quot;us-east-1&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.Parameter.Value&#39;</span><span class="k">)</span>
+<a id="__codelineno-25-9" name="__codelineno-25-9" href="#__codelineno-25-9"></a><span class="nv">DB_PASSWORD</span><span class="o">=</span><span class="k">$(</span><span class="nb">printf</span><span class="w"> </span>%s<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DB_RAW_PASSWORD</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-sRr<span class="w"> </span>@uri<span class="k">)</span>
+<a id="__codelineno-25-10" name="__codelineno-25-10" href="#__codelineno-25-10"></a><span class="nv">DB_READER_URI</span><span class="o">=</span><span class="k">$(</span>aws<span class="w"> </span>rds<span class="w"> </span>describe-db-clusters<span class="w"> </span>--db-cluster-identifier<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$DB_CLUSTER_ID</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-25-11" name="__codelineno-25-11" href="#__codelineno-25-11"></a><span class="w">                 </span>--region<span class="w"> </span><span class="s2">&quot;us-east-1&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.DBClusters[0].ReaderEndpoint&#39;</span><span class="k">)</span>
+<a id="__codelineno-25-12" name="__codelineno-25-12" href="#__codelineno-25-12"></a><span class="nv">DATABASE_CONSTR</span><span class="o">=</span><span class="s2">&quot;postgres://</span><span class="nv">$DB_USERNAME</span><span class="s2">:</span><span class="nv">$DB_PASSWORD</span><span class="s2">@</span><span class="nv">$DB_READER_URI</span><span class="s2">:5432/fhirdb&quot;</span>
+</code></pre></div>
+<ol>
+<li>Running the above commands assume you have appropriate permissions to <em>read</em> and <em>decrypt</em>
+   sensitive SSM parameters in the environment under test</li>
+</ol>
+</li>
+<li>
+<p>Run the Locust tests using <code>locust</code>. Replace <code>&lt;NUM_USERS&gt;</code> with the number of simulated users
+    (amount of load) to run with, <code>&lt;SPAWN_RATE&gt;</code> with the rate at which you would like the simulated
+    users to spawn per-second, and <code>&lt;RUNTIME&gt;</code> with the amount of time you would like to run the
+    performance tests for <em>once all users have spawned</em> (you can specify runtime like "10m30s" or
+    "30s"):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>locust<span class="w"> </span>-f<span class="w"> </span>v2/regression_suite.py<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="w">  </span>--users<span class="o">=</span>&lt;NUM_USERS&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a><span class="w">  </span>--host<span class="o">=</span><span class="s2">&quot;https://</span><span class="nv">$BFD_ENV</span><span class="s2">.bfd.cms.gov&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a><span class="w">  </span>--spawn-rate<span class="o">=</span>&lt;SPAWN_RATE&gt;<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a><span class="w">  </span>--spawned-runtime<span class="o">=</span><span class="s2">&quot;&lt;RUNTIME&gt;&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-26-6" name="__codelineno-26-6" href="#__codelineno-26-6"></a><span class="w">  </span>--client-cert-path<span class="o">=</span><span class="s2">&quot;</span><span class="nv">$CLIENT_CERT_PATH</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-26-7" name="__codelineno-26-7" href="#__codelineno-26-7"></a><span class="w">  </span>--database-connection-string<span class="o">=</span><span class="s2">&quot;</span><span class="nv">$DATABASE_CONSTR</span><span class="s2">&quot;</span>
+<a id="__codelineno-26-8" name="__codelineno-26-8" href="#__codelineno-26-8"></a><span class="w">  </span>--headless
+</code></pre></div>
+<ol>
+<li>Note that <code>--host</code> can be anything (including the IP address of another instance that you
+   would like to target specifically). However, if you are targeting a particular environment and
+   have detached an instance from that environment's ASG, you should stick with only testing
+   instances under that environment (or the default provided here)</li>
+</ol>
+</li>
+<li>
+<p>Once the regression tests have ended, Locust will print a summary table with the performance
+    statistics of the previous run for each endpoint as well as an aggregated total of all endpoint
+    performance</p>
+</li>
+<li>
+<p>Delete the <code>bfd-test-cert.pem</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>rm<span class="w"> </span>-f<span class="w"> </span><span class="nv">$CLIENT_CERT_PATH</span>
+</code></pre></div>
+</li>
+<li>
+<p>In your web browser, navigate back to AWS and sign-in (if necessary)</p>
+</li>
+<li>Navigate to Services &gt; EC2</li>
+<li>Navigate to Instances in the navigation bar on the left side</li>
+<li>Find the detached instance by searching for its name or Instance ID</li>
+<li>Select the checkbox to the left of the name of the detached instance</li>
+<li>Click on the "Instance state" dropdown in the top right of the screen</li>
+<li>Select "Terminate instance" and accept any dialogs that appear</li>
+</ol>
+<h3 id="how-to-run-a-scaling-load-test-using-the-bfd-run-server-load-jenkins-job">How to Run a Scaling Load Test Using the <code>bfd-run-server-load</code> Jenkins Job<a class="headerlink" href="#how-to-run-a-scaling-load-test-using-the-bfd-run-server-load-jenkins-job" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Ensure you are connected to the CMS VPN</li>
+<li>Navigate to the Jenkins CloudBees instance in your web browser and sign-in</li>
+<li>From the main page, select "bfd". A list of jobs should load</li>
+<li>From this list of jobs, click on "bfd-run-server-load". A new page should load showing the "Stage
+   View" and a list of actions on the left side of the screen</li>
+<li>Click on "Build with Parameters" on the left side of the screen. A new page should load showing a
+   variety of input fields</li>
+<li>Choose the desired SDLC environment to load test from the "ENVIRONMENT" dropdown list</li>
+<li>Adjust the default parameters according to the desired load test. For this particular case, it is
+   assumed the desired load test is to continuously ramp-up load until a scaling event occurs and so
+   the <em>defaults can be used</em></li>
+<li>Click "Build" at the bottom of the page. The page from Step #4 should load again, however an
+   in-progress build should appear in the "Build History" list on the left side of the screen</li>
+<li>Click on the <em>build number</em> of the in-progress build. A new page should load showing an overview
+   of the current build</li>
+<li>Click on "Console Output" on the left side of the screen. A new page should load showing
+    realtime log output from the job</li>
+<li>
+<p>Monitor the log output until the following prompt appears in the output:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>Once the run is finished, click either Abort or Proceed to cleanup the test
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>Proceed or Abort
+</code></pre></div>
+</li>
+<li>
+<p>Scroll up in the log output and find the line starting with:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>aws_instance.this[0]: Creation complete after...
+</code></pre></div>
+</li>
+<li>
+<p>Note the instance ID within square brackets -- use this later to follow the log output from the
+    controller in CloudWatch</p>
+</li>
+<li>In your web browser, navigate to AWS and sign-in (if necessary)</li>
+<li>Navigate to Services &gt; CloudWatch</li>
+<li>Navigate to "Log groups" by clicking on the link in the navigation tree</li>
+<li>Search for "server-load-controller.log" and select the corresponding log group in the SDLC
+    environment currently under test</li>
+<li>Refresh the log group until a log stream with the name of the instance ID noted down in Step 13
+    appears</li>
+<li>Open the log stream corresponding to the instance ID noted down in Step 13</li>
+<li>Monitor the log continuously by clicking "Resume" at the bottom of the log output. The log
+    should automatically update in realtime as the load test runs. You may need to continuously
+    scroll to view the log</li>
+<li>Wait until the load tests finish running. If at anytime something goes wrong, return to the
+    running Jenkins job and click either the "Proceed" or "Abort" prompt in the log output to
+    immediately end the test and start cleaning up</li>
+<li>Once Locust prints the summary table and has finished, indicated by the "Locust master process
+    has stopped" message, return to the Jenkins job and click "Proceed". This will cleanup the test,
+    destroying the controller instance and stopping any orphaned Lambda nodes</li>
+<li>View the stats of the run under the following log groups (the log stream corresponding to the
+    current run will be named according to the instance ID noted down in Step 13). Note
+    "{ENVIRONMENT}" should be replaced with the environment under test (i.e. "test"):<ul>
+<li>/bfd/{ENVIRONMENT}/bfd-server-load/load_exceptions.csv</li>
+<li>/bfd/{ENVIRONMENT}/bfd-server-load/load_failures.csv</li>
+<li>/bfd/{ENVIRONMENT}/bfd-server-load/load_stats.csv</li>
+<li>/bfd/{ENVIRONMENT}/bfd-server-load/load_stats_history.csv</li>
+</ul>
+</li>
+</ol>
+<h3 id="how-to-run-a-static-load-test-using-the-bfd-run-server-load-jenkins-job">How to Run a Static Load Test Using the <code>bfd-run-server-load</code> Jenkins Job<a class="headerlink" href="#how-to-run-a-static-load-test-using-the-bfd-run-server-load-jenkins-job" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Ensure you are connected to the CMS VPN</li>
+<li>Navigate to the Jenkins CloudBees instance in your web browser and sign-in</li>
+<li>From the main page, select "bfd". A list of jobs should load</li>
+<li>From this list of jobs, click on "bfd-run-server-load". A new page should load showing the "Stage
+   View" and a list of actions on the left side of the screen</li>
+<li>Click on "Build with Parameters" on the left side of the screen. A new page should load showing a
+   variety of input fields</li>
+<li>Choose the desired SDLC environment to load test from the "ENVIRONMENT" dropdown list</li>
+<li>Adjust the default parameters according to the desired load test. For this particular case, the
+   default values will <em>need to be changed</em>:</li>
+<li>Set <code>INITIAL_WORKER_NODES</code> to the number of worker nodes/Lambdas desired <em>in total</em></li>
+<li>Set <code>MAX_SPAWNED_NODES</code> equal to <code>INITIAL_WORKER_NODES</code></li>
+<li>Set <code>MAX_SPAWNED_USERS</code> to the desired number of simulated users <em>in total</em><ol>
+<li>Note that a ratio of 10 simulated users to 1 worker node should be followed for best
+     performance</li>
+</ol>
+</li>
+<li>Set <code>USER_SPAWN_RATE</code> equal to <code>MAX_SPAWNED_USERS</code> if no ramp-up is desired</li>
+<li>Unselect <code>STOP_ON_SCALING</code> if the load test should <em>not</em> stop when a scaling event is
+      encountered -- for a static test, this should probably be false</li>
+<li>Deselect <code>STOP_ON_NODE_LIMIT</code> to ensure that the load test does not end immediately due to the
+      node limit being hit</li>
+<li>Click "Build" at the bottom of the page. The page from Step #4 should load again, however an
+   in-progress build should appear in the "Build History" list on the left side of the screen</li>
+<li>Click on the <em>build number</em> of the in-progress build. A new page should load showing an overview
+   of the current build</li>
+<li>Click on "Console Output" on the left side of the screen. A new page should load showing
+    realtime log output from the job</li>
+<li>
+<p>Monitor the log output until the following prompt appears in the output:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>Once the run is finished, click either Abort or Proceed to cleanup the test
+<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a>Proceed or Abort
+</code></pre></div>
+</li>
+<li>
+<p>Scroll up in the log output and find the line starting with:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>aws_instance.this[0]: Creation complete after...
+</code></pre></div>
+</li>
+<li>
+<p>Note the instance ID within square brackets -- use this later to follow the log output from the
+    controller in CloudWatch</p>
+</li>
+<li>In your web browser, navigate to AWS and sign-in (if necessary)</li>
+<li>Navigate to Services &gt; CloudWatch</li>
+<li>Navigate to "Log groups" by clicking on the link in the navigation tree</li>
+<li>Search for "server-load-controller.log" and select the corresponding log group in the SDLC
+    environment currently under test</li>
+<li>Refresh the log group until a log stream with the name of the instance ID noted down in Step 13
+    appears</li>
+<li>Open the log stream corresponding to the instance ID noted down in Step 13</li>
+<li>Monitor the log continuously by clicking "Resume" at the bottom of the log output. The log
+    should automatically update in realtime as the load test runs. You may need to continuously
+    scroll to view the log</li>
+<li>Wait until the load tests finish running. If at anytime something goes wrong, return to the
+    running Jenkins job and click either the "Proceed" or "Abort" prompt in the log output to
+    immediately end the test and start cleaning up</li>
+<li>Once Locust prints the summary table and has finished, indicated by the "Locust master process
+    has stopped" message, return to the Jenkins job and click "Proceed". This will cleanup the test,
+    destroying the controller instance and stopping any orphaned Lambda nodes</li>
+<li>View the stats of the run under the following log groups (the log stream corresponding to the
+    current run will be named according to the instance ID noted down in Step 13). Note
+    "{ENVIRONMENT}" should be replaced with the environment under test (i.e. "test"):<ul>
+<li>/bfd/{ENVIRONMENT}/bfd-server-load/load_exceptions.csv</li>
+<li>/bfd/{ENVIRONMENT}/bfd-server-load/load_failures.csv</li>
+<li>/bfd/{ENVIRONMENT}/bfd-server-load/load_stats.csv</li>
+<li>/bfd/{ENVIRONMENT}/bfd-server-load/load_stats_history.csv</li>
+</ul>
+</li>
+</ol>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.sections", "navigation.indexes", "header.autohide", "navigation.tracking"], "search": "../../assets/javascripts/workers/search.e5c33ebb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.ba449ae6.min.js"></script>
+      
+    
+  </body>
+</html>

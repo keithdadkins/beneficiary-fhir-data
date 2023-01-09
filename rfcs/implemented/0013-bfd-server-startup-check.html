@@ -1,0 +1,2402 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://keithdadkins.github.io/beneficiary-fhir-data/rfcs/implemented/0013-bfd-server-startup-check.html">
+      
+      
+        <link rel="prev" href="0011-separate-flyway-from-pipeline.html">
+      
+      
+        <link rel="next" href="0015-centralized-configuration-management.html">
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.3">
+    
+    
+      
+        <title>0013-bfd-server-startup-check - BFD</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6b71719e.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.2505c338.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/mkdocs.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="lightmode" data-md-color-primary="light-blue" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#rfc-proposal" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../index.html" title="BFD" class="md-header__button md-logo" aria-label="BFD" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BFD
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              0013-bfd-server-startup-check
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="lightmode" data-md-color-primary="light-blue" data-md-color-accent="indigo"  aria-label="dark"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="dark" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+            </label>
+          
+        
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/keithdadkins/beneficiary-fhir-data" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    beneficiary-fhir-data
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../index.html" title="BFD" class="md-nav__button md-logo" aria-label="BFD" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    BFD
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/keithdadkins/beneficiary-fhir-data" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    beneficiary-fhir-data
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../index.html" class="md-nav__link">
+        Welcome
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LICENSE.html" class="md-nav__link">
+        License
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_3" tabindex="0" aria-expanded="false">
+          Api
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Api" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Api
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/request-audit-headers.html" class="md-nav__link">
+        BFD Audit Headers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/request-options.html" class="md-nav__link">
+        BFD Request Options
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../changelog/index.html">Changelog</a>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Changelog" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Changelog
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+        
+          
+            
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../contributing/index.html">Contributing</a>
+          
+            <label for="__nav_5">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Contributing" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Contributing
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5_2" type="checkbox" id="__nav_5_2" >
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../contributing/style-guide/index.html">Style guide</a>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Style guide" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_2">
+          <span class="md-nav__icon md-icon"></span>
+          Style guide
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+        
+          
+            
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../insights/index.html">Insights</a>
+          
+            <label for="__nav_6">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Insights" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Insights
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/ab2d_firehose.html" class="md-nav__link">
+        AB2D Firehose Setup
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/bb2_notes.html" class="md-nav__link">
+        BB2 Project information
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/core_tables.html" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/data_organization.html" class="md-nav__link">
+        Organization
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/lessons_learned.html" class="md-nav__link">
+        Lessons Learned
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/onboarding.html" class="md-nav__link">
+        Onboarding
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/security.html" class="md-nav__link">
+        Security Model
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/terraform.html" class="md-nav__link">
+        Terraform Scripts
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/typical_workflow.html" class="md-nav__link">
+        Example Workflow
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7" type="checkbox" id="__nav_7" checked>
+      
+      
+        
+          
+            
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../index.html">Rfcs</a>
+          
+            <label for="__nav_7">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Rfcs" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          Rfcs
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_2" type="checkbox" id="__nav_7_2" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_7_2" tabindex="0" aria-expanded="false">
+          Deferred
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Deferred" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_2">
+          <span class="md-nav__icon md-icon"></span>
+          Deferred
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deferred/0008-partial-backfill-ccw.html" class="md-nav__link">
+        0008-partial-backfill-ccw
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deferred/0012-rda-claims-jsonb-DEFERRED.html" class="md-nav__link">
+        0012-rda-claims-jsonb
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deferred/0016-cursor-paging.html" class="md-nav__link">
+        0016-cursor-paging.md
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deferred/0017-filtering.html" class="md-nav__link">
+        0007-filtering-fields
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_3" type="checkbox" id="__nav_7_3" >
+      
+      
+        
+          
+            
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../howto/index.html">Howto</a>
+          
+            <label for="__nav_7_3">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Howto" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_3">
+          <span class="md-nav__icon md-icon"></span>
+          Howto
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../howto/template.html" class="md-nav__link">
+        rfc-template
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_4" type="checkbox" id="__nav_7_4" checked>
+      
+      
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_7_4" tabindex="0" aria-expanded="true">
+          Implemented
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Implemented" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_4">
+          <span class="md-nav__icon md-icon"></span>
+          Implemented
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0000-jboss-replacement.html" class="md-nav__link">
+        0000-bye-bye-jboss
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0001-beneficiary-fhir-server-rfc-process-v1.html" class="md-nav__link">
+        0001-beneficiary-fhir-server-rfc-process-v1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0002-monorepo.html" class="md-nav__link">
+        0002-monorepo
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0004-since-parameter.html" class="md-nav__link">
+        0004-since-parameter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0005-mbi-search.html" class="md-nav__link">
+        0005-mbi-search
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0007-service-date-filter.html" class="md-nav__link">
+        0007-service-date-filter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0009-pipeline-orchestration-baby-steps.html" class="md-nav__link">
+        0009-pipeline-orchestration-baby-steps
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0011-separate-flyway-from-pipeline.html" class="md-nav__link">
+        0011-separate-flyway-from-pipeline
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          0013-bfd-server-startup-check
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="0013-bfd-server-startup-check.html" class="md-nav__link md-nav__link--active">
+        0013-bfd-server-startup-check
+      </a>
+      
+        
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#status" class="md-nav__link">
+    Status
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    Table of Contents
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#motivation" class="md-nav__link">
+    Motivation
+  </a>
+  
+    <nav class="md-nav" aria-label="Motivation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#issue" class="md-nav__link">
+    Issue
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#discussion" class="md-nav__link">
+    Discussion
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#proposed-solution" class="md-nav__link">
+    Proposed Solution
+  </a>
+  
+    <nav class="md-nav" aria-label="Proposed Solution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#proposed-solution-detailed-design" class="md-nav__link">
+    Proposed Solution: Detailed Design
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proposed-solution-unresolved-questions" class="md-nav__link">
+    Proposed Solution: Unresolved Questions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proposed-solution-drawbacks" class="md-nav__link">
+    Proposed Solution: Drawbacks
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proposed-solution-notable-alternatives" class="md-nav__link">
+    Proposed Solution: Notable Alternatives
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prior-art" class="md-nav__link">
+    Prior Art
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#future-possibilities" class="md-nav__link">
+    Future Possibilities
+  </a>
+  
+    <nav class="md-nav" aria-label="Future Possibilities">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#deployments" class="md-nav__link">
+    Deployments
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#readiness-checking" class="md-nav__link">
+    Readiness Checking
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#devsecops" class="md-nav__link">
+    DevSecOps
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#addendums" class="md-nav__link">
+    Addendums
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0015-centralized-configuration-management.html" class="md-nav__link">
+        0015-centralized-configuration-management
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_4_11" type="checkbox" id="__nav_7_4_11" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_7_4_11" tabindex="0" aria-expanded="false">
+          BFDv2
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="BFDv2" data-md-level="3">
+        <label class="md-nav__title" for="__nav_7_4_11">
+          <span class="md-nav__icon md-icon"></span>
+          BFDv2
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="BFDv2/0001-bfd-v2-coverage.html" class="md-nav__link">
+        RFC Proposal
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="BFDv2/0001-bfd-v2-patient.html" class="md-nav__link">
+        RFC Proposal
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="BFDv2/BFDv2%20RFC.html" class="md-nav__link">
+        RFC Proposal
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_5" type="checkbox" id="__nav_7_5" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_7_5" tabindex="0" aria-expanded="false">
+          Proposed
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Proposed" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_5">
+          <span class="md-nav__icon md-icon"></span>
+          Proposed
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../proposed/0010-custom-system-uris.html" class="md-nav__link">
+        0010-custom-system-uris
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../proposed/0013-synthea-future-claims-and-automation.html" class="md-nav__link">
+        0013-Synthea-future-claims-and-automation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../proposed/0014-dsl-driven-rda-code-generation.html" class="md-nav__link">
+        0014-dsl-driven-rda-code-generation
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_6" type="checkbox" id="__nav_7_6" >
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_7_6" tabindex="0" aria-expanded="false">
+          Rejected
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Rejected" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_6">
+          <span class="md-nav__icon md-icon"></span>
+          Rejected
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rejected/0006-or-condition.html" class="md-nav__link">
+        0006-or-condition
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
+      
+      
+        
+          
+            
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../runbooks/index.html">Runbooks</a>
+          
+            <label for="__nav_8">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Runbooks" data-md-level="1">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          Runbooks
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8_2" type="checkbox" id="__nav_8_2" >
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_2" tabindex="0" aria-expanded="false">
+          Bfd db migrator
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Bfd db migrator" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_2">
+          <span class="md-nav__icon md-icon"></span>
+          Bfd db migrator
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/bfd-db-migrator/recover-from-failures.html" class="md-nav__link">
+        Recover from Failures
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8_3" type="checkbox" id="__nav_8_3" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_3" tabindex="0" aria-expanded="false">
+          Bfd insights
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Bfd insights" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_3">
+          <span class="md-nav__icon md-icon"></span>
+          Bfd insights
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/bfd-insights/firehose-failures.html" class="md-nav__link">
+        How to Investigate Firehose Ingestion Processing Failures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/bfd-insights/load-cw-logs.html" class="md-nav__link">
+        Load cw logs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/bfd-insights/new-quicksight-dashboards.html" class="md-nav__link">
+        How to Create BFD Insights QuickSight Dashboards
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8_4" type="checkbox" id="__nav_8_4" >
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_4" tabindex="0" aria-expanded="false">
+          Bfd pipeline
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Bfd pipeline" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_4">
+          <span class="md-nav__icon md-icon"></span>
+          Bfd pipeline
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/bfd-pipeline/rerun-failed-pipeline-load.html" class="md-nav__link">
+        How to Re-run a Failed BFD Pipeline Load
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8_5" type="checkbox" id="__nav_8_5" >
+      
+      
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_5" tabindex="0" aria-expanded="false">
+          Bfd server
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Bfd server" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_5">
+          <span class="md-nav__icon md-icon"></span>
+          Bfd server
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/bfd-server/recreate-regression-dashboards.html" class="md-nav__link">
+        Recreating `server-regression` QuickSight Dashboards
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/bfd-server/run-locust-tests.html" class="md-nav__link">
+        How to Run the Regression and Load Test Suites
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8_6" type="checkbox" id="__nav_8_6" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_6" tabindex="0" aria-expanded="false">
+          Snyk
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Snyk" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_6">
+          <span class="md-nav__icon md-icon"></span>
+          Snyk
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/snyk/ignore-findings.html" class="md-nav__link">
+        Ignore findings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/snyk/resolve-snyk-bot-prs.html" class="md-nav__link">
+        Resolve snyk bot prs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/snyk/resolve-snyk-report-findings.html" class="md-nav__link">
+        Resolve snyk report findings
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8_7" type="checkbox" id="__nav_8_7" >
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_7" tabindex="0" aria-expanded="false">
+          Synthea
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Synthea" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_7">
+          <span class="md-nav__icon md-icon"></span>
+          Synthea
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/synthea/run-automation.html" class="md-nav__link">
+        How to Run Synthea Automation
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_9" type="checkbox" id="__nav_9" >
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../tags/index.html">Tags</a>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Tags" data-md-level="1">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          Tags
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#status" class="md-nav__link">
+    Status
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    Table of Contents
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#motivation" class="md-nav__link">
+    Motivation
+  </a>
+  
+    <nav class="md-nav" aria-label="Motivation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#issue" class="md-nav__link">
+    Issue
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#discussion" class="md-nav__link">
+    Discussion
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#proposed-solution" class="md-nav__link">
+    Proposed Solution
+  </a>
+  
+    <nav class="md-nav" aria-label="Proposed Solution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#proposed-solution-detailed-design" class="md-nav__link">
+    Proposed Solution: Detailed Design
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proposed-solution-unresolved-questions" class="md-nav__link">
+    Proposed Solution: Unresolved Questions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proposed-solution-drawbacks" class="md-nav__link">
+    Proposed Solution: Drawbacks
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proposed-solution-notable-alternatives" class="md-nav__link">
+    Proposed Solution: Notable Alternatives
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prior-art" class="md-nav__link">
+    Prior Art
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#future-possibilities" class="md-nav__link">
+    Future Possibilities
+  </a>
+  
+    <nav class="md-nav" aria-label="Future Possibilities">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#deployments" class="md-nav__link">
+    Deployments
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#readiness-checking" class="md-nav__link">
+    Readiness Checking
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#devsecops" class="md-nav__link">
+    DevSecOps
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#addendums" class="md-nav__link">
+    Addendums
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+  
+  
+
+
+  <nav class="md-tags" hidden>
+    
+      
+      
+        <a href="../../tags/index.html#rfcs" class="md-tag">RFC's</a>
+      
+    
+  </nav>
+
+
+
+  
+  
+
+
+
+<h1 id="rfc-proposal">RFC Proposal<a class="headerlink" href="#rfc-proposal" title="Permanent link">&para;</a></h1>
+<ul>
+<li>RFC Proposal ID: <code>0013-bfd-server-startup-check</code></li>
+<li>Start Date: 2022-04-24</li>
+<li>RFC PR: <a href="https://github.com/CMSgov/beneficiary-fhir-data/pull/1074">beneficiary-fhir-data/rfcs#0013</a></li>
+<li>JIRA Ticket(s):<ul>
+<li><a href="https://jira.cms.gov/browse/BFD-1663">BFD-1663</a></li>
+</ul>
+</li>
+</ul>
+<p>This RFC proposes a minor change to existing bfd-server on-host health checking to satisfy the requirements of a reliable startup check.</p>
+<h2 id="status">Status<a class="headerlink" href="#status" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Status: Implemented</li>
+<li>Implementation JIRA Ticket(s):<ul>
+<li><a href="https://jira.cms.gov/browse/BFD-1685">BFD-1685</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="table-of-contents">Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="#rfc-proposal">RFC Proposal</a></li>
+<li><a href="#status">Status</a></li>
+<li><a href="#table-of-contents">Table of Contents</a></li>
+<li><a href="#motivation">Motivation</a><ul>
+<li><a href="#issue">Issue</a></li>
+<li><a href="#discussion">Discussion</a></li>
+<li><a href="#supporting-infrastructure">Supporting Infrastructure</a></li>
+<li><a href="#host-based-health-checks">Host-Based Health Checks</a></li>
+<li><a href="#health-check-review">Health Check Review</a></li>
+</ul>
+</li>
+<li><a href="#proposed-solution">Proposed Solution</a><ul>
+<li><a href="#visualize-the-proposal">Visualize the Proposal</a><ul>
+<li><a href="#existing-health-checks-and-startup">Existing Health Checks and Startup</a></li>
+<li><a href="#proposed-health-checks-and-readiness">Proposed Health Checks and Readiness</a></li>
+</ul>
+</li>
+<li><a href="#proposed-solution-detailed-design">Proposed Solution: Detailed Design</a></li>
+<li><a href="#proposed-solution-unresolved-questions">Proposed Solution: Unresolved Questions</a></li>
+<li><a href="#proposed-solution-drawbacks">Proposed Solution: Drawbacks</a></li>
+<li><a href="#proposed-solution-notable-alternatives">Proposed Solution: Notable Alternatives</a></li>
+<li><a href="#health-check-alternatives-in-elastic-load-balancing">Health Check Alternatives in Elastic Load Balancing</a></li>
+<li><a href="#more-complex-solutions">More Complex Solutions</a><ul>
+<li><a href="#reverse-proxying-with-nginx-or-otherwise">Reverse Proxying with Nginx or Otherwise</a></li>
+<li><a href="#split-control-plane">Split Control Plane</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#prior-art">Prior Art</a></li>
+<li><a href="#future-possibilities">Future Possibilities</a><ul>
+<li><a href="#deployments">Deployments</a></li>
+<li><a href="#readiness-checking">Readiness Checking</a></li>
+<li><a href="#devsecops">DevSecOps</a></li>
+</ul>
+</li>
+<li><a href="#addendums">Addendums</a></li>
+</ul>
+<h2 id="motivation">Motivation<a class="headerlink" href="#motivation" title="Permanent link">&para;</a></h2>
+<h3 id="issue">Issue<a class="headerlink" href="#issue" title="Permanent link">&para;</a></h3>
+<p>AWS Classic Load Balancers have limited health check functionality leading to scenarios where traffic can be routed to unhealthy (unsuccessfully started) hosts. In the best case, bfd-server deployments may exhibit brief periods of downtime. In the worst case, the bfd-server may oscillate between healthy and unhealthy application states, resulting in preventable deployment failures.</p>
+<h3 id="discussion">Discussion<a class="headerlink" href="#discussion" title="Permanent link">&para;</a></h3>
+<h4 id="supporting-infrastructure">Supporting Infrastructure<a class="headerlink" href="#supporting-infrastructure" title="Permanent link">&para;</a></h4>
+<p>The Beneficiary FHIR Data Server (<em>bfd-server</em>) is hosted in the Amazon Web Services (<em>AWS</em>) public cloud across a collection of Elastic Compute Cloud (<em>EC2</em>) instances that comprise an Auto Scaling Group (<em>ASG</em>). The ASG is responsible for automatically and horizontally scaling bfd-server <strong>out</strong> to meet performance goals as well as scaling these instances back <strong>in</strong> to meet budgetary requirements. In addition to scaling, the ASG uses a combination of <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-system-instance-status-check.html#types-of-instance-status-checks">status checks provided by EC2</a> and health checks reported by the load balancer (discussed in the following paragraph) to automatically replace unhealthy instances.</p>
+<p>To avoid <a href="https://sre.google/sre-book/monitoring-distributed-systems/#saturation">saturating</a> any single instance in the ASG with excessive traffic, requests intended for the bfd-server are balanced by Elastic Load Balancing (<em>ELB</em>) through a Classic Load Balancer (<em>CLB</em>). As mentioned above, the status of the CLB health check is used in part by the ASG to determine whether a host needs to be replaced or not. Additionally, the CLB uses the status of these health checks to determine which hosts should or should not receive traffic. As of this RFC, the health check is effectively a TCP ping against each bfd-server instance port, 7443. The health check designates hosts as healthy when the TCP ping is successful. Because the bfd-server application starts listening on port 7443 almost immediately after starting (but importantly, before reaching a fully started state), the CLB health check can designate non-started hosts as healthy. This is especially common during instance replacement as part of automated deployments. When unprepared hosts receive bfd-server traffic, the requests result in an error.</p>
+<h4 id="host-based-health-checks">Host-Based Health Checks<a class="headerlink" href="#host-based-health-checks" title="Permanent link">&para;</a></h4>
+<p>In addition to the health checks external to the bfd-server application instance, the instances themselves have an internal health check mechanism running inside the service startup script, encoded in the <code>stop_service_if_failing</code> function. Today, this performs local, authenticated queries against a set of pre-defined API endpoints to determine whether the application is behaving normally. If any errors are detected, it works as a <em>kill switch</em> and stops the service.</p>
+<h4 id="health-check-review">Health Check Review<a class="headerlink" href="#health-check-review" title="Permanent link">&para;</a></h4>
+<p>So far in this discussion, the term <em>health check</em> has been used to generally describe methods for determining the operating state of an application instance. However, this term is somewhat under specified. There are a variety of health checks that assist in achieving reliability targets. To be a little more precise, it might be helpful to adopt the health check (or <em>probe</em>) concepts from the kubernetes ecosystem, despite the obvious difference in hosting strategies. Kubernetes supports probes for <em>liveness</em>, <em>readiness</em>, and <em>startup</em> where they each answer different questions about a service's health throughout the application instance's life cycle.</p>
+<p><em>Liveness</em> can be applicable throughout the lifetime of the application instance and answers the question: "is the application alive or dead?" In kubernetes, this relates to whether or not a container should be restarted. <em>Liveness probes</em> are configured at the operator's discretion and support a variety of probing methods including <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-a-liveness-command">command execution</a>, <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-a-liveness-http-request">HTTP requests</a>, <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-a-tcp-liveness-probe">TCP requests</a>, and <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-a-grpc-liveness-probe">gRPC requests</a>. <strong>As this relates to the bfd-server, both the EC2 status checks and the CLB TCP health check help answer the liveness question for the ASG: should a given instance be replaced?</strong></p>
+<p><em>Readiness</em> is also applicable throughout the lifetime of the application instance, but it answers a slightly different question: "is the application ready to receive requests?" In kubernetes, the status of this check may be transitory (e.g. during startup, spikes in saturation), where operators neither want to restart/replace the running instance, nor should traffic be routed to a non-ready instance. <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-readiness-probes">A readiness probe</a> can also be helpful if <em>liveness</em> and <em>readiness</em> criteria are different, and there is significant difference (<em>significance</em> varies, but generally greater than the latency service level objective) between the first successful liveness probe and first successful readiness probe. <strong>Because the intent of the bfd-server's <code>stop_service_if_failing</code> is to prevent client traffic from reaching a faulty instance, it was tempting to compare this to a readiness probe. However, it only functions at the startup; naturally, it's more directly comparable to a startup probe. To be clear, there is no analog to the readiness probe in the existing infrastructure, noted as an area for <a href="#future-possibilities">future possibilities below</a>.</strong></p>
+<p><em>Startup</em> is most relevant to the early stages of an application instance's lifetime. Startup answers the question: "has the application started?" <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-startup-probes">Startup probes</a> continues to ask this until they succeed (or reach a failure threshold). Once successful, <em>liveness</em> and <em>readiness</em> probes take over. The status of this check is similar to a grace period (<code>initialDelaySeconds</code> settings in kubernetes for the relevant probes) and they can be helpful when an application is slow to start. It's especially helpful when there is any variability in startup times. Specifically in kubernetes, startup probes interact with liveness and readiness probes to prevent them from prematurely restarting or recreating application instances before they have fully started. <strong>Again, the <code>stop_service_if_failing</code> function runs at startup and can intuitively be compared to a startup probe. Additionally, startup probes are somewhat similar to grace periods, so it's tempting to directly compare them with the ASG's <code>health check grace period</code>. However, startup probes have additional application state awareness to prevent other probes from functioning until the application has started.</strong></p>
+<p>Again, the BFD systems are not hosted with kubernetes, and outside of kubernetes the comparisons are challenging to make. Still, the concepts help direct the conversation. The table below summarizes the comparison of kubernetes-style probes to the existing bfd-server health checking strategy.</p>
+<table>
+<thead>
+<tr>
+<th>bfd-server Component</th>
+<th>Type</th>
+<th>Implementation</th>
+<th>State</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>EC2 Instance</td>
+<td>startup</td>
+<td><code>stop_service_if_failing</code> function</td>
+<td>partial</td>
+</tr>
+<tr>
+<td>Classic Load Balancer</td>
+<td>liveness</td>
+<td>TCP Ping on Instance port 7443</td>
+<td>complete</td>
+</tr>
+<tr>
+<td>EC2 Status Checks</td>
+<td>liveness</td>
+<td>AWS Default</td>
+<td>complete</td>
+</tr>
+<tr>
+<td>Auto Scaling Group</td>
+<td>startup</td>
+<td>430s health check grace period</td>
+<td>partial</td>
+</tr>
+</tbody>
+</table>
+<h2 id="proposed-solution">Proposed Solution<a class="headerlink" href="#proposed-solution" title="Permanent link">&para;</a></h2>
+<p>The bfd-server needs a health check that goes beyond mere <em>liveness</em>. It needs to reliably identify each application instance as fully started only after the instance is fully provisioned and prepared to process requests. In short, bfd-server needs a real startup check. The existing <code>stop_service_if_failing</code> function already meets many of the requirements for such a check. It just needs the ability to signal the instance's startup state to the CLB. This <em>signaling</em> can be achieved through the introduction of a single, temporary firewall rule that initially disallows external traffic to the instance's service port, 7443, and subsequently removes the rule once all of the existing health criteria have been satisfied.</p>
+<h4 id="visualize-the-proposal">Visualize the Proposal<a class="headerlink" href="#visualize-the-proposal" title="Permanent link">&para;</a></h4>
+<h5 id="existing-health-checks-and-startup">Existing Health Checks and Startup<a class="headerlink" href="#existing-health-checks-and-startup" title="Permanent link">&para;</a></h5>
+<p>Below is a <em>simplified</em> depiction of the existing health checks in the bfd-server. The instance is regarded as healthy as soon as port 7443 is available, but that can be <strong>before</strong> the service has fully started.</p>
+<p><img alt="2022-04 BFD Server Health Checks" src="./resources/0013-2022-04-bfd-server-health-checks.svg" /></p>
+<h5 id="proposed-health-checks-and-readiness">Proposed Health Checks and Readiness<a class="headerlink" href="#proposed-health-checks-and-readiness" title="Permanent link">&para;</a></h5>
+<p>Below depicts the proposed health checks in the bfd-server. The instance is continues to be regarded as healthy as soon as port 7443 is available. This solution leverages that simplicity and delays the availability of 7443 to <em>external</em> traffic until the <em>internal</em> startup health check succeeds. In other words, traffic is only permitted when the internal health check is satisfied.</p>
+<p><img alt="Proposed BFD Server Health Checks" src="./resources/0013-proposed-bfd-server-health-checks.svg" /></p>
+<h3 id="proposed-solution-detailed-design">Proposed Solution: Detailed Design<a class="headerlink" href="#proposed-solution-detailed-design" title="Permanent link">&para;</a></h3>
+<p>Extending the <code>stop_service_if_failing</code> function to fully satisfy the requirements of a startup check requires the following:
+1. Augment the bfd-server service account with sudoers access, restricted to <code>/sbin/iptables</code> via ansible definition
+2. Adjust the templated <code>bfd-server.sh.j2</code> file with the following changes:
+    - At the beginning of the <code>stop_service_if_failing</code> function, disallow external traffic on port 7443:</p>
+<div class="highlight"><pre><span></span><code>    ```bash
+    sudo iptables -A INPUT -p tcp -i eth0 --dport 7443 -j REJECT
+    ```
+
+- Where the script currently produces the log message &quot;Server started properly&quot;, allow external traffic on port 7443:
+
+    ```bash
+    sudo iptables -D INPUT -p tcp -i eth0 --dport 7443 -j REJECT
+    ```
+</code></pre></div>
+<h3 id="proposed-solution-unresolved-questions">Proposed Solution: Unresolved Questions<a class="headerlink" href="#proposed-solution-unresolved-questions" title="Permanent link">&para;</a></h3>
+<ul class="task-list">
+<li class="task-list-item"><input type="checkbox" checked/> Arguments for and against certain solutions hinge in part on the notion that lazily loaded application data sources could have a negative impact on the performance. However, the evidence is unclear. Do the initial requests executed in the on-host health check ward off a cold-start or similar?
+  The arguments against alternative solutions may be a little weaker upon further investigation. The <em>institutional memory</em> surrounding the original implementation of the <code>stop_service_if_failing</code> suggests that it was not necessarily intended to avoid cold-start issues. If it does avoid these issues, it might be considered a happy accident.</li>
+<li class="task-list-item"><input type="checkbox" checked/> What is the recommended firewall on amazon Linux 2 in 2022? Is <code>iptables</code> still auspicious?
+  <code>iptables</code> continues to be an obvious, acceptable solution.</li>
+<li><code>ufw</code> can be used as a frontend for utilities like <code>iptables</code></li>
+<li><code>ufw</code> <strong>is</strong> available via epel which in turn is available via <code>amazon-linux-extras</code></li>
+<li><code>epel</code> does not appear to be enabled in the CMS base images by default</li>
+<li><code>iptables</code> appears to be installed in base CMS images</li>
+<li><code>iptables</code> is also part of <code>@amzn2-core</code> and easily added if missing</li>
+</ul>
+<h3 id="proposed-solution-drawbacks">Proposed Solution: Drawbacks<a class="headerlink" href="#proposed-solution-drawbacks" title="Permanent link">&para;</a></h3>
+<p>N/A.</p>
+<h3 id="proposed-solution-notable-alternatives">Proposed Solution: Notable Alternatives<a class="headerlink" href="#proposed-solution-notable-alternatives" title="Permanent link">&para;</a></h3>
+<h4 id="health-check-alternatives-in-elastic-load-balancing">Health Check Alternatives in Elastic Load Balancing<a class="headerlink" href="#health-check-alternatives-in-elastic-load-balancing" title="Permanent link">&para;</a></h4>
+<p>If it were only an issue of a lossy health check with what amounts to a TCP ping, AWS CLBs do support HTTP and HTTPS checks. While it might seem like a viable alternative, there are clear reasons to avoid this strategy.</p>
+<p><strong>Ultimately, such a solution will rely on the existing <code>stop_service_if_failing</code> function or something like it.</strong>
+Because the bfd-server authentication strategy involves mutual TLS (<em>mTLS</em>) and the CLB health check mechanism cannot be supplied with a certificate for authentication, bfd-server would need to support endpoints that respond with an HTTP status code of 200 <strong>without</strong> authentication. This alone would require a non-trivial amount of work, but even if the bfd-server could respond this way, such endpoints would still rely on the functionality of  <code>stop_service_if_failing</code> or similar as the definitive startup source. This is because the checks involved are masking and/or compensating for some complexity in bfd-server. <code>stop_service_if_failing</code>, through the set of endpoints that it evaluates, eagerly loads otherwise lazily loaded application data sources. Without these first synthetic requests, the first <em>real</em> client requests may exhibit unacceptable performance. Additionally, these requests exercise the hot code paths involving the database which provides confidence that the first <em>real</em> client traffic will succeed in fetching the requested database resources.</p>
+<p>Much of the same applies to the <em>seemingly</em> obvious alternative: the Network Load Balancer (<em>NLB</em>). While NLBs could satisfy the load balancing requirements, including pass through for mTLS, the additional sophistication within Target Group health checking still falls short of providing holistic startup checks for this system, ultimately relying on host-based, scripted health checks. The Application Load Balancer on the other hand, would not only be similarly limited, but additionally unable to satisfy the mTLS requirements.</p>
+<h4 id="more-complex-solutions">More Complex Solutions<a class="headerlink" href="#more-complex-solutions" title="Permanent link">&para;</a></h4>
+<h5 id="reverse-proxying-with-nginx-or-otherwise">Reverse Proxying with Nginx or Otherwise<a class="headerlink" href="#reverse-proxying-with-nginx-or-otherwise" title="Permanent link">&para;</a></h5>
+<p>Dedicated reverse proxies like <a href="https://www.haproxy.org/">HAProxy</a> or those implemented in popular web servers like <a href="https://nginx.org">Nginx</a> are easy to configure and offer solutions to a number of problems including SSL/TLS offloading and termination; selective routing or advanced load balancing; and rate limiting to name a few. Health checks are first-class members in Nginx and could easily augment the existing CLB strategy. Unfortunately, many of the problems that something like Nginx might address already have successful solutions in place, and much of the additional functionality that a tool like Nginx could provide would go unused. In short, it's overkill when compared to the proposed solution, which satisfies the requirements and introduces little in the way of maintenance overhead. Like the other alternatives mentioned above, introducing Nginx or similar would only be partial solution, still relying on some other mechanism for identifying a successful startup.</p>
+<h5 id="split-control-plane">Split Control Plane<a class="headerlink" href="#split-control-plane" title="Permanent link">&para;</a></h5>
+<p>Unlike other, similarly configured systems, bfd-server utilizes a largely <a href="https://www.digitalocean.com/community/tutorials/what-is-immutable-infrastructure">immutable infrastructure</a> pattern with little in the way of ongoing updates, automated or otherwise, post-deployment. When developers or operators wish to make changes to the system, the <em>happy path</em> involves rebuilding the system with the desired changes via deployment, rather than <em>mutating</em> the existing one. However, if a <em>control plane</em> should exist here, it might only consist of the automated Jenkins deployment pipeline, the application of terraform-defined infrastructure-as-code within it, and the suite of AWS API endpoints the pipeline uses. With this, the EC2 instances are created and automatically registered with the CLB. This is easy to maintain and simple to reason about. However, it's possible to forego the automatic EC2 instance registration with the CLB via the ASG and instead leave the registration up to scripted workflows on the instances themselves. In this way, the instances could register with the appropriate services only after they have more fully started, which satisfies the spirit of the proposed startup check. While this strategy would <em>work</em>, it's hard to imagine that increasing the individual EC2 instances privileges to directly interact with the hosting infrastructure is wise. What's more, splitting the roles and responsibilities could make the system more difficult to fully understand.</p>
+<h2 id="prior-art">Prior Art<a class="headerlink" href="#prior-art" title="Permanent link">&para;</a></h2>
+<p>N/A</p>
+<h2 id="future-possibilities">Future Possibilities<a class="headerlink" href="#future-possibilities" title="Permanent link">&para;</a></h2>
+<h3 id="deployments">Deployments<a class="headerlink" href="#deployments" title="Permanent link">&para;</a></h3>
+<p>Improvements to the existing on-host health check to make it a more specific startup check and will inspire confidence in the existing deployment process. What's more, a reliable startup check is a prerequisite to the development of alternative deployment strategies, such as <a href="https://en.wikipedia.org/wiki/Blue-green_deployment">blue-green deployments</a> and <a href="https://en.wikipedia.org/wiki/Feature_toggle">feature toggle deployments</a>. The adoption of these or other deployment strategies may dramatically decrease deployment risk and toil while further increasing deployment confidence, reliability, and frequency.</p>
+<h3 id="readiness-checking">Readiness Checking<a class="headerlink" href="#readiness-checking" title="Permanent link">&para;</a></h3>
+<p>What's missing from the proposal is the introduction of reliable readiness checks. This will require further consideration moving forward to ensure that the traffic is handled most effectively and that instances aren't suffering from periods of saturation as a result of mismanaged load balancing.</p>
+<h3 id="devsecops">DevSecOps<a class="headerlink" href="#devsecops" title="Permanent link">&para;</a></h3>
+<p>This proposal is <em>very</em> simplistic and the initial feedback to this proposal included concern over the targeted privilege escalation for <code>iptables</code>, which could be avoided by re-imagining aspects of the startup script as cooperative systemd units, discretely responsible for health checking and port management. There could be other benefits from such a solution, however, they may be considered out of scope for this specific proposal.</p>
+<h2 id="addendums">Addendums<a class="headerlink" href="#addendums" title="Permanent link">&para;</a></h2>
+<p>The following addendums are required reading before voting on this proposal:</p>
+<ul>
+<li>(none at this time)</li>
+</ul>
+
+
+
+  
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.sections", "navigation.indexes", "header.autohide", "navigation.tracking"], "search": "../../assets/javascripts/workers/search.e5c33ebb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.ba449ae6.min.js"></script>
+      
+    
+  </body>
+</html>

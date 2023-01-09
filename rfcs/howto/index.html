@@ -1,0 +1,1989 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://keithdadkins.github.io/beneficiary-fhir-data/rfcs/howto/index.html">
+      
+      
+        <link rel="prev" href="../deferred/0017-filtering.html">
+      
+      
+        <link rel="next" href="template.html">
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.3">
+    
+    
+      
+        <title>Resources - BFD</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6b71719e.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.2505c338.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/mkdocs.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="lightmode" data-md-color-primary="light-blue" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#resources" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../index.html" title="BFD" class="md-header__button md-logo" aria-label="BFD" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BFD
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Resources
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="lightmode" data-md-color-primary="light-blue" data-md-color-accent="indigo"  aria-label="dark"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="dark" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+            </label>
+          
+        
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/keithdadkins/beneficiary-fhir-data" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    beneficiary-fhir-data
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../index.html" title="BFD" class="md-nav__button md-logo" aria-label="BFD" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    BFD
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/keithdadkins/beneficiary-fhir-data" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    beneficiary-fhir-data
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../index.html" class="md-nav__link">
+        Welcome
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LICENSE.html" class="md-nav__link">
+        License
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_3" tabindex="0" aria-expanded="false">
+          Api
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Api" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Api
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/request-audit-headers.html" class="md-nav__link">
+        BFD Audit Headers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/request-options.html" class="md-nav__link">
+        BFD Request Options
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../changelog/index.html">Changelog</a>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Changelog" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Changelog
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+        
+          
+            
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../contributing/index.html">Contributing</a>
+          
+            <label for="__nav_5">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Contributing" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Contributing
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5_2" type="checkbox" id="__nav_5_2" >
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../contributing/style-guide/index.html">Style guide</a>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Style guide" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_2">
+          <span class="md-nav__icon md-icon"></span>
+          Style guide
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+        
+          
+            
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../insights/index.html">Insights</a>
+          
+            <label for="__nav_6">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Insights" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Insights
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/ab2d_firehose.html" class="md-nav__link">
+        AB2D Firehose Setup
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/bb2_notes.html" class="md-nav__link">
+        BB2 Project information
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/core_tables.html" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/data_organization.html" class="md-nav__link">
+        Organization
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/lessons_learned.html" class="md-nav__link">
+        Lessons Learned
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/onboarding.html" class="md-nav__link">
+        Onboarding
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/security.html" class="md-nav__link">
+        Security Model
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/terraform.html" class="md-nav__link">
+        Terraform Scripts
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/typical_workflow.html" class="md-nav__link">
+        Example Workflow
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7" type="checkbox" id="__nav_7" checked>
+      
+      
+        
+          
+            
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../index.html">Rfcs</a>
+          
+            <label for="__nav_7">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Rfcs" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          Rfcs
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_2" type="checkbox" id="__nav_7_2" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_7_2" tabindex="0" aria-expanded="false">
+          Deferred
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Deferred" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_2">
+          <span class="md-nav__icon md-icon"></span>
+          Deferred
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deferred/0008-partial-backfill-ccw.html" class="md-nav__link">
+        0008-partial-backfill-ccw
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deferred/0012-rda-claims-jsonb-DEFERRED.html" class="md-nav__link">
+        0012-rda-claims-jsonb
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deferred/0016-cursor-paging.html" class="md-nav__link">
+        0016-cursor-paging.md
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deferred/0017-filtering.html" class="md-nav__link">
+        0007-filtering-fields
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_3" type="checkbox" id="__nav_7_3" checked>
+      
+      
+        
+          
+            
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index md-nav__link--active">
+          <a href="index.html">Howto</a>
+          
+            <label for="__nav_7_3">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Howto" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_3">
+          <span class="md-nav__icon md-icon"></span>
+          Howto
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="template.html" class="md-nav__link">
+        rfc-template
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_4" type="checkbox" id="__nav_7_4" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_7_4" tabindex="0" aria-expanded="false">
+          Implemented
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Implemented" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_4">
+          <span class="md-nav__icon md-icon"></span>
+          Implemented
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../implemented/0000-jboss-replacement.html" class="md-nav__link">
+        0000-bye-bye-jboss
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../implemented/0001-beneficiary-fhir-server-rfc-process-v1.html" class="md-nav__link">
+        0001-beneficiary-fhir-server-rfc-process-v1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../implemented/0002-monorepo.html" class="md-nav__link">
+        0002-monorepo
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../implemented/0004-since-parameter.html" class="md-nav__link">
+        0004-since-parameter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../implemented/0005-mbi-search.html" class="md-nav__link">
+        0005-mbi-search
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../implemented/0007-service-date-filter.html" class="md-nav__link">
+        0007-service-date-filter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../implemented/0009-pipeline-orchestration-baby-steps.html" class="md-nav__link">
+        0009-pipeline-orchestration-baby-steps
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../implemented/0011-separate-flyway-from-pipeline.html" class="md-nav__link">
+        0011-separate-flyway-from-pipeline
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../implemented/0013-bfd-server-startup-check.html" class="md-nav__link">
+        0013-bfd-server-startup-check
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../implemented/0015-centralized-configuration-management.html" class="md-nav__link">
+        0015-centralized-configuration-management
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_4_11" type="checkbox" id="__nav_7_4_11" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_7_4_11" tabindex="0" aria-expanded="false">
+          BFDv2
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="BFDv2" data-md-level="3">
+        <label class="md-nav__title" for="__nav_7_4_11">
+          <span class="md-nav__icon md-icon"></span>
+          BFDv2
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../implemented/BFDv2/0001-bfd-v2-coverage.html" class="md-nav__link">
+        RFC Proposal
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../implemented/BFDv2/0001-bfd-v2-patient.html" class="md-nav__link">
+        RFC Proposal
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../implemented/BFDv2/BFDv2%20RFC.html" class="md-nav__link">
+        RFC Proposal
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_5" type="checkbox" id="__nav_7_5" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_7_5" tabindex="0" aria-expanded="false">
+          Proposed
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Proposed" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_5">
+          <span class="md-nav__icon md-icon"></span>
+          Proposed
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../proposed/0010-custom-system-uris.html" class="md-nav__link">
+        0010-custom-system-uris
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../proposed/0013-synthea-future-claims-and-automation.html" class="md-nav__link">
+        0013-Synthea-future-claims-and-automation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../proposed/0014-dsl-driven-rda-code-generation.html" class="md-nav__link">
+        0014-dsl-driven-rda-code-generation
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_6" type="checkbox" id="__nav_7_6" >
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_7_6" tabindex="0" aria-expanded="false">
+          Rejected
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Rejected" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_6">
+          <span class="md-nav__icon md-icon"></span>
+          Rejected
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rejected/0006-or-condition.html" class="md-nav__link">
+        0006-or-condition
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
+      
+      
+        
+          
+            
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../runbooks/index.html">Runbooks</a>
+          
+            <label for="__nav_8">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Runbooks" data-md-level="1">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          Runbooks
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8_2" type="checkbox" id="__nav_8_2" >
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_2" tabindex="0" aria-expanded="false">
+          Bfd db migrator
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Bfd db migrator" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_2">
+          <span class="md-nav__icon md-icon"></span>
+          Bfd db migrator
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/bfd-db-migrator/recover-from-failures.html" class="md-nav__link">
+        Recover from Failures
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8_3" type="checkbox" id="__nav_8_3" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_3" tabindex="0" aria-expanded="false">
+          Bfd insights
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Bfd insights" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_3">
+          <span class="md-nav__icon md-icon"></span>
+          Bfd insights
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/bfd-insights/firehose-failures.html" class="md-nav__link">
+        How to Investigate Firehose Ingestion Processing Failures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/bfd-insights/load-cw-logs.html" class="md-nav__link">
+        Load cw logs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/bfd-insights/new-quicksight-dashboards.html" class="md-nav__link">
+        How to Create BFD Insights QuickSight Dashboards
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8_4" type="checkbox" id="__nav_8_4" >
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_4" tabindex="0" aria-expanded="false">
+          Bfd pipeline
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Bfd pipeline" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_4">
+          <span class="md-nav__icon md-icon"></span>
+          Bfd pipeline
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/bfd-pipeline/rerun-failed-pipeline-load.html" class="md-nav__link">
+        How to Re-run a Failed BFD Pipeline Load
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8_5" type="checkbox" id="__nav_8_5" >
+      
+      
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_5" tabindex="0" aria-expanded="false">
+          Bfd server
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Bfd server" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_5">
+          <span class="md-nav__icon md-icon"></span>
+          Bfd server
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/bfd-server/recreate-regression-dashboards.html" class="md-nav__link">
+        Recreating `server-regression` QuickSight Dashboards
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/bfd-server/run-locust-tests.html" class="md-nav__link">
+        How to Run the Regression and Load Test Suites
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8_6" type="checkbox" id="__nav_8_6" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_6" tabindex="0" aria-expanded="false">
+          Snyk
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Snyk" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_6">
+          <span class="md-nav__icon md-icon"></span>
+          Snyk
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/snyk/ignore-findings.html" class="md-nav__link">
+        Ignore findings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/snyk/resolve-snyk-bot-prs.html" class="md-nav__link">
+        Resolve snyk bot prs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/snyk/resolve-snyk-report-findings.html" class="md-nav__link">
+        Resolve snyk report findings
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8_7" type="checkbox" id="__nav_8_7" >
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_7" tabindex="0" aria-expanded="false">
+          Synthea
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Synthea" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_7">
+          <span class="md-nav__icon md-icon"></span>
+          Synthea
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/synthea/run-automation.html" class="md-nav__link">
+        How to Run Synthea Automation
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_9" type="checkbox" id="__nav_9" >
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../tags/index.html">Tags</a>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Tags" data-md-level="1">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          Tags
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#plantuml" class="md-nav__link">
+    PlantUML
+  </a>
+  
+    <nav class="md-nav" aria-label="PlantUML">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plantuml-svgs" class="md-nav__link">
+    PlantUML SVGs
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+  
+
+
+
+  
+  
+
+
+
+<h1 id="resources">Resources<a class="headerlink" href="#resources" title="Permanent link">&para;</a></h1>
+<p>This directory is intended to provide a home for non-text resources that are referenced by text within the RFC documents, e.g. graphical diagrams, images, etc. It's inspired by a directory of the same name featured in the <a href="https://github.com/rust-lang/rfcs">rust-lang/rfcs repository</a>. At the time of this writing, the resources directory includes just one image in an SVG format. </p>
+<h2 id="plantuml">PlantUML<a class="headerlink" href="#plantuml" title="Permanent link">&para;</a></h2>
+<p><a href="https://github.com/plantuml/plantuml">PlantUML</a> is "is an open-source tool allowing users to create diagrams from a plain text language" (from the <a href="https://en.wikipedia.org/wiki/PlantUML">PlantUML entry on Wikipedia</a>). It's capable of producing commong diagrams, both UML and otherwise, in a variety of formats including ASCII diagrams, PNG, SVG.</p>
+<h3 id="plantuml-svgs">PlantUML SVGs<a class="headerlink" href="#plantuml-svgs" title="Permanent link">&para;</a></h3>
+<p>It's <em>probably</em> not unique to PlantUML, but no less helpful, the SVG output features an embdedd comment that includes both the MD5 hash of the diagram as well as DSL source code. For this reason, the original PlantUML DSL encoded files can be considered optional.</p>
+<h4 id="plantuml-example">PlantUML Example<a class="headerlink" href="#plantuml-example" title="Permanent link">&para;</a></h4>
+<p>The following example in plantuml with a comment describing the export to SVG, note that only comments inside the <code>@startuml</code> and <code>@enduml</code> will appear in the resultant SVG/XML:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>&#39; hello-world.plantuml
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>@startuml
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>/&#39;
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a> &#39; export PLANTUML_JAR=&lt;path-to-your-plantuml-jar&gt;
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a> &#39; java -jar $PLANTUML_JAR -svg hello-world.plantuml
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a> &#39;/
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>Alice -&gt; Bob: Authentication Request
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>Bob --&gt; Alice: Authentication Response
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>Alice -&gt; Bob: Another authentication Request
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>Alice &lt;-- Bob: Another authentication Response
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>@enduml
+</code></pre></div></p>
+<p>Rendering as an SVG using the prescribed comment embedded in the diagram's DSL above:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">PLANTUML_JAR</span><span class="o">=</span>&lt;path-to-your-plantuml-jar&gt;
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>java<span class="w"> </span>-jar<span class="w"> </span><span class="nv">$PLANTUML_JAR</span><span class="w"> </span>-svg<span class="w"> </span>hello-world.plantuml
+</code></pre></div>
+<p>Rendered as an SVG in the raw XML format, note the final comment:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;</span><span class="nt">&lt;svg</span><span class="w"> </span><span class="na">xmlns=</span><span class="s">&quot;http://www.w3.org/2000/svg&quot;</span><span class="w"> </span><span class="na">xmlns:xlink=</span><span class="s">&quot;http://www.w3.org/1999/xlink&quot;</span><span class="w"> </span><span class="na">contentScriptType=</span><span class="s">&quot;application/ecmascript&quot;</span><span class="w"> </span><span class="na">contentStyleType=</span><span class="s">&quot;text/css&quot;</span><span class="w"> </span><span class="na">height=</span><span class="s">&quot;221px&quot;</span><span class="w"> </span><span class="na">preserveAspectRatio=</span><span class="s">&quot;none&quot;</span><span class="w"> </span><span class="na">style=</span><span class="s">&quot;width:295px;height:221px;background:#FFFFFF;&quot;</span><span class="w"> </span><span class="na">version=</span><span class="s">&quot;1.1&quot;</span><span class="w"> </span><span class="na">viewBox=</span><span class="s">&quot;0 0 295 221&quot;</span><span class="w"> </span><span class="na">width=</span><span class="s">&quot;295px&quot;</span><span class="w"> </span><span class="na">zoomAndPan=</span><span class="s">&quot;magnify&quot;</span><span class="nt">&gt;&lt;defs&gt;&lt;filter</span><span class="w"> </span><span class="na">height=</span><span class="s">&quot;300%&quot;</span><span class="w"> </span><span class="na">id=</span><span class="s">&quot;fuqcworyn19rk&quot;</span><span class="w"> </span><span class="na">width=</span><span class="s">&quot;300%&quot;</span><span class="w"> </span><span class="na">x=</span><span class="s">&quot;-1&quot;</span><span class="w"> </span><span class="na">y=</span><span class="s">&quot;-1&quot;</span><span class="nt">&gt;&lt;feGaussianBlur</span><span class="w"> </span><span class="na">result=</span><span class="s">&quot;blurOut&quot;</span><span class="w"> </span><span class="na">stdDeviation=</span><span class="s">&quot;2.0&quot;</span><span class="nt">/&gt;&lt;feColorMatrix</span><span class="w"> </span><span class="na">in=</span><span class="s">&quot;blurOut&quot;</span><span class="w"> </span><span class="na">result=</span><span class="s">&quot;blurOut2&quot;</span><span class="w"> </span><span class="na">type=</span><span class="s">&quot;matrix&quot;</span><span class="w"> </span><span class="na">values=</span><span class="s">&quot;0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0&quot;</span><span class="nt">/&gt;&lt;feOffset</span><span class="w"> </span><span class="na">dx=</span><span class="s">&quot;4.0&quot;</span><span class="w"> </span><span class="na">dy=</span><span class="s">&quot;4.0&quot;</span><span class="w"> </span><span class="na">in=</span><span class="s">&quot;blurOut2&quot;</span><span class="w"> </span><span class="na">result=</span><span class="s">&quot;blurOut3&quot;</span><span class="nt">/&gt;&lt;feBlend</span><span class="w"> </span><span class="na">in=</span><span class="s">&quot;SourceGraphic&quot;</span><span class="w"> </span><span class="na">in2=</span><span class="s">&quot;blurOut3&quot;</span><span class="w"> </span><span class="na">mode=</span><span class="s">&quot;normal&quot;</span><span class="nt">/&gt;&lt;/filter&gt;&lt;/defs&gt;&lt;g&gt;&lt;line</span><span class="w"> </span><span class="na">style=</span><span class="s">&quot;stroke:#A80036;stroke-width:1.0;stroke-dasharray:5.0,5.0;&quot;</span><span class="w"> </span><span class="na">x1=</span><span class="s">&quot;30&quot;</span><span class="w"> </span><span class="na">x2=</span><span class="s">&quot;30&quot;</span><span class="w"> </span><span class="na">y1=</span><span class="s">&quot;40.4883&quot;</span><span class="w"> </span><span class="na">y2=</span><span class="s">&quot;177.7305&quot;</span><span class="nt">/&gt;&lt;line</span><span class="w"> </span><span class="na">style=</span><span class="s">&quot;stroke:#A80036;stroke-width:1.0;stroke-dasharray:5.0,5.0;&quot;</span><span class="w"> </span><span class="na">x1=</span><span class="s">&quot;263.5&quot;</span><span class="w"> </span><span class="na">x2=</span><span class="s">&quot;263.5&quot;</span><span class="w"> </span><span class="na">y1=</span><span class="s">&quot;40.4883&quot;</span><span class="w"> </span><span class="na">y2=</span><span class="s">&quot;177.7305&quot;</span><span class="nt">/&gt;&lt;rect</span><span class="w"> </span><span class="na">fill=</span><span class="s">&quot;#FEFECE&quot;</span><span class="w"> </span><span class="na">filter=</span><span class="s">&quot;url(#fuqcworyn19rk)&quot;</span><span class="w"> </span><span class="na">height=</span><span class="s">&quot;30.4883&quot;</span><span class="w"> </span><span class="na">style=</span><span class="s">&quot;stroke:#A80036;stroke-width:1.5;&quot;</span><span class="w"> </span><span class="na">width=</span><span class="s">&quot;47&quot;</span><span class="w"> </span><span class="na">x=</span><span class="s">&quot;5&quot;</span><span class="w"> </span><span class="na">y=</span><span class="s">&quot;5&quot;</span><span class="nt">/&gt;&lt;text</span><span class="w"> </span><span class="na">fill=</span><span class="s">&quot;#000000&quot;</span><span class="w"> </span><span class="na">font-family=</span><span class="s">&quot;sans-serif&quot;</span><span class="w"> </span><span class="na">font-size=</span><span class="s">&quot;14&quot;</span><span class="w"> </span><span class="na">lengthAdjust=</span><span class="s">&quot;spacing&quot;</span><span class="w"> </span><span class="na">textLength=</span><span class="s">&quot;33&quot;</span><span class="w"> </span><span class="na">x=</span><span class="s">&quot;12&quot;</span><span class="w"> </span><span class="na">y=</span><span class="s">&quot;25.5352&quot;</span><span class="nt">&gt;</span>Alice<span class="nt">&lt;/text&gt;&lt;rect</span><span class="w"> </span><span class="na">fill=</span><span class="s">&quot;#FEFECE&quot;</span><span class="w"> </span><span class="na">filter=</span><span class="s">&quot;url(#fuqcworyn19rk)&quot;</span><span class="w"> </span><span class="na">height=</span><span class="s">&quot;30.4883&quot;</span><span class="w"> </span><span class="na">style=</span><span class="s">&quot;stroke:#A80036;stroke-width:1.5;&quot;</span><span class="w"> </span><span class="na">width=</span><span class="s">&quot;47&quot;</span><span class="w"> </span><span class="na">x=</span><span class="s">&quot;5&quot;</span><span class="w"> </span><span class="na">y=</span><span class="s">&quot;176.7305&quot;</span><span class="nt">/&gt;&lt;text</span><span class="w"> </span><span class="na">fill=</span><span class="s">&quot;#000000&quot;</span><span class="w"> </span><span class="na">font-family=</span><span class="s">&quot;sans-serif&quot;</span><span class="w"> </span><span class="na">font-size=</span><span class="s">&quot;14&quot;</span><span class="w"> </span><span class="na">lengthAdjust=</span><span class="s">&quot;spacing&quot;</span><span class="w"> </span><span class="na">textLength=</span><span class="s">&quot;33&quot;</span><span class="w"> </span><span class="na">x=</span><span class="s">&quot;12&quot;</span><span class="w"> </span><span class="na">y=</span><span class="s">&quot;197.2656&quot;</span><span class="nt">&gt;</span>Alice<span class="nt">&lt;/text&gt;&lt;rect</span><span class="w"> </span><span class="na">fill=</span><span class="s">&quot;#FEFECE&quot;</span><span class="w"> </span><span class="na">filter=</span><span class="s">&quot;url(#fuqcworyn19rk)&quot;</span><span class="w"> </span><span class="na">height=</span><span class="s">&quot;30.4883&quot;</span><span class="w"> </span><span class="na">style=</span><span class="s">&quot;stroke:#A80036;stroke-width:1.5;&quot;</span><span class="w"> </span><span class="na">width=</span><span class="s">&quot;40&quot;</span><span class="w"> </span><span class="na">x=</span><span class="s">&quot;241.5&quot;</span><span class="w"> </span><span class="na">y=</span><span class="s">&quot;5&quot;</span><span class="nt">/&gt;&lt;text</span><span class="w"> </span><span class="na">fill=</span><span class="s">&quot;#000000&quot;</span><span class="w"> </span><span class="na">font-family=</span><span class="s">&quot;sans-serif&quot;</span><span class="w"> </span><span class="na">font-size=</span><span class="s">&quot;14&quot;</span><span class="w"> </span><span class="na">lengthAdjust=</span><span class="s">&quot;spacing&quot;</span><span class="w"> </span><span class="na">textLength=</span><span class="s">&quot;26&quot;</span><span class="w"> </span><span class="na">x=</span><span class="s">&quot;248.5&quot;</span><span class="w"> </span><span class="na">y=</span><span class="s">&quot;25.5352&quot;</span><span class="nt">&gt;</span>Bob<span class="nt">&lt;/text&gt;&lt;rect</span><span class="w"> </span><span class="na">fill=</span><span class="s">&quot;#FEFECE&quot;</span><span class="w"> </span><span class="na">filter=</span><span class="s">&quot;url(#fuqcworyn19rk)&quot;</span><span class="w"> </span><span class="na">height=</span><span class="s">&quot;30.4883&quot;</span><span class="w"> </span><span class="na">style=</span><span class="s">&quot;stroke:#A80036;stroke-width:1.5;&quot;</span><span class="w"> </span><span class="na">width=</span><span class="s">&quot;40&quot;</span><span class="w"> </span><span class="na">x=</span><span class="s">&quot;241.5&quot;</span><span class="w"> </span><span class="na">y=</span><span class="s">&quot;176.7305&quot;</span><span class="nt">/&gt;&lt;text</span><span class="w"> </span><span class="na">fill=</span><span class="s">&quot;#000000&quot;</span><span class="w"> </span><span class="na">font-family=</span><span class="s">&quot;sans-serif&quot;</span><span class="w"> </span><span class="na">font-size=</span><span class="s">&quot;14&quot;</span><span class="w"> </span><span class="na">lengthAdjust=</span><span class="s">&quot;spacing&quot;</span><span class="w"> </span><span class="na">textLength=</span><span class="s">&quot;26&quot;</span><span class="w"> </span><span class="na">x=</span><span class="s">&quot;248.5&quot;</span><span class="w"> </span><span class="na">y=</span><span class="s">&quot;197.2656&quot;</span><span class="nt">&gt;</span>Bob<span class="nt">&lt;/text&gt;&lt;polygon</span><span class="w"> </span><span class="na">fill=</span><span class="s">&quot;#A80036&quot;</span><span class="w"> </span><span class="na">points=</span><span class="s">&quot;251.5,67.7988,261.5,71.7988,251.5,75.7988,255.5,71.7988&quot;</span><span class="w"> </span><span class="na">style=</span><span class="s">&quot;stroke:#A80036;stroke-width:1.0;&quot;</span><span class="nt">/&gt;&lt;line</span><span class="w"> </span><span class="na">style=</span><span class="s">&quot;stroke:#A80036;stroke-width:1.0;&quot;</span><span class="w"> </span><span class="na">x1=</span><span class="s">&quot;30.5&quot;</span><span class="w"> </span><span class="na">x2=</span><span class="s">&quot;257.5&quot;</span><span class="w"> </span><span class="na">y1=</span><span class="s">&quot;71.7988&quot;</span><span class="w"> </span><span class="na">y2=</span><span class="s">&quot;71.7988&quot;</span><span class="nt">/&gt;&lt;text</span><span class="w"> </span><span class="na">fill=</span><span class="s">&quot;#000000&quot;</span><span class="w"> </span><span class="na">font-family=</span><span class="s">&quot;sans-serif&quot;</span><span class="w"> </span><span class="na">font-size=</span><span class="s">&quot;13&quot;</span><span class="w"> </span><span class="na">lengthAdjust=</span><span class="s">&quot;spacing&quot;</span><span class="w"> </span><span class="na">textLength=</span><span class="s">&quot;147&quot;</span><span class="w"> </span><span class="na">x=</span><span class="s">&quot;37.5&quot;</span><span class="w"> </span><span class="na">y=</span><span class="s">&quot;67.0566&quot;</span><span class="nt">&gt;</span>Authentication<span class="w"> </span>Request<span class="nt">&lt;/text&gt;&lt;polygon</span><span class="w"> </span><span class="na">fill=</span><span class="s">&quot;#A80036&quot;</span><span class="w"> </span><span class="na">points=</span><span class="s">&quot;41.5,97.1094,31.5,101.1094,41.5,105.1094,37.5,101.1094&quot;</span><span class="w"> </span><span class="na">style=</span><span class="s">&quot;stroke:#A80036;stroke-width:1.0;&quot;</span><span class="nt">/&gt;&lt;line</span><span class="w"> </span><span class="na">style=</span><span class="s">&quot;stroke:#A80036;stroke-width:1.0;stroke-dasharray:2.0,2.0;&quot;</span><span class="w"> </span><span class="na">x1=</span><span class="s">&quot;35.5&quot;</span><span class="w"> </span><span class="na">x2=</span><span class="s">&quot;262.5&quot;</span><span class="w"> </span><span class="na">y1=</span><span class="s">&quot;101.1094&quot;</span><span class="w"> </span><span class="na">y2=</span><span class="s">&quot;101.1094&quot;</span><span class="nt">/&gt;&lt;text</span><span class="w"> </span><span class="na">fill=</span><span class="s">&quot;#000000&quot;</span><span class="w"> </span><span class="na">font-family=</span><span class="s">&quot;sans-serif&quot;</span><span class="w"> </span><span class="na">font-size=</span><span class="s">&quot;13&quot;</span><span class="w"> </span><span class="na">lengthAdjust=</span><span class="s">&quot;spacing&quot;</span><span class="w"> </span><span class="na">textLength=</span><span class="s">&quot;157&quot;</span><span class="w"> </span><span class="na">x=</span><span class="s">&quot;47.5&quot;</span><span class="w"> </span><span class="na">y=</span><span class="s">&quot;96.3672&quot;</span><span class="nt">&gt;</span>Authentication<span class="w"> </span>Response<span class="nt">&lt;/text&gt;&lt;polygon</span><span class="w"> </span><span class="na">fill=</span><span class="s">&quot;#A80036&quot;</span><span class="w"> </span><span class="na">points=</span><span class="s">&quot;251.5,126.4199,261.5,130.4199,251.5,134.4199,255.5,130.4199&quot;</span><span class="w"> </span><span class="na">style=</span><span class="s">&quot;stroke:#A80036;stroke-width:1.0;&quot;</span><span class="nt">/&gt;&lt;line</span><span class="w"> </span><span class="na">style=</span><span class="s">&quot;stroke:#A80036;stroke-width:1.0;&quot;</span><span class="w"> </span><span class="na">x1=</span><span class="s">&quot;30.5&quot;</span><span class="w"> </span><span class="na">x2=</span><span class="s">&quot;257.5&quot;</span><span class="w"> </span><span class="na">y1=</span><span class="s">&quot;130.4199&quot;</span><span class="w"> </span><span class="na">y2=</span><span class="s">&quot;130.4199&quot;</span><span class="nt">/&gt;&lt;text</span><span class="w"> </span><span class="na">fill=</span><span class="s">&quot;#000000&quot;</span><span class="w"> </span><span class="na">font-family=</span><span class="s">&quot;sans-serif&quot;</span><span class="w"> </span><span class="na">font-size=</span><span class="s">&quot;13&quot;</span><span class="w"> </span><span class="na">lengthAdjust=</span><span class="s">&quot;spacing&quot;</span><span class="w"> </span><span class="na">textLength=</span><span class="s">&quot;199&quot;</span><span class="w"> </span><span class="na">x=</span><span class="s">&quot;37.5&quot;</span><span class="w"> </span><span class="na">y=</span><span class="s">&quot;125.6777&quot;</span><span class="nt">&gt;</span>Another<span class="w"> </span>authentication<span class="w"> </span>Request<span class="nt">&lt;/text&gt;&lt;polygon</span><span class="w"> </span><span class="na">fill=</span><span class="s">&quot;#A80036&quot;</span><span class="w"> </span><span class="na">points=</span><span class="s">&quot;41.5,155.7305,31.5,159.7305,41.5,163.7305,37.5,159.7305&quot;</span><span class="w"> </span><span class="na">style=</span><span class="s">&quot;stroke:#A80036;stroke-width:1.0;&quot;</span><span class="nt">/&gt;&lt;line</span><span class="w"> </span><span class="na">style=</span><span class="s">&quot;stroke:#A80036;stroke-width:1.0;stroke-dasharray:2.0,2.0;&quot;</span><span class="w"> </span><span class="na">x1=</span><span class="s">&quot;35.5&quot;</span><span class="w"> </span><span class="na">x2=</span><span class="s">&quot;262.5&quot;</span><span class="w"> </span><span class="na">y1=</span><span class="s">&quot;159.7305&quot;</span><span class="w"> </span><span class="na">y2=</span><span class="s">&quot;159.7305&quot;</span><span class="nt">/&gt;&lt;text</span><span class="w"> </span><span class="na">fill=</span><span class="s">&quot;#000000&quot;</span><span class="w"> </span><span class="na">font-family=</span><span class="s">&quot;sans-serif&quot;</span><span class="w"> </span><span class="na">font-size=</span><span class="s">&quot;13&quot;</span><span class="w"> </span><span class="na">lengthAdjust=</span><span class="s">&quot;spacing&quot;</span><span class="w"> </span><span class="na">textLength=</span><span class="s">&quot;209&quot;</span><span class="w"> </span><span class="na">x=</span><span class="s">&quot;47.5&quot;</span><span class="w"> </span><span class="na">y=</span><span class="s">&quot;154.9883&quot;</span><span class="nt">&gt;</span>Another<span class="w"> </span>authentication<span class="w"> </span>Response<span class="nt">&lt;/text&gt;</span><span class="cm">&lt;!--MD5=[7b907e995d48c862f5d0492a126b987a]</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="cm">@startuml</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="cm">/&#39;</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="cm"> &#39; export PLANTUML_JAR=&lt;path-to-your-plantuml-jar&gt;</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="cm"> &#39; java -jar $PLANTUML_JAR -svg hello-world.plantuml</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="cm"> &#39;/</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="cm">Alice -&gt; Bob: Authentication Request</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="cm">Bob - -&gt; Alice: Authentication Response</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="cm">Alice -&gt; Bob: Another authentication Request</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="cm">Alice &lt;- - Bob: Another authentication Response</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="cm">@enduml</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="cm">@startuml</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="cm">Alice -&gt; Bob: Authentication Request</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="cm">Bob - -&gt; Alice: Authentication Response</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="cm">Alice -&gt; Bob: Another authentication Request</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="cm">Alice &lt;- - Bob: Another authentication Response</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="cm">@enduml</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="cm">PlantUML version 1.2022.1(Tue Feb 01 12:19:58 CST 2022)</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="cm">(GPL source distribution)</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="cm">Java Runtime: OpenJDK Runtime Environment</span>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="cm">JVM: OpenJDK 64-Bit Server VM</span>
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="cm">Default Encoding: UTF-8</span>
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="cm">Language: en</span>
+<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a><span class="cm">Country: US</span>
+<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a><span class="cm">--&gt;</span><span class="nt">&lt;/g&gt;&lt;/svg&gt;</span>
+</code></pre></div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.sections", "navigation.indexes", "header.autohide", "navigation.tracking"], "search": "../../assets/javascripts/workers/search.e5c33ebb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.ba449ae6.min.js"></script>
+      
+    
+  </body>
+</html>

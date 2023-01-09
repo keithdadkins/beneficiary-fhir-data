@@ -1,0 +1,2454 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://keithdadkins.github.io/beneficiary-fhir-data/runbooks/bfd-server/recreate-regression-dashboards.html">
+      
+      
+        <link rel="prev" href="../bfd-pipeline/rerun-failed-pipeline-load.html">
+      
+      
+        <link rel="next" href="run-locust-tests.html">
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.3">
+    
+    
+      
+        <title>Recreating `server-regression` QuickSight Dashboards - BFD</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6b71719e.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.2505c338.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/mkdocs.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="lightmode" data-md-color-primary="light-blue" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#recreating-server-regression-quicksight-dashboards" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../index.html" title="BFD" class="md-header__button md-logo" aria-label="BFD" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BFD
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Recreating `server-regression` QuickSight Dashboards
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="lightmode" data-md-color-primary="light-blue" data-md-color-accent="indigo"  aria-label="dark"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="dark" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+            </label>
+          
+        
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/keithdadkins/beneficiary-fhir-data" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    beneficiary-fhir-data
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../index.html" title="BFD" class="md-nav__button md-logo" aria-label="BFD" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    BFD
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/keithdadkins/beneficiary-fhir-data" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    beneficiary-fhir-data
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../index.html" class="md-nav__link">
+        Welcome
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LICENSE.html" class="md-nav__link">
+        License
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_3" tabindex="0" aria-expanded="false">
+          Api
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Api" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Api
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/request-audit-headers.html" class="md-nav__link">
+        BFD Audit Headers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/request-options.html" class="md-nav__link">
+        BFD Request Options
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../changelog/index.html">Changelog</a>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Changelog" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Changelog
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+        
+          
+            
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../contributing/index.html">Contributing</a>
+          
+            <label for="__nav_5">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Contributing" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Contributing
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5_2" type="checkbox" id="__nav_5_2" >
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../contributing/style-guide/index.html">Style guide</a>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Style guide" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_2">
+          <span class="md-nav__icon md-icon"></span>
+          Style guide
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+        
+          
+            
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../insights/index.html">Insights</a>
+          
+            <label for="__nav_6">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Insights" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Insights
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/ab2d_firehose.html" class="md-nav__link">
+        AB2D Firehose Setup
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/bb2_notes.html" class="md-nav__link">
+        BB2 Project information
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/core_tables.html" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/data_organization.html" class="md-nav__link">
+        Organization
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/lessons_learned.html" class="md-nav__link">
+        Lessons Learned
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/onboarding.html" class="md-nav__link">
+        Onboarding
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/security.html" class="md-nav__link">
+        Security Model
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/terraform.html" class="md-nav__link">
+        Terraform Scripts
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/typical_workflow.html" class="md-nav__link">
+        Example Workflow
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+      
+      
+        
+          
+            
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../rfcs/index.html">Rfcs</a>
+          
+            <label for="__nav_7">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Rfcs" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          Rfcs
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_2" type="checkbox" id="__nav_7_2" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_7_2" tabindex="0" aria-expanded="false">
+          Deferred
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Deferred" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_2">
+          <span class="md-nav__icon md-icon"></span>
+          Deferred
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/deferred/0008-partial-backfill-ccw.html" class="md-nav__link">
+        0008-partial-backfill-ccw
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/deferred/0012-rda-claims-jsonb-DEFERRED.html" class="md-nav__link">
+        0012-rda-claims-jsonb
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/deferred/0016-cursor-paging.html" class="md-nav__link">
+        0016-cursor-paging.md
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/deferred/0017-filtering.html" class="md-nav__link">
+        0007-filtering-fields
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_3" type="checkbox" id="__nav_7_3" >
+      
+      
+        
+          
+            
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../rfcs/howto/index.html">Howto</a>
+          
+            <label for="__nav_7_3">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Howto" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_3">
+          <span class="md-nav__icon md-icon"></span>
+          Howto
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/howto/template.html" class="md-nav__link">
+        rfc-template
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_4" type="checkbox" id="__nav_7_4" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_7_4" tabindex="0" aria-expanded="false">
+          Implemented
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Implemented" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_4">
+          <span class="md-nav__icon md-icon"></span>
+          Implemented
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/implemented/0000-jboss-replacement.html" class="md-nav__link">
+        0000-bye-bye-jboss
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/implemented/0001-beneficiary-fhir-server-rfc-process-v1.html" class="md-nav__link">
+        0001-beneficiary-fhir-server-rfc-process-v1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/implemented/0002-monorepo.html" class="md-nav__link">
+        0002-monorepo
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/implemented/0004-since-parameter.html" class="md-nav__link">
+        0004-since-parameter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/implemented/0005-mbi-search.html" class="md-nav__link">
+        0005-mbi-search
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/implemented/0007-service-date-filter.html" class="md-nav__link">
+        0007-service-date-filter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/implemented/0009-pipeline-orchestration-baby-steps.html" class="md-nav__link">
+        0009-pipeline-orchestration-baby-steps
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/implemented/0011-separate-flyway-from-pipeline.html" class="md-nav__link">
+        0011-separate-flyway-from-pipeline
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/implemented/0013-bfd-server-startup-check.html" class="md-nav__link">
+        0013-bfd-server-startup-check
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/implemented/0015-centralized-configuration-management.html" class="md-nav__link">
+        0015-centralized-configuration-management
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_4_11" type="checkbox" id="__nav_7_4_11" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_7_4_11" tabindex="0" aria-expanded="false">
+          BFDv2
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="BFDv2" data-md-level="3">
+        <label class="md-nav__title" for="__nav_7_4_11">
+          <span class="md-nav__icon md-icon"></span>
+          BFDv2
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/implemented/BFDv2/0001-bfd-v2-coverage.html" class="md-nav__link">
+        RFC Proposal
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/implemented/BFDv2/0001-bfd-v2-patient.html" class="md-nav__link">
+        RFC Proposal
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/implemented/BFDv2/BFDv2%20RFC.html" class="md-nav__link">
+        RFC Proposal
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_5" type="checkbox" id="__nav_7_5" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_7_5" tabindex="0" aria-expanded="false">
+          Proposed
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Proposed" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_5">
+          <span class="md-nav__icon md-icon"></span>
+          Proposed
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/proposed/0010-custom-system-uris.html" class="md-nav__link">
+        0010-custom-system-uris
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/proposed/0013-synthea-future-claims-and-automation.html" class="md-nav__link">
+        0013-Synthea-future-claims-and-automation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/proposed/0014-dsl-driven-rda-code-generation.html" class="md-nav__link">
+        0014-dsl-driven-rda-code-generation
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_6" type="checkbox" id="__nav_7_6" >
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_7_6" tabindex="0" aria-expanded="false">
+          Rejected
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Rejected" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_6">
+          <span class="md-nav__icon md-icon"></span>
+          Rejected
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rfcs/rejected/0006-or-condition.html" class="md-nav__link">
+        0006-or-condition
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8" type="checkbox" id="__nav_8" checked>
+      
+      
+        
+          
+            
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../index.html">Runbooks</a>
+          
+            <label for="__nav_8">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Runbooks" data-md-level="1">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          Runbooks
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8_2" type="checkbox" id="__nav_8_2" >
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_2" tabindex="0" aria-expanded="false">
+          Bfd db migrator
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Bfd db migrator" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_2">
+          <span class="md-nav__icon md-icon"></span>
+          Bfd db migrator
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bfd-db-migrator/recover-from-failures.html" class="md-nav__link">
+        Recover from Failures
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8_3" type="checkbox" id="__nav_8_3" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_3" tabindex="0" aria-expanded="false">
+          Bfd insights
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Bfd insights" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_3">
+          <span class="md-nav__icon md-icon"></span>
+          Bfd insights
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bfd-insights/firehose-failures.html" class="md-nav__link">
+        How to Investigate Firehose Ingestion Processing Failures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bfd-insights/load-cw-logs.html" class="md-nav__link">
+        Load cw logs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bfd-insights/new-quicksight-dashboards.html" class="md-nav__link">
+        How to Create BFD Insights QuickSight Dashboards
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8_4" type="checkbox" id="__nav_8_4" >
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_4" tabindex="0" aria-expanded="false">
+          Bfd pipeline
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Bfd pipeline" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_4">
+          <span class="md-nav__icon md-icon"></span>
+          Bfd pipeline
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bfd-pipeline/rerun-failed-pipeline-load.html" class="md-nav__link">
+        How to Re-run a Failed BFD Pipeline Load
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8_5" type="checkbox" id="__nav_8_5" checked>
+      
+      
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_5" tabindex="0" aria-expanded="true">
+          Bfd server
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Bfd server" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_5">
+          <span class="md-nav__icon md-icon"></span>
+          Bfd server
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Recreating `server-regression` QuickSight Dashboards
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="recreate-regression-dashboards.html" class="md-nav__link md-nav__link--active">
+        Recreating `server-regression` QuickSight Dashboards
+      </a>
+      
+        
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#glossary" class="md-nav__link">
+    Glossary
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#faq" class="md-nav__link">
+    FAQ
+  </a>
+  
+    <nav class="md-nav" aria-label="FAQ">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#will-the-hash-in-each-of-the-dataset-sql-queries-below-ever-change-what-is-it-used-for" class="md-nav__link">
+    Will the hash in each of the Dataset SQL queries below ever change? What is it used for?
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#instructions" class="md-nav__link">
+    Instructions
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="run-locust-tests.html" class="md-nav__link">
+        How to Run the Regression and Load Test Suites
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8_6" type="checkbox" id="__nav_8_6" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_6" tabindex="0" aria-expanded="false">
+          Snyk
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Snyk" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_6">
+          <span class="md-nav__icon md-icon"></span>
+          Snyk
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../snyk/ignore-findings.html" class="md-nav__link">
+        Ignore findings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../snyk/resolve-snyk-bot-prs.html" class="md-nav__link">
+        Resolve snyk bot prs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../snyk/resolve-snyk-report-findings.html" class="md-nav__link">
+        Resolve snyk report findings
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8_7" type="checkbox" id="__nav_8_7" >
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_7" tabindex="0" aria-expanded="false">
+          Synthea
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Synthea" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_7">
+          <span class="md-nav__icon md-icon"></span>
+          Synthea
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../synthea/run-automation.html" class="md-nav__link">
+        How to Run Synthea Automation
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_9" type="checkbox" id="__nav_9" >
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../tags/index.html">Tags</a>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Tags" data-md-level="1">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          Tags
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#glossary" class="md-nav__link">
+    Glossary
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#faq" class="md-nav__link">
+    FAQ
+  </a>
+  
+    <nav class="md-nav" aria-label="FAQ">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#will-the-hash-in-each-of-the-dataset-sql-queries-below-ever-change-what-is-it-used-for" class="md-nav__link">
+    Will the hash in each of the Dataset SQL queries below ever change? What is it used for?
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#instructions" class="md-nav__link">
+    Instructions
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+  
+
+
+
+  
+  
+
+
+
+<h1 id="recreating-server-regression-quicksight-dashboards">Recreating <code>server-regression</code> QuickSight Dashboards<a class="headerlink" href="#recreating-server-regression-quicksight-dashboards" title="Permanent link">&para;</a></h1>
+<p>Follow this runbook in the event that the QuickSight dashboards for the <code>server-regression</code>'s test suite's performance metrics are ever destroyed and need to be recreated.</p>
+<p>As of writing, the following dashboards are available to view for members of the BFD team:</p>
+<ul>
+<li><a href="https://us-east-1.quicksight.aws.amazon.com/sn/dashboards/598e729a-90c6-418a-a59e-e4b18d9f6dff"><code>bfd-test-server-regression</code></a></li>
+<li><a href="https://us-east-1.quicksight.aws.amazon.com/sn/dashboards/09e53c86-acbb-437a-b451-63123fdceab4"><code>bfd-prod-sbx-server-regression</code></a></li>
+<li><a href="https://us-east-1.quicksight.aws.amazon.com/sn/dashboards/7c9c77bb-34fe-4434-a9f6-41d700d058a7"><code>bfd-prod-server-regression</code></a></li>
+</ul>
+<blockquote>
+<p><strong>Note:</strong> The above dashboards can also be found in QuickSight's <a href="https://us-east-1.quicksight.aws.amazon.com/sn/start/dashboards">"Dashboards" view</a></p>
+</blockquote>
+<h2 id="glossary">Glossary<a class="headerlink" href="#glossary" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th align="center">Term</th>
+<th align="center">Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><code>server-regression</code></td>
+<td align="center">Technical identifier for the Locust-based performance regression test suite that runs against BFD Server during deployment in all environments</td>
+</tr>
+<tr>
+<td align="center">QuickSight</td>
+<td align="center">An AWS Service that allows for the creation of visual dashboards from various datasets (i.e. S3, RDS, Athena, etc.)</td>
+</tr>
+<tr>
+<td align="center">Dataset</td>
+<td align="center">QuickSight's term for a data store (such as S3, Athena, etc) along with the fields to display from the store</td>
+</tr>
+<tr>
+<td align="center">Analysis</td>
+<td align="center">A work-in-progress Dashboard that uses a Dataset to display fields</td>
+</tr>
+<tr>
+<td align="center">Dashboard</td>
+<td align="center">A collection of graphs and visuals that represents a Dataset</td>
+</tr>
+<tr>
+<td align="center">Athena</td>
+<td align="center">An AWS Service that is used to analyze data stored in AWS S3 using standard SQL</td>
+</tr>
+</tbody>
+</table>
+<h2 id="faq">FAQ<a class="headerlink" href="#faq" title="Permanent link">&para;</a></h2>
+<!-- This section should contain frequently-asked-questions as sub-headers with answers as sub-paragraphs. Since this is a living document, this section should be added to as needed. -->
+
+<h3 id="will-the-hash-in-each-of-the-dataset-sql-queries-below-ever-change-what-is-it-used-for">Will the <code>hash</code> in each of the Dataset SQL queries below ever change? What is it used for?<a class="headerlink" href="#will-the-hash-in-each-of-the-dataset-sql-queries-below-ever-change-what-is-it-used-for" title="Permanent link">&para;</a></h3>
+<p>Firstly, the <code>hash</code> (or, more specifically, <code>metadata.hash</code>) is a SHA256 hash of various test parameters and metadata values
+from a given test suite run. Performance metrics with the same <code>metadata.hash</code> value can be confidently compared as they
+were collected from test suite runs that were started with the same parameters (i.e. number of simulated users, desired
+test runtime, types of tests run, etc.).</p>
+<p>There are really only two scenarios where the hash could change:</p>
+<ol>
+<li>The parameters (runtime, user count, spawn rate) that control how the <code>server-regression</code> test suite runs during BFD Server deployments change from their current defaults</li>
+<li>The code to generate the hash changes because we add an additional field or want to change the hashing algorithm</li>
+</ol>
+<p>These scenarios are unlikely for the following reasons:</p>
+<ol>
+<li>With the current parameters, consistent and <em>useful</em> results are being captured with minimal increase in deployment time. That is to say, at time of writing there is no benefit in changing these parameters</li>
+<li>There is no additional metadata that Locust exposes that we would want to include in the hash to further delineate performance metrics that <em>can</em> or <em>can't</em> be compared</li>
+</ol>
+<p>If, however, the hash <em>does</em> change in the future, the queries listed below will need to be updated <strong>in both</strong> this runbook and in each of
+the Datasets in QuickSight. Note that this scenario will be easy to identify, as the visuals in each Dashboard will stop displaying
+data.</p>
+<h2 id="instructions">Instructions<a class="headerlink" href="#instructions" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p>You will need to navigate to the QuickSight AWS Service in order to start creating QuickSight Dashboards</p>
+</li>
+<li>
+<p>Navigate to <code>aws.amazon.com</code> in any browser</p>
+</li>
+<li>Click the "Sign In" link in the navigation bar on the top right of the screen</li>
+<li>Enter your AWS account credentials and sign-in</li>
+<li>You should now have navigated to the "Console Home", click the search input in the navigation bar on the top left of the screen</li>
+<li>
+<p>Type "QuickSight" and click the QuickSight result that appears</p>
+</li>
+<li>
+<p>Every QuickSight dashboard requires a <em>Dataset</em>, which for the <code>server-regression</code> dashboards will be a <code>Custom SQL</code> query against Athena. As there will be three dashboards, there will be three datasets (one dataset for each dashboard)</p>
+</li>
+<li>
+<p>Creating the <code>bfd-test-server-regression</code> dataset:</p>
+<ol>
+<li>Navigate to "Datasets" in QuickSight (click on "Datasets" in the navigation tree on the left side of the page)</li>
+<li>Click the "New dataset" button on the top-left of the page</li>
+<li>The page that appears should list a large number of possible data sources. Find "Athena" in this list, and click on it</li>
+<li>Enter "bfd-test-server-regression" for the "Data source name"</li>
+<li>Choose <code>bfd</code> for the "Athena workgroup"</li>
+<li>Click "Create data source"</li>
+<li>Choose <code>AwsDataCatalog</code> as the "Catalog"</li>
+<li>Choose <code>bfd-insights-bfd-test</code> as the "Database"</li>
+<li>Choose <code>bfd_insights_bfd_test_server_regression</code> as the "Table"</li>
+<li>Click "Use custom SQL"</li>
+<li>In the first input box, enter "bfd-test-server-regression" (replacing "New custom SQL")</li>
+<li>In the large text area, enter the following SQL query:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">select</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="n">totals</span><span class="p">.</span><span class="n">total_reqs_per_second</span><span class="p">,</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="n">totals</span><span class="p">.</span><span class="n">num_requests</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">total_requests</span><span class="p">,</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="n">totals</span><span class="p">.</span><span class="n">num_failures</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">total_failures</span><span class="p">,</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="n">totals</span><span class="p">.</span><span class="n">min_response_time</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">total_min_response_time</span><span class="p">,</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="n">totals</span><span class="p">.</span><span class="n">average_response_time</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">total_avg_response_time</span><span class="p">,</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span><span class="n">totals</span><span class="p">.</span><span class="n">median_response_time</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">total_median_response_time</span><span class="p">,</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">  </span><span class="n">totals</span><span class="p">.</span><span class="n">response_time_percentiles</span><span class="p">.</span><span class="ss">&quot;0.95&quot;</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">total_95_percentile</span><span class="p">,</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">  </span><span class="n">totals</span><span class="p">.</span><span class="n">response_time_percentiles</span><span class="p">.</span><span class="ss">&quot;0.99&quot;</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">total_99_percentile</span><span class="p">,</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">  </span><span class="n">totals</span><span class="p">.</span><span class="n">response_time_percentiles</span><span class="p">.</span><span class="ss">&quot;1.0&quot;</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">total_100_percentile</span><span class="p">,</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">  </span><span class="n">metadata</span><span class="p">.</span><span class="n">compare_result</span><span class="p">,</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">  </span><span class="n">date_format</span><span class="p">(</span><span class="n">from_unixtime</span><span class="p">(</span><span class="n">metadata</span><span class="p">.</span><span class="k">timestamp</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;US/Eastern&#39;</span><span class="p">),</span><span class="w"> </span><span class="s1">&#39;%b-%e-%y %T EST&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">date_time</span><span class="p">,</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">  </span><span class="n">metadata</span><span class="p">.</span><span class="k">timestamp</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">raw_timestamp</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="k">from</span><span class="w"> </span><span class="ss">&quot;bfd-insights-bfd-test&quot;</span><span class="p">.</span><span class="ss">&quot;bfd_insights_bfd_test_server_regression&quot;</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="k">where</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">  </span><span class="n">metadata</span><span class="p">.</span><span class="n">hash</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;85d93b342368c8f57f8e78ea6c56979ad5e32901776aaeaffdd8467e4cee1df9&#39;</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">  </span><span class="k">and</span><span class="w"> </span><span class="k">contains</span><span class="p">(</span><span class="n">metadata</span><span class="p">.</span><span class="n">tags</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;master&#39;</span><span class="p">)</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">  </span><span class="k">and</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">     </span><span class="n">metadata</span><span class="p">.</span><span class="n">validation_result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;PASSED&#39;</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">     </span><span class="k">or</span><span class="w"> </span><span class="n">metadata</span><span class="p">.</span><span class="n">validation_result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;NOT_APPLICABLE&#39;</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">  </span><span class="p">)</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="k">order</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">metadata</span><span class="p">.</span><span class="k">timestamp</span><span class="w"> </span><span class="k">asc</span>
+</code></pre></div>
+<ol>
+<li>Click "Confirm query"</li>
+<li>In "Finish dataset creation", select "Directly query your data"</li>
+<li>Click "Edit/preview data"</li>
+<li>An editor should appear with the SQL you entered above, click "Apply"</li>
+<li>Ensure that data is returned in the data preview</li>
+<li>Click "SAVE &amp; PUBLISH" in the navigation bar on the top right of the screen</li>
+<li>Ensure that an in-page notification appears indicating the dataset was saved successfully</li>
+<li>Click "CANCEL" in the navigation bar on the top right of the screen to exit the Dataset creation page and return to QuickSight Home</li>
+</ol>
+</li>
+<li>
+<p>Creating the <code>bfd-prod-sbx-server-regression</code> dataset:</p>
+<ol>
+<li>Navigate to "Datasets" in QuickSight (click on "Datasets" in the navigation tree on the left side of the page)</li>
+<li>Click the "New dataset" button on the top-left of the page</li>
+<li>The page that appears should list a large number of possible data sources. Find "Athena" in this list, and click on it</li>
+<li>Enter "bfd-prod-sbx-server-regression" for the "Data source name"</li>
+<li>Choose <code>bfd</code> for the "Athena workgroup"</li>
+<li>Click "Create data source"</li>
+<li>Choose <code>AwsDataCatalog</code> as the "Catalog"</li>
+<li>Choose <code>bfd-insights-bfd-prod-sbx</code> as the "Database"</li>
+<li>Choose <code>bfd_insights_bfd_prod_sbx_server_regression</code> as the "Table"</li>
+<li>Click "Use custom SQL"</li>
+<li>In the first input box, enter "bfd-prod-sbx-server-regression" (replacing "New custom SQL")</li>
+<li>In the large text area, enter the following SQL query:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">select</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="n">totals</span><span class="p">.</span><span class="n">total_reqs_per_second</span><span class="p">,</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="n">totals</span><span class="p">.</span><span class="n">num_requests</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">total_requests</span><span class="p">,</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="n">totals</span><span class="p">.</span><span class="n">num_failures</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">total_failures</span><span class="p">,</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="n">totals</span><span class="p">.</span><span class="n">min_response_time</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">total_min_response_time</span><span class="p">,</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="n">totals</span><span class="p">.</span><span class="n">average_response_time</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">total_avg_response_time</span><span class="p">,</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span><span class="n">totals</span><span class="p">.</span><span class="n">median_response_time</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">total_median_response_time</span><span class="p">,</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">  </span><span class="n">totals</span><span class="p">.</span><span class="n">response_time_percentiles</span><span class="p">.</span><span class="ss">&quot;0.95&quot;</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">total_95_percentile</span><span class="p">,</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">  </span><span class="n">totals</span><span class="p">.</span><span class="n">response_time_percentiles</span><span class="p">.</span><span class="ss">&quot;0.99&quot;</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">total_99_percentile</span><span class="p">,</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">  </span><span class="n">totals</span><span class="p">.</span><span class="n">response_time_percentiles</span><span class="p">.</span><span class="ss">&quot;1.0&quot;</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">total_100_percentile</span><span class="p">,</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">  </span><span class="n">metadata</span><span class="p">.</span><span class="n">compare_result</span><span class="p">,</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">  </span><span class="n">date_format</span><span class="p">(</span><span class="n">from_unixtime</span><span class="p">(</span><span class="n">metadata</span><span class="p">.</span><span class="k">timestamp</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;US/Eastern&#39;</span><span class="p">),</span><span class="w"> </span><span class="s1">&#39;%b-%e-%y %T EST&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">date_time</span><span class="p">,</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">  </span><span class="n">metadata</span><span class="p">.</span><span class="k">timestamp</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">raw_timestamp</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="k">from</span><span class="w"> </span><span class="ss">&quot;bfd-insights-bfd-prod-sbx&quot;</span><span class="p">.</span><span class="ss">&quot;bfd_insights_bfd_prod_sbx_server_regression&quot;</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="k">where</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">  </span><span class="n">metadata</span><span class="p">.</span><span class="n">hash</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;71a5310d52e0ffb8c03dc74cdee7bf635bc7fbd75dfe1d8f647fcfb11e5b65ce&#39;</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">  </span><span class="k">and</span><span class="w"> </span><span class="k">contains</span><span class="p">(</span><span class="n">metadata</span><span class="p">.</span><span class="n">tags</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;master&#39;</span><span class="p">)</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">  </span><span class="k">and</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="w">     </span><span class="n">metadata</span><span class="p">.</span><span class="n">validation_result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;PASSED&#39;</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">     </span><span class="k">or</span><span class="w"> </span><span class="n">metadata</span><span class="p">.</span><span class="n">validation_result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;NOT_APPLICABLE&#39;</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="w">  </span><span class="p">)</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="k">order</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">metadata</span><span class="p">.</span><span class="k">timestamp</span><span class="w"> </span><span class="k">asc</span>
+</code></pre></div>
+<ol>
+<li>Click "Confirm query"</li>
+<li>In "Finish dataset creation", select "Directly query your data"</li>
+<li>Click "Edit/preview data"</li>
+<li>An editor should appear with the SQL you entered above, click "Apply"</li>
+<li>Ensure that data is returned in the data preview</li>
+<li>Click "SAVE &amp; PUBLISH" in the navigation bar on the top right of the screen</li>
+<li>Ensure that an in-page notification appears indicating the dataset was saved successfully</li>
+<li>Click "CANCEL" in the navigation bar on the top right of the screen to exit the Dataset creation page and return to QuickSight Home</li>
+</ol>
+</li>
+<li>
+<p>Creating the <code>bfd-prod-server-regression</code> dataset:</p>
+<ol>
+<li>Navigate to "Datasets" in QuickSight (click on "Datasets" in the navigation tree on the left side of the page)</li>
+<li>Click the "New dataset" button on the top-left of the page</li>
+<li>The page that appears should list a large number of possible data sources. Find "Athena" in this list, and click on it</li>
+<li>Enter "bfd-prod-server-regression" for the "Data source name"</li>
+<li>Choose <code>bfd</code> for the "Athena workgroup"</li>
+<li>Click "Create data source"</li>
+<li>Choose <code>AwsDataCatalog</code> as the "Catalog"</li>
+<li>Choose <code>bfd-insights-bfd-prod</code> as the "Database"</li>
+<li>Choose <code>bfd_insights_bfd_prod_server_regression</code> as the "Table"</li>
+<li>Click "Use custom SQL"</li>
+<li>In the first input box, enter "bfd-prod-server-regression" (replacing "New custom SQL")</li>
+<li>In the large text area, enter the following SQL query:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">select</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="n">totals</span><span class="p">.</span><span class="n">total_reqs_per_second</span><span class="p">,</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="n">totals</span><span class="p">.</span><span class="n">num_requests</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">total_requests</span><span class="p">,</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="n">totals</span><span class="p">.</span><span class="n">num_failures</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">total_failures</span><span class="p">,</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="n">totals</span><span class="p">.</span><span class="n">min_response_time</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">total_min_response_time</span><span class="p">,</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="n">totals</span><span class="p">.</span><span class="n">average_response_time</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">total_avg_response_time</span><span class="p">,</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="n">totals</span><span class="p">.</span><span class="n">median_response_time</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">total_median_response_time</span><span class="p">,</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">  </span><span class="n">totals</span><span class="p">.</span><span class="n">response_time_percentiles</span><span class="p">.</span><span class="ss">&quot;0.95&quot;</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">total_95_percentile</span><span class="p">,</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">  </span><span class="n">totals</span><span class="p">.</span><span class="n">response_time_percentiles</span><span class="p">.</span><span class="ss">&quot;0.99&quot;</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">total_99_percentile</span><span class="p">,</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">  </span><span class="n">totals</span><span class="p">.</span><span class="n">response_time_percentiles</span><span class="p">.</span><span class="ss">&quot;1.0&quot;</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">total_100_percentile</span><span class="p">,</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">  </span><span class="n">metadata</span><span class="p">.</span><span class="n">compare_result</span><span class="p">,</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">  </span><span class="n">date_format</span><span class="p">(</span><span class="n">from_unixtime</span><span class="p">(</span><span class="n">metadata</span><span class="p">.</span><span class="k">timestamp</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;US/Eastern&#39;</span><span class="p">),</span><span class="w"> </span><span class="s1">&#39;%b-%e-%y %T EST&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">date_time</span><span class="p">,</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">  </span><span class="n">metadata</span><span class="p">.</span><span class="k">timestamp</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">raw_timestamp</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="k">from</span><span class="w"> </span><span class="ss">&quot;bfd-insights-bfd-prod&quot;</span><span class="p">.</span><span class="ss">&quot;bfd_insights_bfd_prod_server_regression&quot;</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="k">where</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">  </span><span class="n">metadata</span><span class="p">.</span><span class="n">hash</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;727a44e865e717728ac409e8e23a7e13ce73a155874f3832a0caef1fde17e95c&#39;</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">  </span><span class="k">and</span><span class="w"> </span><span class="k">contains</span><span class="p">(</span><span class="n">metadata</span><span class="p">.</span><span class="n">tags</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;master&#39;</span><span class="p">)</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">  </span><span class="k">and</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="w">     </span><span class="n">metadata</span><span class="p">.</span><span class="n">validation_result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;PASSED&#39;</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="w">     </span><span class="k">or</span><span class="w"> </span><span class="n">metadata</span><span class="p">.</span><span class="n">validation_result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;NOT_APPLICABLE&#39;</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="w">  </span><span class="p">)</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="k">order</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">metadata</span><span class="p">.</span><span class="k">timestamp</span><span class="w"> </span><span class="k">asc</span>
+</code></pre></div>
+<ol>
+<li>Click "Confirm query"</li>
+<li>In "Finish dataset creation", select "Directly query your data"</li>
+<li>Click "Edit/preview data"</li>
+<li>An editor should appear with the SQL you entered above, click "Apply"</li>
+<li>Ensure that data is returned in the data preview</li>
+<li>Click "SAVE &amp; PUBLISH" in the navigation bar on the top right of the screen</li>
+<li>Ensure that an in-page notification appears indicating the dataset was saved successfully</li>
+<li>Click "CANCEL" in the navigation bar on the top right of the screen to exit the Dataset creation page and return to QuickSight Home</li>
+</ol>
+</li>
+<li>
+<p>Navigate to "Analyses" in QuickSight (click on "Analyses" in the navigation tree on the left side of the page from the QuickSight "home")</p>
+</li>
+<li>Click "New analysis" on the top right of the page</li>
+<li>Choose <code>bfd-test-server-regression</code></li>
+<li>A new page should appear with details about the dataset. Click on "USE IN ANALYSIS"</li>
+<li>A new page should appear with an empty "AutoGraph" and a variety of controls on the left-side:</li>
+<li><img alt="New Analysis Startpage" src="resources/new-analsyis-startpage.png" /></li>
+<li>
+<p>Start by re-creating all of the line graphs for the <code>server-regression</code> dashboard:</p>
+</li>
+<li>
+<p>Click anywhere within the empty "AutoGraph". An outline should appear indicating it has been selected, along with controls in the top-right corner</p>
+</li>
+<li>In "Visual types", choose a line graph (red outlined button in figure):<ol>
+<li><img alt="Line Graph in Visual Types" src="resources/visual-types-line-graph.png" /></li>
+</ol>
+</li>
+<li>The graph's title/description should change to "You need to add or remove fields" and the collapsed "Field wells" section should expand showing "X axis", "Value", and "Color" as shown in the following figure:<ol>
+<li><img alt="Line Graph Selected" src="resources/line-graph-chosen.png" /></li>
+</ol>
+</li>
+<li>In the "Fields list", click and drag "date_time" to the "X axis" control in "Field wells". You should see the graph update after doing so</li>
+<li>In the "Fields list", click and drag "total_reqs_per_second" to the "Value" control in "Field wells". You should see the graph update, and the page should look like the following:<ol>
+<li><img alt="Fields Added to Line Graph Without Change" src="resources/fields-added-to-line-graph-start.png" /></li>
+</ol>
+</li>
+<li><a id="change-aggregation"></a>The graph's "Value" is currently representing the unique count of the "total_reqs_per_second" which is not correct. Click on "total_reqs_per_second (Count)" in the "Value" control in the "Field wells" section. A dropdown menu should appear</li>
+<li>Click on "Aggregate: Count". An additional dropdown menu should appear to the right of the menu</li>
+<li>Click on "Sum" in the list of aggregations</li>
+<li>The graph should update and the values being graphed should be correct, as shown below (note the values will be different, but the graph should now be graphing the actual <em>value</em> of <code>total_reqs_per_second</code>):<ol>
+<li><img alt="&quot;total_reqs_per_second&quot; Changed to Sum Aggregation" src="resources/total-reqs-per-second-graph-using-sum.png" /></li>
+</ol>
+</li>
+<li><a id="sort-raw-timestamp"></a>The graph's x-axis (<code>date_time</code>) is currently sorted alphabetically and not by time. Similar to above, click on "date_time" in the "X axis" control in "Field wells". A dropdown menu should appear. The first item in the menu should be "Sort by" and should be "total_reqs_per_second" as shown in the figure:<ol>
+<li><img alt="&quot;date_time&quot; Dropdown &quot;Sort by&quot;" src="resources/date-time-sort-by-dropdown.png" /></li>
+</ol>
+</li>
+<li>Click on the "Sort by" option (highlighted by the red outline in the figure above). A second dropdown should appear to the right of the original menu</li>
+<li>Click on "Sort options" in the second, right-most dropdown</li>
+<li>The left pane (where "Fields list" was) should be replaced by "Sort options". In the select/dropdown menu labeled "Sort by", select "raw_timestamp" as shown in the figure below:<ol>
+<li><img alt="&quot;Sort by&quot; Set to &quot;raw_timestamp&quot;" src="resources/sort-options-raw-timestamp.png" /></li>
+</ol>
+</li>
+<li>Click "Apply" at the bottom of the "Sort options" pane. The graph should update and now be ordered correctly by time</li>
+<li>Click "Close". The left-most pane should switch back to "Fields list"</li>
+<li><a id="change-graph-title"></a>Change the title of the graph to "Total RPS Over Time" by double-clicking on the current title ("Sum of Total_reqs_per_second by Date_time") and entering the new title in the text area</li>
+<li><a id="change-axis-label"></a>Double-click the y-axis label ("total_reqs_per_second (Sum)", shown vertically). A dropdown menu should appear</li>
+<li>Select "Rename" from the dropdown menu</li>
+<li>Rename to "Total Requests-Per-Second"</li>
+<li>Follow the same steps as above to rename the x-axis, but this time the name should be "Date and Time (EST)"</li>
+<li><a id="enable-data-labels"></a>Hover over the graph and click the small pencil icon in the top right corner. Hovering over the icon should show a tooltip with the text "Format visual". The "Fields list" pane should be replaced by a pane named "Format visual" on the leftside of the page, as shown below:<ol>
+<li><img alt="&quot;Format visual&quot; Pane" src="resources/format-visual-pane.png" /></li>
+</ol>
+</li>
+<li>There should be multiple collapsible sections, click on "Data labels"</li>
+<li>Click on the "Show data labels" checkbox. Each point on the line graph should now be labeled with its value</li>
+<li><a id="duplicate-graph"></a>Hover over the graph again and this time click the three-dots in the top right corner. A dropdown menu should appear</li>
+<li>Click "Duplicate visual"</li>
+<li>A duplicate of the original "Total RPS Over Time" line graph should appear to the right</li>
+<li>Click on this new, duplicate graph. It should become outlined</li>
+<li>Uncollapse the "Field wells" section above the graphs by clicking anywhere within it</li>
+<li>Click on the green "total_reqs_per_second (Sum)" button in the "Value" section. A dropdown menu should appear</li>
+<li>In the very bottom of the dropdown menu, beneath the "Search fields" input, find "total_requests". Click on it</li>
+<li>The graph's y-axis should change to "total_requests (Sum)" and the "Value" of the graph should now be "total_requests (Sum)"</li>
+<li>Change the title of the graph to "Total Requests over Time" <a href="#change-graph-title">following instructions above</a></li>
+<li>Change the title of the y-axis to "Total Requests" <a href="#change-axis-label">following instructions above</a></li>
+<li>Ensure the title of the x-axis remains "Date and Time (EST)". If not, change it <a href="#change-axis-label">following instructions above</a></li>
+<li>Ensure that data labels appear above each point in the graph. If not, change it <a href="#enable-data-labels">following instructions above</a></li>
+<li>Duplicate any of the two graphs <a href="#duplicate-graph">following the instructions above</a>. A third graph should appear on bottom-left of the screen</li>
+<li>Following instructions outlined above, change the "Value"/y-axis of the graph to "total_failures"</li>
+<li>Change the title to "Number of Total Request Failures over Time"</li>
+<li>Change the y-axis title to "Total Failures"</li>
+<li>Ensure the x-axis title is "Date and Time (EST)"</li>
+<li>Ensure data labels appear above each point in the line graph</li>
+<li>Navigate to "Format visual" (ensure that the new failures graph is selected)</li>
+<li>In the "Title" collapsible section, click the "Edit subtitle" button</li>
+<li>
+<p>Change the subtitle to "Successful runs should always have 0 failures"</p>
+</li>
+<li>
+<p>Next, recreate the totals bar charts</p>
+</li>
+<li>
+<p><a id="create-new-visual"></a>On the top-left of the page, click the "ADD" button. A dropdown menu should appear</p>
+</li>
+<li>Select "Add visual". A new "AutoGraph" should appear on the page</li>
+<li>From "Visual types" (bottom collapsible section of the left-pane) select "Vertical bar chart" (top-most row, right-most icon). Vertical bar charts require <em>both</em> an x-axis and values, but since these charts will be used to display values without any meaningful x-axis to plot them against we will need to create a <em>fake</em> x-axis value to plot against</li>
+<li>Click the "ADD" button again. Choose "Add calculated field". A new page should open with three main sections: a name field with the value "Add name", a section on the right with inner collapsible sections showing "Fields", "Parameters" and "Functions", and a large text area that takes up most of the screen</li>
+<li>In the large text area, type "1"</li>
+<li>For the name of the field, enter "fake_x". See the figure below:<ol>
+<li><img alt="&quot;fake_x&quot; Calculated Field" src="resources/calculated-field-fakex.png" /></li>
+</ol>
+</li>
+<li>Click "Save". You should now return to the main Analysis screen with the graphs</li>
+<li>Select the empty vertical bar chart graph</li>
+<li>In "Field wells", set the x-axis to "fake_x"</li>
+<li>Set the "Value" to "total_avg_response_time". When set, the aggregate function should default to "Count"</li>
+<li><a href="#change-aggregation">Following instructions outlined above</a> to change the aggregate for a value, change the aggregate function from "Count" to "Min"</li>
+<li>Add another copy/duplicate of "total<em>avg_response_time" to the graph's "Value" (by dragging "total_avg_response_time" to "Value" in "Field wells" again) _beneath</em> the previous "total_avg_response_time (Min)" value, as shown in the figure below:</li>
+<li><img alt="Multiple &quot;total_avg_response_time&quot; Values for Bar Chart" src="resources/multiple-values-vertical-bar-chart.png" /></li>
+<li>This time, change the aggregate function from "Count" to "Median"</li>
+<li>Repeat the above steps two more times: add two more "total_avg_reponse_time" values, set the first's aggregate to "Average", and set the second's to "Max". When finished, "Values" should have 4 "total_avg_response_time" values each with a different aggregate function. See figure below:</li>
+<li><img alt="All &quot;total_avg_respone_time&quot; Values for Bar Chart" src="resources/all-values-with-aggregates-in-values-field-wells.png" /></li>
+<li>Go to "Format visual" for the bar chart</li>
+<li>Un-collapse "X-axis" in "Format visual" by clicking on it</li>
+<li>Un-select every checkbox in the section: "Show title", "Show sort", "Show data zoom", "Show axis line", and "Show labels". The bar chart should now only display the y-axis</li>
+<li>Un-collapse "Legend"</li>
+<li>Un-select every checkbox in the section: "Show legend" and "Show legend title". The legend to the right of the bars in the vertical bar chart should no longer be visible</li>
+<li>Un-collapse "Data labels"</li>
+<li>Select "Show data labels". Each bar's value should now appear above their respective bar</li>
+<li>Un-collapse "Tooltip"</li>
+<li>Under "Display options", un-select "Use primary value as title" and <em>select</em> "Show aggregations"</li>
+<li>Under "Fields", find "fake_x" and click on the three-dots to the right of its label. A dropdown menu should appear</li>
+<li>Click/select "Hide". The "fake_x" field should darken/grey-out. Now when hovering over each distinct bar in the bar chart you will see a tooltip showing the value and the corresponding aggregation function, as shown in the figure below:</li>
+<li><img alt="Bar Chart Tooltip Example" src="resources/bar-chart-tooltip.png" /></li>
+<li>Close the "Format visual" section by clicking the "x" button next to the name at the top of the section. The "Fields list" should re-appear</li>
+<li><a id="set-ms-suffix"></a>In "Fields list", hover over "total_avg_response_time" until a vertical three-dots button appears to the right of the label. Click on it. A dropdown menu should appear</li>
+<li>Hover over "Format: 1,234.57". A dropdown menu should appear to the right</li>
+<li>Click on "More formatting options...". The "Fields list" section should be replaced with "Format data"</li>
+<li>Un-collapse the "Units" section</li>
+<li>In the input field labeled "Suffix", enter " ms". <em>Do not forget the leading space</em>. You should see the values in the vertical bar chart for "total_avg_response_time" update to include the new "ms" suffix</li>
+<li>Change the bar chart's title to "Total Average Response Time"</li>
+<li>Change the bar chart's subtitle to "Minimum, Median, Average, Maximum"</li>
+<li>Duplicate the bar chart following the <a href="#duplicate-graph">instructions for duplicating charts above</a></li>
+<li>For this new chart, change all of its aggregated values from "total_avg_response_time" to "total_reqs_per_second". You may need to change the aggregation function from "Count" to "Min"/"Median"/etc. after changing the value's field</li>
+<li>Change this new chart's title to "Total Requests Per Second"</li>
+<li>Ensure this new chart's subtitle is "Minimum, Median, Average, Maximum"</li>
+<li>Duplicate this new chart</li>
+<li>Change all aggregated values to "total_requests"</li>
+<li>Change the "total_requests" chart's title to "Total Requests"</li>
+<li>Ensure this new "total_requests" chart's subtitle is "Minimum, Median, Average, Maximum"</li>
+<li>Resize and move the 3 bar charts such that they are arranged at the top of the dashboard in a similar way to the following figure:</li>
+<li>
+<p><img alt="Vertical Bar Chart Arrangement" src="resources/bar-chart-arrangement.png" /></p>
+</li>
+<li>
+<p>Next, recreate the comparison results pie chart</p>
+<ol>
+<li>Create a new visual <a href="#create-new-visual">following the steps outlined above</a></li>
+<li>In "Visual types" choose "Pie chart"</li>
+<li>Set the "Group/Color" in "Field wells" to "compare_result". The pie chart should update and show the ratios of each type of comparison result</li>
+<li>Rename the bottom-most label from "Group By: compare_result" to "Comparison Result"</li>
+<li>Change the title to "Comparison Results"</li>
+</ol>
+</li>
+<li>
+<p>Finally, recreate the percentiles and average response time bar charts</p>
+<ol>
+<li>Add a new visual and set its type to "Vertical bar chart"</li>
+<li>Set the x-axis to "date_time"</li>
+<li>Set the values to "total_95_percentile", "total_99_percentile", "total_100_percentile". Ensure each value's aggregation function is "Sum". The bar chart should update and show each response time percentile for each date</li>
+<li><a href="#sort-raw-timestamp">Following the instructions outlined above</a>, set "date_time"'s sort to "raw_timestamp" so that the graph is sorted by time</li>
+<li><a href="#enable-data-labels">Following the instructions outlined above</a>, enable data labels such that the value of each bar in the bar chart is displayed above the bar</li>
+<li><a href="#set-ms-suffix">Following the instructions outlined above</a>, <em>for each field in "Values"</em> add a " ms" suffix to the field. The values displayed in the bar chart should now include a "ms" suffix to indicate that the value is a measure of time</li>
+<li>Change the chart's title to "95%, 99%, and 100% Total Response Time Percentiles over Time"</li>
+<li>Change the x-axis's title to "Date and Time (EST)"</li>
+<li>Duplicate the chart</li>
+<li>Change the chart's values to be "total_min_response_time", "total_median_response_time", and "total_max_response_time". Ensure each value's aggregation function is "Sum", not "Count". The bar chart should update and show each response time for each date</li>
+<li><a href="#set-ms-suffix">Following the instructions outlined above</a>, change the suffix for "total_min_response_time" and "total_median_response_time" to " ms"</li>
+<li>Change the chart title to "Minimum, Median, and Average Response Times (ms) over Time"</li>
+<li>Ensure the x-axis title is "Date and Time (EST)"</li>
+</ol>
+</li>
+<li>
+<p><a id="set-sheet-title"></a>Click on "ADD" in the top-left</p>
+</li>
+<li>Select "Add title"</li>
+<li>Set the sheet's title to "server-regression Statistics from TEST Environment 'master' Deployment Runs"</li>
+<li><a id="publish-dashboard"></a>On the top-right of the screen, click the share icon (next to the save and download icons). A dropdown menu should appear</li>
+<li>Click "Publish dashboard"</li>
+<li>Name the dashboard "bfd-test-server-regression"</li>
+<li>Click "Publish dashboard". A new page should load showing the completed Dashboard</li>
+<li><a id="share-dashboard"></a>Click the share icon on the top-right of the screen. A dropdown menu should appear</li>
+<li>Click "Share dashboard". A new page should load with sharing options</li>
+<li>In the bottom right, under "Enable access for", select "Everyone in this account"</li>
+<li>Select "Discoverable in QuickSight" as well</li>
+<li>Close the Dashboard and return to the QuickSight "home" by clicking on "QuickSight" on the top-left of the screen</li>
+<li>Return to the "Analyses" view</li>
+<li>Open the "bfd-test-server-regression" analysis</li>
+<li><a id="save-copy-analysis"></a>When loaded, click on the save icon on the top-right of the screen. A dialog pop-up should appear titled "Save a copy"</li>
+<li>In the input field, enter "bfd-prod-sbx-server-regression"</li>
+<li>Click "SAVE". The copied Analysis should load</li>
+<li><a id="change-dataset"></a>In the left pane, click the pencil icon next to the "Dataset" label. A dialog pop-up should appear with the title "Datasets in this analysis"</li>
+<li>Click on the vertical three-dots. A dropdown menu should appear</li>
+<li>Click on "Replace". A new dialog should appear named "Select replacement dataset"</li>
+<li>Select the "bfd-prod-sbx-server-regression" Dataset</li>
+<li>Click "Select"</li>
+<li>Click "Replace". All graphs in the Analysis should update appropriately with the new Dataset's field values</li>
+<li>Change the sheet's title to "server-regression Statistics from PROD-SBX Environment 'master' Deployment Runs"</li>
+<li><a href="#publish-dashboard">Repeat the steps outlined above to publish</a> and <a href="#share-dashboard">share the Analsyis</a> as a Dashboard named "bfd-prod-sbx-server-regression"</li>
+<li><a href="#save-copy-analysis">Repeat the previous steps</a> to duplicate the "bfd-prod-sbx-server-regression" Analysis. Name the duplicated analysis "bfd-prod-server-regression"</li>
+<li><a href="#change-dataset">Repeat the previous steps</a> to replace the "bfd-prod-sbx-server-regression" Dataset with "bfd-prod-server-regression"</li>
+<li>Change the sheet's title to "server-regression Statistics from PROD Environment 'master' Deployment Runs" <a href="#set-sheet-title">following instructions outlined above</a></li>
+<li><a href="#publish-dashboard">Repeat the steps outlined above to publish</a> and <a href="#share-dashboard">share the Analsyis</a> as a Dashboard named "bfd-prod-server-regression"</li>
+</ol>
+<p>Once the steps above are complete, there should be three new Dashboards available to view in QuickSight
+displaying performance metrics for each of the three environments (<code>TEST</code>, <code>PROD-SBX</code>, and <code>PROD</code>). These
+Dashboards should appear similar to the following:</p>
+<p><img alt="Final Dashboard Preview" src="resources/final-dashboard-preview.png" /></p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.sections", "navigation.indexes", "header.autohide", "navigation.tracking"], "search": "../../assets/javascripts/workers/search.e5c33ebb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.ba449ae6.min.js"></script>
+      
+    
+  </body>
+</html>

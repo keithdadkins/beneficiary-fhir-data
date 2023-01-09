@@ -1,0 +1,2674 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://keithdadkins.github.io/beneficiary-fhir-data/rfcs/implemented/0009-pipeline-orchestration-baby-steps.html">
+      
+      
+        <link rel="prev" href="0007-service-date-filter.html">
+      
+      
+        <link rel="next" href="0011-separate-flyway-from-pipeline.html">
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.3">
+    
+    
+      
+        <title>0009-pipeline-orchestration-baby-steps - BFD</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6b71719e.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.2505c338.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/mkdocs.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="lightmode" data-md-color-primary="light-blue" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#rfc-proposal" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../index.html" title="BFD" class="md-header__button md-logo" aria-label="BFD" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BFD
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              0009-pipeline-orchestration-baby-steps
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="lightmode" data-md-color-primary="light-blue" data-md-color-accent="indigo"  aria-label="dark"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="dark" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+            </label>
+          
+        
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/keithdadkins/beneficiary-fhir-data" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    beneficiary-fhir-data
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../index.html" title="BFD" class="md-nav__button md-logo" aria-label="BFD" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    BFD
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/keithdadkins/beneficiary-fhir-data" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    beneficiary-fhir-data
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../index.html" class="md-nav__link">
+        Welcome
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LICENSE.html" class="md-nav__link">
+        License
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_3" tabindex="0" aria-expanded="false">
+          Api
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Api" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Api
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/request-audit-headers.html" class="md-nav__link">
+        BFD Audit Headers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/request-options.html" class="md-nav__link">
+        BFD Request Options
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../changelog/index.html">Changelog</a>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Changelog" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Changelog
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+        
+          
+            
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../contributing/index.html">Contributing</a>
+          
+            <label for="__nav_5">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Contributing" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Contributing
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5_2" type="checkbox" id="__nav_5_2" >
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../contributing/style-guide/index.html">Style guide</a>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Style guide" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_2">
+          <span class="md-nav__icon md-icon"></span>
+          Style guide
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+        
+          
+            
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../insights/index.html">Insights</a>
+          
+            <label for="__nav_6">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Insights" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Insights
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/ab2d_firehose.html" class="md-nav__link">
+        AB2D Firehose Setup
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/bb2_notes.html" class="md-nav__link">
+        BB2 Project information
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/core_tables.html" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/data_organization.html" class="md-nav__link">
+        Organization
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/lessons_learned.html" class="md-nav__link">
+        Lessons Learned
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/onboarding.html" class="md-nav__link">
+        Onboarding
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/security.html" class="md-nav__link">
+        Security Model
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/terraform.html" class="md-nav__link">
+        Terraform Scripts
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/typical_workflow.html" class="md-nav__link">
+        Example Workflow
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7" type="checkbox" id="__nav_7" checked>
+      
+      
+        
+          
+            
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../index.html">Rfcs</a>
+          
+            <label for="__nav_7">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Rfcs" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          Rfcs
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_2" type="checkbox" id="__nav_7_2" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_7_2" tabindex="0" aria-expanded="false">
+          Deferred
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Deferred" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_2">
+          <span class="md-nav__icon md-icon"></span>
+          Deferred
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deferred/0008-partial-backfill-ccw.html" class="md-nav__link">
+        0008-partial-backfill-ccw
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deferred/0012-rda-claims-jsonb-DEFERRED.html" class="md-nav__link">
+        0012-rda-claims-jsonb
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deferred/0016-cursor-paging.html" class="md-nav__link">
+        0016-cursor-paging.md
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deferred/0017-filtering.html" class="md-nav__link">
+        0007-filtering-fields
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_3" type="checkbox" id="__nav_7_3" >
+      
+      
+        
+          
+            
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../howto/index.html">Howto</a>
+          
+            <label for="__nav_7_3">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Howto" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_3">
+          <span class="md-nav__icon md-icon"></span>
+          Howto
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../howto/template.html" class="md-nav__link">
+        rfc-template
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_4" type="checkbox" id="__nav_7_4" checked>
+      
+      
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_7_4" tabindex="0" aria-expanded="true">
+          Implemented
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Implemented" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_4">
+          <span class="md-nav__icon md-icon"></span>
+          Implemented
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0000-jboss-replacement.html" class="md-nav__link">
+        0000-bye-bye-jboss
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0001-beneficiary-fhir-server-rfc-process-v1.html" class="md-nav__link">
+        0001-beneficiary-fhir-server-rfc-process-v1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0002-monorepo.html" class="md-nav__link">
+        0002-monorepo
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0004-since-parameter.html" class="md-nav__link">
+        0004-since-parameter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0005-mbi-search.html" class="md-nav__link">
+        0005-mbi-search
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0007-service-date-filter.html" class="md-nav__link">
+        0007-service-date-filter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          0009-pipeline-orchestration-baby-steps
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="0009-pipeline-orchestration-baby-steps.html" class="md-nav__link md-nav__link--active">
+        0009-pipeline-orchestration-baby-steps
+      </a>
+      
+        
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#status" class="md-nav__link">
+    Status
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    Table of Contents
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#motivation" class="md-nav__link">
+    Motivation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#proposed-solution" class="md-nav__link">
+    Proposed Solution
+  </a>
+  
+    <nav class="md-nav" aria-label="Proposed Solution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#immediate-changes" class="md-nav__link">
+    Immediate Changes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#additional-optionsphases" class="md-nav__link">
+    Additional Options/Phases
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proposed-solution-detailed-design" class="md-nav__link">
+    Proposed Solution: Detailed Design
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proposed-solution-unresolved-questions" class="md-nav__link">
+    Proposed Solution: Unresolved Questions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proposed-solution-drawbacks" class="md-nav__link">
+    Proposed Solution: Drawbacks
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proposed-solution-notable-alternatives" class="md-nav__link">
+    Proposed Solution: Notable Alternatives
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prior-art" class="md-nav__link">
+    Prior Art
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#future-possibilities" class="md-nav__link">
+    Future Possibilities
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#addendums" class="md-nav__link">
+    Addendums
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0011-separate-flyway-from-pipeline.html" class="md-nav__link">
+        0011-separate-flyway-from-pipeline
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0013-bfd-server-startup-check.html" class="md-nav__link">
+        0013-bfd-server-startup-check
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0015-centralized-configuration-management.html" class="md-nav__link">
+        0015-centralized-configuration-management
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_4_11" type="checkbox" id="__nav_7_4_11" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_7_4_11" tabindex="0" aria-expanded="false">
+          BFDv2
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="BFDv2" data-md-level="3">
+        <label class="md-nav__title" for="__nav_7_4_11">
+          <span class="md-nav__icon md-icon"></span>
+          BFDv2
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="BFDv2/0001-bfd-v2-coverage.html" class="md-nav__link">
+        RFC Proposal
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="BFDv2/0001-bfd-v2-patient.html" class="md-nav__link">
+        RFC Proposal
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="BFDv2/BFDv2%20RFC.html" class="md-nav__link">
+        RFC Proposal
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_5" type="checkbox" id="__nav_7_5" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_7_5" tabindex="0" aria-expanded="false">
+          Proposed
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Proposed" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_5">
+          <span class="md-nav__icon md-icon"></span>
+          Proposed
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../proposed/0010-custom-system-uris.html" class="md-nav__link">
+        0010-custom-system-uris
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../proposed/0013-synthea-future-claims-and-automation.html" class="md-nav__link">
+        0013-Synthea-future-claims-and-automation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../proposed/0014-dsl-driven-rda-code-generation.html" class="md-nav__link">
+        0014-dsl-driven-rda-code-generation
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_6" type="checkbox" id="__nav_7_6" >
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_7_6" tabindex="0" aria-expanded="false">
+          Rejected
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Rejected" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_6">
+          <span class="md-nav__icon md-icon"></span>
+          Rejected
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rejected/0006-or-condition.html" class="md-nav__link">
+        0006-or-condition
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
+      
+      
+        
+          
+            
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../runbooks/index.html">Runbooks</a>
+          
+            <label for="__nav_8">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Runbooks" data-md-level="1">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          Runbooks
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8_2" type="checkbox" id="__nav_8_2" >
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_2" tabindex="0" aria-expanded="false">
+          Bfd db migrator
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Bfd db migrator" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_2">
+          <span class="md-nav__icon md-icon"></span>
+          Bfd db migrator
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/bfd-db-migrator/recover-from-failures.html" class="md-nav__link">
+        Recover from Failures
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8_3" type="checkbox" id="__nav_8_3" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_3" tabindex="0" aria-expanded="false">
+          Bfd insights
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Bfd insights" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_3">
+          <span class="md-nav__icon md-icon"></span>
+          Bfd insights
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/bfd-insights/firehose-failures.html" class="md-nav__link">
+        How to Investigate Firehose Ingestion Processing Failures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/bfd-insights/load-cw-logs.html" class="md-nav__link">
+        Load cw logs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/bfd-insights/new-quicksight-dashboards.html" class="md-nav__link">
+        How to Create BFD Insights QuickSight Dashboards
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8_4" type="checkbox" id="__nav_8_4" >
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_4" tabindex="0" aria-expanded="false">
+          Bfd pipeline
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Bfd pipeline" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_4">
+          <span class="md-nav__icon md-icon"></span>
+          Bfd pipeline
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/bfd-pipeline/rerun-failed-pipeline-load.html" class="md-nav__link">
+        How to Re-run a Failed BFD Pipeline Load
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8_5" type="checkbox" id="__nav_8_5" >
+      
+      
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_5" tabindex="0" aria-expanded="false">
+          Bfd server
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Bfd server" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_5">
+          <span class="md-nav__icon md-icon"></span>
+          Bfd server
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/bfd-server/recreate-regression-dashboards.html" class="md-nav__link">
+        Recreating `server-regression` QuickSight Dashboards
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/bfd-server/run-locust-tests.html" class="md-nav__link">
+        How to Run the Regression and Load Test Suites
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8_6" type="checkbox" id="__nav_8_6" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_6" tabindex="0" aria-expanded="false">
+          Snyk
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Snyk" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_6">
+          <span class="md-nav__icon md-icon"></span>
+          Snyk
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/snyk/ignore-findings.html" class="md-nav__link">
+        Ignore findings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/snyk/resolve-snyk-bot-prs.html" class="md-nav__link">
+        Resolve snyk bot prs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/snyk/resolve-snyk-report-findings.html" class="md-nav__link">
+        Resolve snyk report findings
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8_7" type="checkbox" id="__nav_8_7" >
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_7" tabindex="0" aria-expanded="false">
+          Synthea
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Synthea" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_7">
+          <span class="md-nav__icon md-icon"></span>
+          Synthea
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/synthea/run-automation.html" class="md-nav__link">
+        How to Run Synthea Automation
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_9" type="checkbox" id="__nav_9" >
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../tags/index.html">Tags</a>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Tags" data-md-level="1">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          Tags
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#status" class="md-nav__link">
+    Status
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    Table of Contents
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#motivation" class="md-nav__link">
+    Motivation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#proposed-solution" class="md-nav__link">
+    Proposed Solution
+  </a>
+  
+    <nav class="md-nav" aria-label="Proposed Solution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#immediate-changes" class="md-nav__link">
+    Immediate Changes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#additional-optionsphases" class="md-nav__link">
+    Additional Options/Phases
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proposed-solution-detailed-design" class="md-nav__link">
+    Proposed Solution: Detailed Design
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proposed-solution-unresolved-questions" class="md-nav__link">
+    Proposed Solution: Unresolved Questions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proposed-solution-drawbacks" class="md-nav__link">
+    Proposed Solution: Drawbacks
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proposed-solution-notable-alternatives" class="md-nav__link">
+    Proposed Solution: Notable Alternatives
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prior-art" class="md-nav__link">
+    Prior Art
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#future-possibilities" class="md-nav__link">
+    Future Possibilities
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#addendums" class="md-nav__link">
+    Addendums
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+  
+  
+
+
+  <nav class="md-tags" hidden>
+    
+      
+      
+        <a href="../../tags/index.html#rfcs" class="md-tag">RFC's</a>
+      
+    
+  </nav>
+
+
+
+  
+  
+
+
+
+<h1 id="rfc-proposal">RFC Proposal<a class="headerlink" href="#rfc-proposal" title="Permanent link">&para;</a></h1>
+<ul>
+<li>RFC Proposal ID: <code>0009-pipeline-orchestration-baby-steps</code></li>
+<li>Start Date: 2021-02-22</li>
+<li>RFC PR: <a href="https://github.com/CMSgov/beneficiary-fhir-data/pull/462">CMSgov/beneficiary-fhir-data#462</a></li>
+<li>JIRA Ticket(s):<ul>
+<li><a href="https://jira.cms.gov/browse/BFD-652">BFD-652: Story: Improve BFD Pipeline Job Orchestration</a></li>
+</ul>
+</li>
+</ul>
+<!--
+Write a brief summary here: a one paragraph explanation of the feature.
+Try to structure it like an "elevator pitch":
+  it should provide readers with a high-level understanding of the goals and proposed solution.
+
+Please note: many of the other sections below will not be needed for some proposals;
+  don't waste time writing responses that don't deliver real value.
+For any such not-needed section, simply write in "N/A".
+-->
+
+<p>The BFD Pipeline already has several ETL-ish tasks/jobs that it runs.
+Over the next year or two, it is likely to acquire several more,
+  including, for example the DC Geo data load.
+This proposal details architectural changes that
+  can and should be made in order to accomodate these requirements
+  (since the BFD Pipeline architecture was originally designed with only one task/job in mind).</p>
+<h2 id="status">Status<a class="headerlink" href="#status" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Status: Implemented</li>
+<li>Implementation JIRA Ticket(s):<ul>
+<li><a href="https://jira.cms.gov/browse/BFD-704">BFD-704</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="table-of-contents">Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="#rfc-proposal">RFC Proposal</a></li>
+<li><a href="#status">Status</a></li>
+<li><a href="#table-of-contents">Table of Contents</a></li>
+<li><a href="#motivation">Motivation</a></li>
+<li><a href="#proposed-solution">Proposed Solution</a><ul>
+<li><a href="#immediate-changes">Immediate Changes</a></li>
+<li><a href="#additional-optionsphases">Additional Options/Phases</a></li>
+<li><a href="#option-do-we-need-to-run-jobs-in-parallel">Option: Do We Need To Run Jobs In Parallel?</a></li>
+<li><a href="#option-do-we-need-better-obervability">Option: Do We Need Better Obervability?</a></li>
+<li><a href="#option-do-we-need-to-run-jobs-on-more-than-one-host">Option: Do We Need To Run Jobs On More Than One Host?</a></li>
+<li><a href="#option-do-we-want-a-more-off-the-shelf-job-orchestrator">Option: Do We Want a More Off-the-Shelf Job Orchestrator?</a></li>
+<li><a href="#option-do-we-need-to-fan-out-the-execution-of-a-single-job-across-multiple-workers">Option: Do We Need To "Fan Out" the Execution of a Single Job Across Multiple Workers?</a></li>
+<li><a href="#proposed-solution-detailed-design">Proposed Solution: Detailed Design</a></li>
+<li><a href="#immediate-changes-1">Immediate Changes</a></li>
+<li><a href="#option-do-we-need-to-run-jobs-in-parallel-1">Option: Do We Need To Run Jobs In Parallel?</a></li>
+<li><a href="#option-do-we-need-better-obervability-1">Option: Do We Need Better Obervability?</a></li>
+<li><a href="#proposed-solution-unresolved-questions">Proposed Solution: Unresolved Questions</a></li>
+<li><a href="#proposed-solution-drawbacks">Proposed Solution: Drawbacks</a></li>
+<li><a href="#proposed-solution-notable-alternatives">Proposed Solution: Notable Alternatives</a></li>
+</ul>
+</li>
+<li><a href="#prior-art">Prior Art</a></li>
+<li><a href="#future-possibilities">Future Possibilities</a></li>
+<li><a href="#addendums">Addendums</a></li>
+</ul>
+<h2 id="motivation">Motivation<a class="headerlink" href="#motivation" title="Permanent link">&para;</a></h2>
+<!--
+Why are we doing this?
+What use cases does it support?
+What is the expected outcome?
+Why is now the appropriate time to address this?
+-->
+
+<p>We're at a first inflection point in the complexity of BFD's ETL jobs/tasks,
+  with the number of such jobs going past just a few.
+Accordingly, it's time to re-evaluate some of the architectural decisions in the BFD Pipeline,
+  to better accomodate the increasing number of jobs
+  and ensure that the application remains maintainable.</p>
+<p>By making modest architectural changes now,
+  and planning for further medium-term changes,
+  we can help ensure the continued success of our ETL efforts.</p>
+<h2 id="proposed-solution">Proposed Solution<a class="headerlink" href="#proposed-solution" title="Permanent link">&para;</a></h2>
+<!--
+Explain the proposal as if it was already implemented and shipped,
+  and you were just explaining it to another developer or user.
+That generally means:
+
+* Introducing new named concepts.
+* Identifying and address each of the various audiences who might (or should) care about this proposal.
+  Explaining the solution using concepts and terms relevant to eaach of them.
+  Explaining how they should _think_ about the solution; detailing the impact as concretely as possible.
+  Possible audiences might include:
+    * Internal team: engineers, operators, product management, business owners.
+    * External users: engineers, operators, product management, business owners, end users.
+* Explaining the feature largely in terms of examples.
+    * Screencasts are often a good idea.
+        * On Mac OS X, you can use the built-in Quicktime Player or the built-in Mac OS X Mojave (and up) feature.
+    * Diagrams are often a good idea.
+        * Keep it simple! Use something like <http://asciiflow.com/>.
+* As part of implementing this proposal, will any documentation updates be needed, e.g. changelogs, Confluence pages, etc.?
+  If so, draft them now! Include the draft as a subsection or addendum.
+-->
+
+<p>As always, the trick here is to "right-size" our architectural choices;
+  we don't want to under-engineer things and end up with a bunch of things getting hacked in, in ugly ways;
+  we don't want to over-engineer things and thus end up with unnecessary long-term development and maintenance expenses.
+Accordingly, this proposal lays out some short-term steps that will unblock new ETL jobs immediately,
+  and also suggests further phases/options that can be pursued in the future, if/as needed.</p>
+<p>Folks tend to overthink ETL a bit.
+At its core, ETL is really just one or more tasks/jobs that run,
+  which happen to move data around.
+Those jobs often (though not always) have dependencies,
+  such that Job A has to complete before Job B should start.
+Those jobs need to be scheduled, such that they run when a trigger condition occurs,
+  though those conditions are often just along the lines of "try to run every five minutes".
+If you stop and think about it, this is all very similar to any other workflow orchestration problem:
+  figuring out what to run, when.</p>
+<p>Of course, much like the broader workflow orchestration field,
+  there are a lot of folks looking to push/sell very complicated solutions.
+Those are overkill for ETL just as often as they are for anything else.
+BFD's problems do not currently need a complex business rules engine,
+  nor do they currently need a complex ETL orchestration engine...
+  but I repeat myself.</p>
+<p>To be sure, that could happen in the future!
+But that would be a future where BFD has <strong>dozens</strong> of ETL jobs,
+  <strong>and</strong> one where those jobs have complex interdependencies.
+Not so this year, or next.</p>
+<p>What does BFD need then?
+First, let's talk about what ETL BFD currently does and how it might be quickly improved.
+The BFD Pipeline already has several different ETL jobs that it runs:</p>
+<ol>
+<li>The original <code>DatabaseSchemaManager</code> job, that updates the database schema if/as needed.</li>
+<li>The original <code>RifLoader.process()</code> job, that loads the CCW data from RIF files in S3.</li>
+<li>A newer <code>RifLoaderIdleTasks.fixupBeneficiaryExecutor()</code> job, that updates MBI hashes in the <code>Beneficiaries</code> table.</li>
+<li>A newer <code>RifLoaderIdleTasks.fixupHistoryExecutor()</code> job, that updates MBI hashes in the <code>BeneficiariesHistory</code> table.</li>
+</ol>
+<p>But aside from #2 in the list above, the other jobs are all a bit "shoehorned" in.
+Which is fine! ... for a few things,
+  but we will be adding more jobs this year and it will quickly become <em>less</em> fine.</p>
+<h3 id="immediate-changes">Immediate Changes<a class="headerlink" href="#immediate-changes" title="Permanent link">&para;</a></h3>
+<p>In the short term, this RFC proposes "un-shoehorning" the other three jobs, above (#1, #3, and #4).
+From some analysis, it appears that the BFD Pipeline already has
+  a solid foundation for a more robust job orchestration system;
+  with just some moderate refactoring it can easily support a number of additional jobs.</p>
+<p>This refactoring should result in a restructuring of the BFD Pipeline's modules,
+  ending with a set of modules like the following:</p>
+<ul>
+<li><code>bfd-pipeline-shared-utils</code>: The set of utility and framework code shared across the application, including:<ul>
+<li>The interface definition(s) for ETL jobs.</li>
+<li>The DB schema upgrade ETL job.</li>
+</ul>
+</li>
+<li><code>bfd-pipeline-ccw</code>: The ETL jobs related to the CCW, including #2, #3, and #4, above.</li>
+<li><code>bfd-pipeline-app</code>: The application launcher and job management/orchestration code.</li>
+</ul>
+<p>In the future, we should also expect modules like the following to exist:</p>
+<ul>
+<li><code>bfd-pipeline-synthetic-data</code>: The ETL job(s) related to synthethic data, including any data generated by Synthea.</li>
+<li><code>bfd-pipeline-dc-geo</code>: The ETL job(s) related to the DC Geo effort.</li>
+</ul>
+<p>With these modest short-term changes, the BFD Pipeline will be able to:</p>
+<ul>
+<li>Run multiple jobs, not in parallel.</li>
+<li>Simply implement new jobs, with only minor dependencies on the larger application.</li>
+<li>Isolate job code and execution, within the BFD Pipeline application and JVM.</li>
+<li>Scale compute vertically, if performance needs to be dialed up.</li>
+</ul>
+<h3 id="additional-optionsphases">Additional Options/Phases<a class="headerlink" href="#additional-optionsphases" title="Permanent link">&para;</a></h3>
+<p>As/if needed, the following additional options/phases can be implemented,
+  to meet additional business/product goals,
+  as they become needed.</p>
+<h4 id="option-do-we-need-to-run-jobs-in-parallel">Option: Do We Need To Run Jobs In Parallel?<a class="headerlink" href="#option-do-we-need-to-run-jobs-in-parallel" title="Permanent link">&para;</a></h4>
+<p>If one job's runtime is long enough to violate SLOs for other jobs,
+  then it may become necessary to run jobs in parallel,
+  such that Job B which does not depend on Job A will run at the same time as Job A.</p>
+<p>The simplest solution to this business need is to update the job management system such that:</p>
+<ul>
+<li>Job dependencies can be expressed and are honored (e.g. "Job C should always run after Job B").</li>
+<li>Jobs are run in an executor with more than one thread.</li>
+</ul>
+<p>That's it: nice &amp; simple.</p>
+<p>Please note that running jobs in parallel does not necessarily mean running jobs on multiple hosts.
+Multiple jobs can easily run in parallel on a single host.
+  particularly since most job threads will spend their time waiting around for I/O to complete.
+See the "Option: Do We Need To Run Jobs On More Than One Host?" section for details on <em>that</em> business need.</p>
+<h4 id="option-do-we-need-better-obervability">Option: Do We Need Better Obervability?<a class="headerlink" href="#option-do-we-need-better-obervability" title="Permanent link">&para;</a></h4>
+<p>Perhaps engineers/operators often find themselves wondering things like:</p>
+<ul>
+<li>When did Job A last execute and how long did it take to complete?</li>
+<li>Did Job B fail last night?</li>
+<li>and so on...</li>
+</ul>
+<p>If so, there are a couple of potential solutions, including:</p>
+<ul>
+<li>Comprehensive logging,
+    with good documentation that tells operators
+    how to answer common questions from the logs.</li>
+<li>Storing job status and results in a database,
+    with good documentation that tells operators
+    how to answer common questions from the database.</li>
+</ul>
+<p>If something fancier is needed, choose the database option
+  and consider adding a simple web interface on top of it.
+But try to avoid that, as BFD would now have yet another piece of infrastructure to maintain and operate.</p>
+<h4 id="option-do-we-need-to-run-jobs-on-more-than-one-host">Option: Do We Need To Run Jobs On More Than One Host?<a class="headerlink" href="#option-do-we-need-to-run-jobs-on-more-than-one-host" title="Permanent link">&para;</a></h4>
+<p>Perhaps, for performance reasons, vertical scaling of a single job-running-system is no longer sufficient.
+In that case, the next obvious step to improving performance would be to run jobs across multiple hosts,
+  such that Job A could run on Host "Foo" at the same time that Job B runs on Host "Bar".</p>
+<p>The simplest solution to this business need is to update the BFD Pipeline such that:</p>
+<ul>
+<li>It is auto-scaled across EC2 hosts.</li>
+<li>Jobs guard/lock against duplicate execution, using a shared system,
+    such as the BFD database.</li>
+<li>Jobs use the same shared system to track execution and check dependencies.</li>
+</ul>
+<p>Unlike the previous options, this solution starts to add a moderate amount of complexity.
+It's not complex!
+But it's also no longer a simple, easy change.
+This isn't to say that it's a bad idea;
+  just that this is where real investment starts to be required.
+In this case, it's 1-3 senior engineer-sprints worth of work.</p>
+<h4 id="option-do-we-want-a-more-off-the-shelf-job-orchestrator">Option: Do We Want a More Off-the-Shelf Job Orchestrator?<a class="headerlink" href="#option-do-we-want-a-more-off-the-shelf-job-orchestrator" title="Permanent link">&para;</a></h4>
+<p>Honestly, this is not so much a business <em>need</em>, as a technical <em>want</em>.
+Accordingly, I'm inclinced to argue against it:
+  unless you can articulate (and prove) what such an off-the-shelf orchestrator,
+  e.g. <a href="https://airflow.apache.org/">Airflow</a>,
+  will <strong>specifically</strong> get you,
+  <strong>and</strong> prove/demonstrate that said orchestrator is mature and reliable and flexible enough to meet our needs,
+  don't do this;
+  it's a bad idea.</p>
+<p>Nevertheless, if you're dead set on this, I'd suggest the following:</p>
+<ul>
+<li>Lean heavily towards mature distributed systems deployed widely at very large companies.<ul>
+<li>You will hate how complex/expensive they are to deploy and operate,
+    but you will appreciate the relative feature set, lack of bugs, etc.</li>
+<li>This means: more like <a href="https://netflix.github.io/conductor/">Netflix's Conductor</a>
+    and <a href="https://aws.amazon.com/step-functions/">AWS' Step Functions</a>;
+    less like <a href="https://airflow.apache.org/">Airflow</a>.</li>
+</ul>
+</li>
+<li>Consider investing in <a href="https://www.nomadproject.io/">Nomad</a>
+    or <a href="https://kubernetes.io/">Kubernetes</a> at the same time,
+    so that you can avoid vendor lock-in
+    and also so developers can continue to benefit from being able to run code locally.<ul>
+<li>Note: this is another way of saying, "AWS Step Functions" are a great example of vendor lock-in.</li>
+</ul>
+</li>
+<li>Plan on this taking <strong>at least</strong> a full PI to fully prototype, implement, and deploy.</li>
+</ul>
+<h4 id="option-do-we-need-to-fan-out-the-execution-of-a-single-job-across-multiple-workers">Option: Do We Need To "Fan Out" the Execution of a Single Job Across Multiple Workers?<a class="headerlink" href="#option-do-we-need-to-fan-out-the-execution-of-a-single-job-across-multiple-workers" title="Permanent link">&para;</a></h4>
+<p>Suppose that <strong>very</strong> tight SLOs are mandated,
+  such that a single ETL job needs to "fan out" its processing across multiple hosts
+  (not just threads).
+This pre-supposes that you've exhausted the limits of vertical scaling
+  (which, it's worth noting, seems unlikely).</p>
+<p>The proposed solution here is basically:
+  see the above "Option: Do We Want a More Off-the-Shelf Job Orchestrator?" section
+  and figure out how to fan-out on top of an existing, mature platform.
+While it sounds like fun (to weirdos like me),
+  implementing a bespoke system that can do this correctly is not for the faint of heart.</p>
+<h3 id="proposed-solution-detailed-design">Proposed Solution: Detailed Design<a class="headerlink" href="#proposed-solution-detailed-design" title="Permanent link">&para;</a></h3>
+<!--
+This is the technical portion of the RFC. Explain the design in sufficient detail that:
+
+* Its interaction with other features is clear.
+* It is reasonably clear how the feature would be implemented.
+* Corner cases are dissected by example.
+
+The section should return to the examples given in the previous section, and explain more fully how the detailed proposal makes those examples work.
+-->
+
+<p>This detailed design is limited to just a few of the options, above.
+The other options/sections are more complex pieces of work and thus ought to be considered separately,
+  outside of this RFC.</p>
+<h4 id="immediate-changes_1">Immediate Changes<a class="headerlink" href="#immediate-changes_1" title="Permanent link">&para;</a></h4>
+<p>Digging into the current code a bit, the BFD Pipeline already has a lot of the boring machinery required to run multiple jobs:
+  a task executor instrumented for observability,
+  task wrappers to handle failures appropriately,
+  startup and shutdown routines,
+  etc.
+Except... that's all currently configured to only ever run one job,
+  and all of the other current jobs get kicked off by that main job before or after it runs its main logic.
+That machinery is captured in the <code>DataSetMonitor</code> class.</p>
+<p>Per this proposal, let's refactor <code>DataSetMonitor</code> in the short-term such that:</p>
+<ul>
+<li>It runs an ordered list of jobs (rather than a single one), one after the other.</li>
+<li>It has a more generic name that reflects its larger scope, e.g. <code>PipelineManager</code>.</li>
+<li>It gets restructured out of the CCW-specific <code>bfd-pipeline-rif-extract</code> module
+    into one that reflects its larger scope.</li>
+<li>All of the current four ETL tasks are run as generic, independent jobs,
+    rather than being shoehorned into the CCW data load job.</li>
+<li>Add a sample, disabled job that demonstrates how new jobs can be added and managed.</li>
+</ul>
+<h4 id="option-do-we-need-to-run-jobs-in-parallel_1">Option: Do We Need To Run Jobs In Parallel?<a class="headerlink" href="#option-do-we-need-to-run-jobs-in-parallel_1" title="Permanent link">&para;</a></h4>
+<p>Relationships between jobs would be expressed as a directed-acyclic graph (DAG).
+For the current jobs, that DAG would look like this:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>            +----------------------------+
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>            |                            |
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>            | Database Schema Management |
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>            |                            |
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>            +--------------+-------------+
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>                           ^
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>                           |
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>                           |
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>                   +-------+------+
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>                   |              |
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>                   | CCW RIF Load |
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>                   |              |
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>                   +-+----------+-+
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>                     ^          ^
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>                     |          |
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>                     |          |
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>+--------------------+--+    +--+----------------------+
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>|                       |    |                         |
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>| Beneficiary MBI Fixup |    | Beneficiary History MBI |
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>|                       |    |                         |
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>+-----------------------+    +-------------------------+
+</code></pre></div>
+<p>That DAG will need to be expressed declaratively in the BFD code, e.g. <code>jobA.dependsOn(jobB, "version 42")</code>.
+Then the <code>PipelineManager</code> and related classes will need to be updated to honor it.
+Once that is complete, the <code>PipelineManager</code> likely won't have to do anything more exciting than
+  increasing the size of its main job threadpool from <code>1</code> to <code>N&gt;1</code>, and jobs will start running in parallel.
+Easy peasy, lemon squeezy.</p>
+<p>Fun fact: this option may also allow us to speed up the execution of the existing CCW RIF Load task,
+  if the loads for each RIF record type are run in parallel, where possible.</p>
+<h4 id="option-do-we-need-better-obervability_1">Option: Do We Need Better Obervability?<a class="headerlink" href="#option-do-we-need-better-obervability_1" title="Permanent link">&para;</a></h4>
+<p>Observability is a big old rabbit hole; it all depends on what questions engineers and operators want answered.
+That said, we should start with a few relatively simple steps,
+  and see if that provides enough information to answer the most commong questions:</p>
+<ol>
+<li>Record the start and end of each job run in a database, but only for runs where the job actually has work to do.</li>
+<li>Publish those same start and end events to New Relic, as well.</li>
+<li>Publish those same start and end events to our logs (and thus Splunk), as well.</li>
+</ol>
+<p>Those runs/events should also include basic job status details,
+  e.g. whether or not the job succeeded.
+For failures, it'd be nice to also include a brief one-liner error message, as well.</p>
+<p>That should go a long way towards helping folks understand the state and behavior of our ETL systems.</p>
+<h3 id="proposed-solution-unresolved-questions">Proposed Solution: Unresolved Questions<a class="headerlink" href="#proposed-solution-unresolved-questions" title="Permanent link">&para;</a></h3>
+<!--
+Collect a list of action items to be resolved or officially deferred before this RFC is submitted for final comment, including:
+
+* What parts of the design do you expect to resolve through the RFC process before this gets merged?
+* What parts of the design do you expect to resolve through the implementation of this feature before stabilization?
+* What related issues do you consider out of scope for this RFC that could be addressed in the future independently of the solution that comes out of this RFC?
+-->
+
+<p>No unresolved questions have been identified at this time.</p>
+<h3 id="proposed-solution-drawbacks">Proposed Solution: Drawbacks<a class="headerlink" href="#proposed-solution-drawbacks" title="Permanent link">&para;</a></h3>
+<!--
+Why should we *not* do this?
+-->
+
+<p>The most common concern I hear with this single-codebase approach is something along the lines of,
+  "I don't want to have to deal with someone else's framework/application;
+  I just want to create and deploy this new thing as a standalone task."</p>
+<p>This is a <strong>very</strong> understandable concern!
+There's definitely a tradeoff in keeping things in one codebase:
+  it lowers long-term maintenance costs by ensuring the BFD team only has one codebase to support,
+  but can increase the costs of initial development by forcing the new job developer(s) to become familiar with that codebase.</p>
+<p>However, those risks are very manageable, if addressed appopriately.
+Which is what we're trying to do here with this design:
+  we want to keep the "surface area" of contact between each job and the framework,
+  and between the different ETL jobs,
+  as minimal as possible.
+Inasmuch as we can manage it, each job will basically be just a Java <code>Runnable</code>
+  and can do whatever it needs to, however it wants to do it.</p>
+<p>Other concerns I hear with this approach basically boil down to,
+  "but I want to use [language/platform X], instead."
+This is <strong>also</strong> a very understandable concern!
+There's definitely a tradeoff in restricting the programming language and platform used for ETL tasks:
+  it lowers long-term maintenance costs by ensuring the BFD team only has one language and platform to support,
+  but can increase the costs of initial development by forcing the new job developer(s) to become familiar with that language and platform.</p>
+<p>For the long-term health of the BFD platform, this is just the appropriate tradeoff to make.
+The BFD team is not and likely won't ever be particularly large,
+  and thus needs to aggressively limit the scope of the services that they support.</p>
+<p>Occassionally, this concern gets reframed as "BFD should <em>move</em> all its ETL jobs to [language/platform X]
+  and this new job will just use it for now to prove why that's such a great idea."
+I've been guilty of this move sometimes, myself!
+But historical reality rather convincingly demonstrates that, no,
+  the BFD team will never have the resources and freedom to move everything to the new platform.
+Instead, the BFD team will now be saddled with the maintenance burdens of <em>two</em> platforms, rather than one,
+  with no corresponding increase in team size or budget.
+Unfortunately, unless the team proposing this is also proposing to migrate everything themselves,
+  this is not a realistic approach.</p>
+<h3 id="proposed-solution-notable-alternatives">Proposed Solution: Notable Alternatives<a class="headerlink" href="#proposed-solution-notable-alternatives" title="Permanent link">&para;</a></h3>
+<!--
+* Why is this design the best in the space of possible designs?
+* What other designs have been considered and what is the rationale for not choosing them?
+* What is the impact of not doing this?
+-->
+
+<p>These questions are addressed as part of other sections, instead.</p>
+<h2 id="prior-art">Prior Art<a class="headerlink" href="#prior-art" title="Permanent link">&para;</a></h2>
+<!--
+
+Discuss prior art, both the good and the bad, in relation to this proposal.
+A few examples of what this can include are:
+
+* For feature proposals:
+  Does this feature exist in other similar-ish APIs and what experience have their community had?
+* For architecture proposals:
+  Is this architecture used by other CMS or fedgov systems and what experience have they had?
+* For process proposals:
+  Is this process used by other CMS or fedgov programs and what experience have they had?
+* For other teams:
+  What lessons can we learn from what other communities have done here?
+* Papers and other references:
+  Are there any published papers or great posts that discuss this?
+  If you have some relevant papers to refer to, this can serve as a more detailed theoretical background.
+
+This section is intended to encourage you as an author to think about the lessons from other languages, provide readers of your RFC with a fuller picture.
+If there is no prior art, that is fine - your ideas are interesting to us whether they are brand new or if it is an adaptation from other languages.
+
+Note that while precedent set by other programs is some motivation, it does not on its own motivate an RFC.
+Please also take into consideration that we (and the government in general) sometimes intentionally diverge from common "best practices".
+
+-->
+
+<p>The following discussion is very relevant to this RFC:
+  <a href="https://news.ycombinator.com/item?id=25728198">Hacker News: How to Become a Data Engineer in 2021</a>.</p>
+<p>Here are my notes from the original article:</p>
+<ul>
+<li>Older tools such as Informatica, Pentaho, and Talend are characterized as legacy approaches.</li>
+<li>I don't really buy the assertin that data engineers need to be practiced with
+    a DB's underlying DB structures and algorithms, e.g. B-trees.
+  That said, I would agree that they should be at least passingly familiar with them.<ul>
+<li>I think the most important insight from this is really related to index caching:
+    modern DBs will try to keep "hot" index pages cached in memory
+    and may exhibit pathological behavior when they can't.
+  Which portions of the trees are likely to be "hot"?
+  The upper levels of the tree, as bounded by the system's page size.</li>
+<li>This insight has been particularly important when interacting with PostgreSQL's query planner.
+  If the DB determines that it can't keep "enough" index pages in memory, it will refuse to use the index.
+  In addition to being frustrating due to the poor visibility developers have into this behavior,
+    it also cautions against viewing table partiioning as a silver bullet:
+    there's no reason to assume that simply having more, smaller index trees will perform any better.
+  And on the flip side, it points towards DB sharding as potentially being necessary in the future.
+  If our indices ever outgrow what we can fit into memory on large RDS instances,
+    sharding seems like a likely (albeit expensive) solution.
+  To be clear, I'm still of the opinion that we're a long way away from needing to shard,
+    but it's worth keeping in mind for the future,
+    in addition to evaluating alternative DB platforms.</li>
+</ul>
+</li>
+<li>Both the article and discussion repeatedly make the point that SQL is an essential technology.
+  This rings true: it is still clearly the best tool for many data problems.</li>
+<li>The article calls out Python's poor performance as a concern.
+  I share this concern, but think it's nevertheless worth exploring Airflow and other Python-based options.</li>
+<li>When reading the article's "Big Data Tools" section it's worth keeping in mind
+    what problems <em>we</em> are trying to solve for BFD.</li>
+<li>Problems we don't have:<ul>
+<li>We can <em>invent</em> an event streaming problem for ourselves but we don't intrinsically <em>need</em> to apply that technique.</li>
+<li>We don't have much in the way of data processing to do.</li>
+<li>We don't need an analytics platform.</li>
+</ul>
+</li>
+<li>Problems we do have:<ul>
+<li>We're doing a massive amount of very simple ETL under modest time constraints.</li>
+<li>Actually, it's mostly "EL" not "ETL": we don't want to apply many data transformations at load time.
+  If we had to reload/reprocess all records every time we changed our mapping we would be in a very bad place.</li>
+</ul>
+</li>
+<li>It's also worth keeping in mind the scale of our systems:
+  We have terabytes of data but <strong>not</strong> petabytes.
+  Billions of records but <strong>not</strong> trillions.
+  We're not really a big data system, as such.
+  Instead, BFD is just a data-lake-sized online database, heavily optimized to support a limited number of query types.</li>
+</ul>
+<p>Here are my notes from the article's discussion on HN:</p>
+<ul>
+<li>Lots of mentions of Snowflake, though that doesn't seem germane to the problems we're looking at here.
+  (Worth considering later, though.)</li>
+<li><a href="https://www.getdbt.com/">dbt</a> sounds interesting, but again: we don't want to do much transformation prior to load.<ul>
+<li>If we ever wanted to dual-purpose the DB as an analytics platform, I think we should look at dbt.</li>
+</ul>
+</li>
+<li><a href="https://fivetran.com/">Fivetran</a> sounds interesting, but appears to not offer a hosted option,
+    and is thus a non-starter, unless/until they get FedRAMP'd.</li>
+<li>It references this,
+    <a href="https://a16z.com/2020/10/15/the-emerging-architectures-for-modern-data-infrastructure/">Emerging Architectures for Modern Data Infrastructure</a>,
+    which is interesting in general, but also has the a useful new (to me) acronym:
+    "ELT" for "extract, then load, then transform" and calls it out as being less brittle than traditional ETL.
+  Nice term for capturing what we do in BFD.</li>
+<li>A comment mentioned "Data Vault", which turned out to be an interesting read:
+    <a href="https://en.wikipedia.org/wiki/Data_vault_modeling">Data vault modeling</a>.
+  I'm not sold on the suggested storage structure, but the underlying philosophy makes sense.</li>
+<li>These two comments ring true: <a href="https://news.ycombinator.com/item?id=25733701">https://news.ycombinator.com/item?id=25733701</a>
+    and <a href="https://news.ycombinator.com/item?id=25732147">https://news.ycombinator.com/item?id=25732147</a>.
+  Developers uncomfortable with SQL should be encouraged and supported to "push through" that.</li>
+<li><a href="https://aws.amazon.com/step-functions/">AWS Step Functions</a> appear to be the preferred approach
+    when going serverless.</li>
+<li>As a complete sidenote, I wandered across this very useful article while reading this discussion and related items:
+    <a href="https://medium.com/bluecore-engineering/were-all-using-airflow-wrong-and-how-to-fix-it-a56f14cb0753">We’re All Using Airflow Wrong and How to Fix It</a>.
+  It makes the case that Airflow's built-in operators are buggy and hard to debug
+    and argues for instead using just the Kubernetes operator to run custom code for every task.
+  It's a compelling argument, especially since we could just as easily substitute in Docker, instead.</li>
+</ul>
+<h2 id="future-possibilities">Future Possibilities<a class="headerlink" href="#future-possibilities" title="Permanent link">&para;</a></h2>
+<p>TODO</p>
+<p>Think about what the natural extension and evolution of your proposal would be and how it would affect the language and project as a whole in a holistic way.
+Try to use this section as a tool to more fully consider all possible interactions with the project and language in your proposal.
+Also consider how the this all fits into the roadmap for the project and of the relevant sub-team.</p>
+<p>This is also a good place to "dump ideas", if they are out of scope for the RFC you are writing but otherwise related.</p>
+<p>If you have tried and cannot think of any future possibilities, you may simply state that you cannot think of anything.</p>
+<p>Note that having something written down in the future-possibilities section is not a reason to accept the current or a future RFC;
+  such notes should be in the section on motivation or rationale in this or subsequent RFCs.
+The section merely provides additional information.</p>
+<h2 id="addendums">Addendums<a class="headerlink" href="#addendums" title="Permanent link">&para;</a></h2>
+<p>TODO</p>
+<p>The following addendums are required reading before voting on this proposal:</p>
+<ul>
+<li>(none at this time)</li>
+</ul>
+<p>Please note that some of these addendums may be encrypted. If you are unable to decrypt the files, you are not authorized to vote on this proposal.</p>
+
+
+
+  
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.sections", "navigation.indexes", "header.autohide", "navigation.tracking"], "search": "../../assets/javascripts/workers/search.e5c33ebb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.ba449ae6.min.js"></script>
+      
+    
+  </body>
+</html>

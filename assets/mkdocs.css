@@ -1,0 +1,35 @@
+/* hide the big prev/next nav footer
+.md-footer__inner { display: none } */
+
+/* hide the superflous nav title */
+.md-nav__title { display: none }
+
+/* make home bold */
+body > div.md-container > main > div > div.md-sidebar.md-sidebar--primary > div > div > nav > ul > li:nth-child(1) > a {
+  font-weight: bold;
+}
+
+/* .md-typeset h1 {
+  font-weight: bolder;
+  text-transform: uppercase;
+} */
+/*
+.md-typeset h2 {
+  font-size: 1.3em;
+  font-weight: 750;
+  very dark grey;
+*/
+
+/* .md-typeset h3 {
+  font-size: 1.1em;
+  font-weight: 650;
+} */
+
+/* .md-typeset h4 {
+  font-size: 1em;
+  font-weight: 450;
+} */
+
+/* .md-typeset h5 {
+  color: rgb(95, 94, 94);
+} */

@@ -1,0 +1,2632 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://keithdadkins.github.io/beneficiary-fhir-data/rfcs/implemented/0015-centralized-configuration-management.html">
+      
+      
+        <link rel="prev" href="0013-bfd-server-startup-check.html">
+      
+      
+        <link rel="next" href="BFDv2/0001-bfd-v2-coverage.html">
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.3">
+    
+    
+      
+        <title>0015-centralized-configuration-management - BFD</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6b71719e.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.2505c338.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/mkdocs.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="lightmode" data-md-color-primary="light-blue" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#rfc-proposal" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../index.html" title="BFD" class="md-header__button md-logo" aria-label="BFD" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BFD
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              0015-centralized-configuration-management
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="lightmode" data-md-color-primary="light-blue" data-md-color-accent="indigo"  aria-label="dark"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="dark" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+            </label>
+          
+        
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/keithdadkins/beneficiary-fhir-data" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    beneficiary-fhir-data
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../index.html" title="BFD" class="md-nav__button md-logo" aria-label="BFD" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    BFD
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/keithdadkins/beneficiary-fhir-data" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    beneficiary-fhir-data
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../index.html" class="md-nav__link">
+        Welcome
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LICENSE.html" class="md-nav__link">
+        License
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_3" tabindex="0" aria-expanded="false">
+          Api
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Api" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Api
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/request-audit-headers.html" class="md-nav__link">
+        BFD Audit Headers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/request-options.html" class="md-nav__link">
+        BFD Request Options
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../changelog/index.html">Changelog</a>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Changelog" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Changelog
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+        
+          
+            
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../contributing/index.html">Contributing</a>
+          
+            <label for="__nav_5">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Contributing" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Contributing
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5_2" type="checkbox" id="__nav_5_2" >
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../contributing/style-guide/index.html">Style guide</a>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Style guide" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_2">
+          <span class="md-nav__icon md-icon"></span>
+          Style guide
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+        
+          
+            
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../insights/index.html">Insights</a>
+          
+            <label for="__nav_6">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Insights" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Insights
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/ab2d_firehose.html" class="md-nav__link">
+        AB2D Firehose Setup
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/bb2_notes.html" class="md-nav__link">
+        BB2 Project information
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/core_tables.html" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/data_organization.html" class="md-nav__link">
+        Organization
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/lessons_learned.html" class="md-nav__link">
+        Lessons Learned
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/onboarding.html" class="md-nav__link">
+        Onboarding
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/security.html" class="md-nav__link">
+        Security Model
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/terraform.html" class="md-nav__link">
+        Terraform Scripts
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../insights/typical_workflow.html" class="md-nav__link">
+        Example Workflow
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7" type="checkbox" id="__nav_7" checked>
+      
+      
+        
+          
+            
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../index.html">Rfcs</a>
+          
+            <label for="__nav_7">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Rfcs" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          Rfcs
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_2" type="checkbox" id="__nav_7_2" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_7_2" tabindex="0" aria-expanded="false">
+          Deferred
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Deferred" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_2">
+          <span class="md-nav__icon md-icon"></span>
+          Deferred
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deferred/0008-partial-backfill-ccw.html" class="md-nav__link">
+        0008-partial-backfill-ccw
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deferred/0012-rda-claims-jsonb-DEFERRED.html" class="md-nav__link">
+        0012-rda-claims-jsonb
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deferred/0016-cursor-paging.html" class="md-nav__link">
+        0016-cursor-paging.md
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deferred/0017-filtering.html" class="md-nav__link">
+        0007-filtering-fields
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_3" type="checkbox" id="__nav_7_3" >
+      
+      
+        
+          
+            
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../howto/index.html">Howto</a>
+          
+            <label for="__nav_7_3">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Howto" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_3">
+          <span class="md-nav__icon md-icon"></span>
+          Howto
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../howto/template.html" class="md-nav__link">
+        rfc-template
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_4" type="checkbox" id="__nav_7_4" checked>
+      
+      
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_7_4" tabindex="0" aria-expanded="true">
+          Implemented
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Implemented" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_4">
+          <span class="md-nav__icon md-icon"></span>
+          Implemented
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0000-jboss-replacement.html" class="md-nav__link">
+        0000-bye-bye-jboss
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0001-beneficiary-fhir-server-rfc-process-v1.html" class="md-nav__link">
+        0001-beneficiary-fhir-server-rfc-process-v1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0002-monorepo.html" class="md-nav__link">
+        0002-monorepo
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0004-since-parameter.html" class="md-nav__link">
+        0004-since-parameter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0005-mbi-search.html" class="md-nav__link">
+        0005-mbi-search
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0007-service-date-filter.html" class="md-nav__link">
+        0007-service-date-filter
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0009-pipeline-orchestration-baby-steps.html" class="md-nav__link">
+        0009-pipeline-orchestration-baby-steps
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0011-separate-flyway-from-pipeline.html" class="md-nav__link">
+        0011-separate-flyway-from-pipeline
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="0013-bfd-server-startup-check.html" class="md-nav__link">
+        0013-bfd-server-startup-check
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          0015-centralized-configuration-management
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="0015-centralized-configuration-management.html" class="md-nav__link md-nav__link--active">
+        0015-centralized-configuration-management
+      </a>
+      
+        
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#status" class="md-nav__link">
+    Status
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    Table of Contents
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#motivation" class="md-nav__link">
+    Motivation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#proposed-solution" class="md-nav__link">
+    Proposed Solution
+  </a>
+  
+    <nav class="md-nav" aria-label="Proposed Solution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameter-formatting" class="md-nav__link">
+    Parameter Formatting
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#project-scope" class="md-nav__link">
+    Project Scope
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#environment-scope" class="md-nav__link">
+    Environment Scope
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#group-scope" class="md-nav__link">
+    Group Scope
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sensitivity-scope-and-the-leaf-node" class="md-nav__link">
+    Sensitivity Scope and the Leaf Node
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proposed-solution-detailed-design" class="md-nav__link">
+    Proposed Solution: Detailed Design
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proposed-solution-unresolved-questions" class="md-nav__link">
+    Proposed Solution: Unresolved Questions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proposed-solution-drawbacks" class="md-nav__link">
+    Proposed Solution: Drawbacks
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proposed-solution-notable-alternatives" class="md-nav__link">
+    Proposed Solution: Notable Alternatives
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prior-art" class="md-nav__link">
+    Prior Art
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#future-possibilities" class="md-nav__link">
+    Future Possibilities
+  </a>
+  
+    <nav class="md-nav" aria-label="Future Possibilities">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ergonomic-encryption-mechanism" class="md-nav__link">
+    Ergonomic Encryption Mechanism
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#future-automation-opportunities" class="md-nav__link">
+    Future Automation Opportunities
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#addendums" class="md-nav__link">
+    Addendums
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_4_11" type="checkbox" id="__nav_7_4_11" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_7_4_11" tabindex="0" aria-expanded="false">
+          BFDv2
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="BFDv2" data-md-level="3">
+        <label class="md-nav__title" for="__nav_7_4_11">
+          <span class="md-nav__icon md-icon"></span>
+          BFDv2
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="BFDv2/0001-bfd-v2-coverage.html" class="md-nav__link">
+        RFC Proposal
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="BFDv2/0001-bfd-v2-patient.html" class="md-nav__link">
+        RFC Proposal
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="BFDv2/BFDv2%20RFC.html" class="md-nav__link">
+        RFC Proposal
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_5" type="checkbox" id="__nav_7_5" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_7_5" tabindex="0" aria-expanded="false">
+          Proposed
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Proposed" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_5">
+          <span class="md-nav__icon md-icon"></span>
+          Proposed
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../proposed/0010-custom-system-uris.html" class="md-nav__link">
+        0010-custom-system-uris
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../proposed/0013-synthea-future-claims-and-automation.html" class="md-nav__link">
+        0013-Synthea-future-claims-and-automation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../proposed/0014-dsl-driven-rda-code-generation.html" class="md-nav__link">
+        0014-dsl-driven-rda-code-generation
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_6" type="checkbox" id="__nav_7_6" >
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_7_6" tabindex="0" aria-expanded="false">
+          Rejected
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Rejected" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_6">
+          <span class="md-nav__icon md-icon"></span>
+          Rejected
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rejected/0006-or-condition.html" class="md-nav__link">
+        0006-or-condition
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
+      
+      
+        
+          
+            
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../runbooks/index.html">Runbooks</a>
+          
+            <label for="__nav_8">
+              <span class="md-nav__icon md-icon"></span>
+            </label>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Runbooks" data-md-level="1">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          Runbooks
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8_2" type="checkbox" id="__nav_8_2" >
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_2" tabindex="0" aria-expanded="false">
+          Bfd db migrator
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Bfd db migrator" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_2">
+          <span class="md-nav__icon md-icon"></span>
+          Bfd db migrator
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/bfd-db-migrator/recover-from-failures.html" class="md-nav__link">
+        Recover from Failures
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8_3" type="checkbox" id="__nav_8_3" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_3" tabindex="0" aria-expanded="false">
+          Bfd insights
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Bfd insights" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_3">
+          <span class="md-nav__icon md-icon"></span>
+          Bfd insights
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/bfd-insights/firehose-failures.html" class="md-nav__link">
+        How to Investigate Firehose Ingestion Processing Failures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/bfd-insights/load-cw-logs.html" class="md-nav__link">
+        Load cw logs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/bfd-insights/new-quicksight-dashboards.html" class="md-nav__link">
+        How to Create BFD Insights QuickSight Dashboards
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8_4" type="checkbox" id="__nav_8_4" >
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_4" tabindex="0" aria-expanded="false">
+          Bfd pipeline
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Bfd pipeline" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_4">
+          <span class="md-nav__icon md-icon"></span>
+          Bfd pipeline
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/bfd-pipeline/rerun-failed-pipeline-load.html" class="md-nav__link">
+        How to Re-run a Failed BFD Pipeline Load
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8_5" type="checkbox" id="__nav_8_5" >
+      
+      
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_5" tabindex="0" aria-expanded="false">
+          Bfd server
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Bfd server" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_5">
+          <span class="md-nav__icon md-icon"></span>
+          Bfd server
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/bfd-server/recreate-regression-dashboards.html" class="md-nav__link">
+        Recreating `server-regression` QuickSight Dashboards
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/bfd-server/run-locust-tests.html" class="md-nav__link">
+        How to Run the Regression and Load Test Suites
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8_6" type="checkbox" id="__nav_8_6" >
+      
+      
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_6" tabindex="0" aria-expanded="false">
+          Snyk
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Snyk" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_6">
+          <span class="md-nav__icon md-icon"></span>
+          Snyk
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/snyk/ignore-findings.html" class="md-nav__link">
+        Ignore findings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/snyk/resolve-snyk-bot-prs.html" class="md-nav__link">
+        Resolve snyk bot prs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/snyk/resolve-snyk-report-findings.html" class="md-nav__link">
+        Resolve snyk report findings
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_8_7" type="checkbox" id="__nav_8_7" >
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_7" tabindex="0" aria-expanded="false">
+          Synthea
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Synthea" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_7">
+          <span class="md-nav__icon md-icon"></span>
+          Synthea
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/synthea/run-automation.html" class="md-nav__link">
+        How to Run Synthea Automation
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_9" type="checkbox" id="__nav_9" >
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../tags/index.html">Tags</a>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Tags" data-md-level="1">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          Tags
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#status" class="md-nav__link">
+    Status
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    Table of Contents
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#motivation" class="md-nav__link">
+    Motivation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#proposed-solution" class="md-nav__link">
+    Proposed Solution
+  </a>
+  
+    <nav class="md-nav" aria-label="Proposed Solution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parameter-formatting" class="md-nav__link">
+    Parameter Formatting
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#project-scope" class="md-nav__link">
+    Project Scope
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#environment-scope" class="md-nav__link">
+    Environment Scope
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#group-scope" class="md-nav__link">
+    Group Scope
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sensitivity-scope-and-the-leaf-node" class="md-nav__link">
+    Sensitivity Scope and the Leaf Node
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proposed-solution-detailed-design" class="md-nav__link">
+    Proposed Solution: Detailed Design
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proposed-solution-unresolved-questions" class="md-nav__link">
+    Proposed Solution: Unresolved Questions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proposed-solution-drawbacks" class="md-nav__link">
+    Proposed Solution: Drawbacks
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proposed-solution-notable-alternatives" class="md-nav__link">
+    Proposed Solution: Notable Alternatives
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prior-art" class="md-nav__link">
+    Prior Art
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#future-possibilities" class="md-nav__link">
+    Future Possibilities
+  </a>
+  
+    <nav class="md-nav" aria-label="Future Possibilities">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ergonomic-encryption-mechanism" class="md-nav__link">
+    Ergonomic Encryption Mechanism
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#future-automation-opportunities" class="md-nav__link">
+    Future Automation Opportunities
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#addendums" class="md-nav__link">
+    Addendums
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+  
+  
+
+
+  <nav class="md-tags" hidden>
+    
+      
+      
+        <a href="../../tags/index.html#rfcs" class="md-tag">RFC's</a>
+      
+    
+  </nav>
+
+
+
+  
+  
+
+
+
+<h1 id="rfc-proposal">RFC Proposal<a class="headerlink" href="#rfc-proposal" title="Permanent link">&para;</a></h1>
+<ul>
+<li>RFC Proposal ID: <code>0015-centralized-configuration-management</code></li>
+<li>Start Date: 2022-07-05</li>
+<li>RFC PR: <a href="https://github.com/CMSgov/beneficiary-fhir-data/pull/1193">beneficiary-fhir-data/rfcs#0015</a></li>
+<li>JIRA Ticket(s):<ul>
+<li><a href="https://jira.cms.gov/browse/BFD-1641">BFD-1641</a></li>
+</ul>
+</li>
+</ul>
+<p>This RFC proposes BFD's adoption of:
+- AWS Systems Manager (SSM) Parameter Store as the primary method for managing environment and system-specific configuration
+- A set of conventions to dramatically improve the strategy for storing and supplying configuration to BFD services and supporting systems</p>
+<h2 id="status">Status<a class="headerlink" href="#status" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Status: Approved</li>
+<li>Implementation JIRA Ticket(s):<ul>
+<li><a href="https://jira.cms.gov/browse/BFD-1639">BFD-1639</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="table-of-contents">Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="#rfc-proposal">RFC Proposal</a></li>
+<li><a href="#status">Status</a></li>
+<li><a href="#table-of-contents">Table of Contents</a></li>
+<li><a href="#motivation">Motivation</a></li>
+<li><a href="#proposed-solution">Proposed Solution</a><ul>
+<li><a href="#parameter-formatting">Parameter Formatting</a></li>
+<li><a href="#project-scope">Project Scope</a></li>
+<li><a href="#conventions">Conventions</a></li>
+<li><a href="#environment-scope">Environment Scope</a></li>
+<li><a href="#conventions-1">Conventions</a></li>
+<li><a href="#examples">Examples</a></li>
+<li><a href="#group-scope">Group Scope</a></li>
+<li><a href="#conventions-2">Conventions</a></li>
+<li><a href="#examples-1">Examples</a></li>
+<li><a href="#sensitivity-scope-and-the-leaf-node">Sensitivity Scope and the Leaf Node</a></li>
+<li><a href="#conventions-3">Conventions</a></li>
+<li><a href="#examples-2">Examples</a></li>
+<li><a href="#proposed-solution-detailed-design">Proposed Solution: Detailed Design</a></li>
+<li><a href="#base-environment-definitions-in-terraform">Base Environment Definitions in Terraform</a></li>
+<li><a href="#access-controls">Access Controls</a><ul>
+<li><a href="#aws-ssm-access">AWS SSM Access</a></li>
+<li><a href="#kms-access">KMS Access</a></li>
+<li><a href="#terraform-tfstate">Terraform tfstate</a></li>
+</ul>
+</li>
+<li><a href="#adoption-and-parameter-precedence">Adoption and Parameter Precedence</a></li>
+<li><a href="#proposed-solution-unresolved-questions">Proposed Solution: Unresolved Questions</a></li>
+<li><a href="#proposed-solution-drawbacks">Proposed Solution: Drawbacks</a></li>
+<li><a href="#proposed-solution-notable-alternatives">Proposed Solution: Notable Alternatives</a></li>
+<li><a href="#aws-ssm-appconfig">AWS SSM AppConfig</a></li>
+<li><a href="#hashicorp-vaultconsul">HashiCorp Vault+Consul</a></li>
+</ul>
+</li>
+<li><a href="#prior-art">Prior Art</a></li>
+<li><a href="#future-possibilities">Future Possibilities</a><ul>
+<li><a href="#ergonomic-encryption-mechanism">Ergonomic Encryption Mechanism</a></li>
+<li><a href="#future-automation-opportunities">Future Automation Opportunities</a></li>
+</ul>
+</li>
+<li><a href="#addendums">Addendums</a></li>
+</ul>
+<h2 id="motivation">Motivation<a class="headerlink" href="#motivation" title="Permanent link">&para;</a></h2>
+<p>Despite BFD's relatively modest infrastructure footprint, the existing configuration strategy is complex.
+How, where, and <em>when</em> configuration is used informs us of the tools and locations of supporting code that may need to be updated to accommodate a change.
+Supported use-cases like renaming or adding new configuration may require one or more updates to the following locations:</p>
+<ol>
+<li>packer definitions</li>
+<li>sensitive ansible variables protected with <code>ansible-vault</code></li>
+<li>nonsensitive ansible variables in plain-text</li>
+<li>ansible build playbooks</li>
+<li>ansible launch playbooks</li>
+<li>ansible role variables</li>
+<li>ansible role definitions</li>
+<li>sensitive terraform input variables stored as tfvars files in <code>keybase</code></li>
+<li>nonsensitive terraform input variables passed between Jenkins job stages</li>
+<li>terraform templated cloud-init user data definitions</li>
+<li>terraform module definitions</li>
+<li>nonsensitive Jenkins job definitions stored in Jenkins</li>
+<li>nonsensitive Jenkins job definitions stored in various Jenkinsfiles</li>
+<li>sensitive Jenkins definitions stored with the Jenkins credential plugin</li>
+</ol>
+<p>The ability to supply configuration to each tool should be an enabling feature.
+Instead, the sprawling configuration has historically discouraged us from adopting worthy changes, contributed to operators' inadvertent addition of errors, and represents an unfriendly introduction to new contributors who wish to make what would otherwise be simple updates to BFD configuration.</p>
+<h2 id="proposed-solution">Proposed Solution<a class="headerlink" href="#proposed-solution" title="Permanent link">&para;</a></h2>
+<p>AWS Systems Manager (SSM) Parameter Store is a hierarchical, key-value data store typically used for centrally managed sensitive and nonsensitive configuration data.
+In addition to the AWS Console, the Parameter Store is accessed through the Parameter Store API, and can be even more accessible through various tools, including:
+- the AWS CLI via <code>aws ssm</code> (<a href="https://docs.aws.amazon.com/cli/latest/reference/ssm/get-parameter.html">single parameter</a> and <a href="https://docs.aws.amazon.com/cli/latest/reference/ssm/get-parameters-by-path.html">path lookups</a>) sub-command
+- terraform resources and data sources (<a href="https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ssm_parameter">single parameter</a> and <a href="https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ssm_parameters_by_path">path lookups</a>) with the aws provider
+- ansible workflows through the <a href="https://docs.ansible.com/ansible/2.9/plugins/lookup/aws_ssm.html"><code>aws_ssm</code> lookup plugin</a></p>
+<h3 id="parameter-formatting">Parameter Formatting<a class="headerlink" href="#parameter-formatting" title="Permanent link">&para;</a></h3>
+<p>We take advantage of Parameter Store's hierarchical nature by formatting the hierarchies into 4-tuple prefixes, culminating in a named <em>leaf</em> node. Together, the 4-tuple prefix and leaf make up a single parameter: <code>/${project}/${env}/${group}/${sensitivity}/${leaf}</code>.
+Each member of the tuple represents a scoped level or tier providing increasingly specific context for BFD services and supporting systems.
+The scopes lend themselves well to crafting simple queries and tailored access policies that target the necessary hierarchies of configuration data only.
+The primary use cases for these parameters include infrastructure-as-code, automated-configuration-management, and release-management strategies in <code>terraform</code>, <code>ansible</code>, and <code>jenkins</code> tooling, respectively.
+This proposed format <strong>does not</strong> apply to other potential Parameter Store use-cases.</p>
+<h3 id="project-scope">Project Scope<a class="headerlink" href="#project-scope" title="Permanent link">&para;</a></h3>
+<p>Project scope (<code>${project}</code>) is the <em>parameter name root</em>. In these hierarchies, this is <em>practically</em> an invariant that resolves to our project: <code>bfd</code>.
+Nevertheless, this is necessary to separate bfd-specific resources from other potential hierarchies managed by external teams supporting wider CMS projects.</p>
+<h4 id="conventions">Conventions<a class="headerlink" href="#conventions" title="Permanent link">&para;</a></h4>
+<ul>
+<li>No leaves are allowed within this scope, e.g. <code>/bfd/foo</code> is illegal</li>
+<li>Must resolve to <code>bfd</code></li>
+</ul>
+<h3 id="environment-scope">Environment Scope<a class="headerlink" href="#environment-scope" title="Permanent link">&para;</a></h3>
+<p>Environment scope (<code>${env}</code>) includes typical Software Development Life Cycle (SDLC) Environments like production (<code>prod</code>), those used along the <em>path-to-production</em> like <code>test</code> and <code>prod-sbx</code>, as well as higher order environments that fall outside of the typical BFD release process, i.e. <code>mgmt</code>.
+This fundamental scope separates production hierarchies from non-production ones and facilitates simple, least-privilege role-based access controls for developers and services.</p>
+<h4 id="conventions_1">Conventions<a class="headerlink" href="#conventions_1" title="Permanent link">&para;</a></h4>
+<ul>
+<li>No leaf nodes are allowed within this scope, e.g. <code>/bfd/prod/foo</code> is illegal</li>
+<li>Must be one of <code>mgmt</code>, <code>prod</code>, <code>prod-sbx</code>, or <code>test</code></li>
+</ul>
+<h4 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h4>
+<ul>
+<li><code>/bfd/mgmt/</code></li>
+<li><code>/bfd/prod/</code></li>
+<li><code>/bfd/prod-sbx/</code></li>
+<li><code>/bfd/test/</code></li>
+</ul>
+<h3 id="group-scope">Group Scope<a class="headerlink" href="#group-scope" title="Permanent link">&para;</a></h3>
+<p>Group scope (<code>${group}</code>) largely provides the service-level configuration. The more inclusive <em>group</em> concept is used instead of <em>service</em> because hierarchies may include scopes that don't map to any one service.</p>
+<h4 id="conventions_2">Conventions<a class="headerlink" href="#conventions_2" title="Permanent link">&para;</a></h4>
+<ul>
+<li>No leaf nodes are allowed within this scope, e.g. <code>/bfd/test/common/foo</code> is illegal</li>
+<li>Must be one of <code>jenkins</code>, <code>common</code>, <code>migrator</code>, <code>pipeline</code>, or <code>server</code></li>
+</ul>
+<h4 id="examples_1">Examples<a class="headerlink" href="#examples_1" title="Permanent link">&para;</a></h4>
+<ul>
+<li><code>/bfd/mgmt/jenkins/</code></li>
+<li><code>/bfd/prod-sbx/migrator/</code></li>
+<li><code>/bfd/prod/server/</code></li>
+<li><code>/bfd/test/common/</code></li>
+</ul>
+<h3 id="sensitivity-scope-and-the-leaf-node">Sensitivity Scope and the Leaf Node<a class="headerlink" href="#sensitivity-scope-and-the-leaf-node" title="Permanent link">&para;</a></h3>
+<p>Sensitivity scope (<code>${sensitivity}</code>) defines whether a leaf node (<code>${leaf}</code>) in the hierarchy is stored as an ordinary <code>String</code> or encrypted with AWS KMS as a <code>SecureString</code>.
+Explicit inclusion of this scope keeps secrets handling and access obvious and simple.</p>
+<p>The leaf node is the final member of the hierarchy and maps to the configuration value.</p>
+<h4 id="conventions_3">Conventions<a class="headerlink" href="#conventions_3" title="Permanent link">&para;</a></h4>
+<ul>
+<li><code>${leaf}</code> must be unique per hierarchy, formatted as lower_snake_case, and generally be translatable/consumable as posix shell variable</li>
+<li>Sensitive parameters must be stored under a <code>sensitive</code> hierarchy in order to be encrypted as appropriate</li>
+<li>Nonsensitive parameters must be stored under the <code>nonsensitive</code> hierarchy to remain in plain-text</li>
+</ul>
+<h4 id="examples_2">Examples<a class="headerlink" href="#examples_2" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Sensitive Parameters</li>
+<li><code>/bfd/mgmt/jenkins/sensitive/bfd_aws_account_id</code></li>
+<li><code>/bfd/test/common/sensitive/rds_master_password</code></li>
+<li>Nonsensitive Parameters</li>
+<li><code>/bfd/test/common/nonsensitive/rds_cluster_id</code></li>
+<li><code>/bfd/prod-sbx/migrator/nonsensitive/instance_type</code></li>
+<li><code>/bfd/test/pipeline/nonsensitive/rda_job_enabled</code></li>
+<li><code>/bfd/prod/server/nonsensitive/new_relic_app_name</code></li>
+</ul>
+<h3 id="proposed-solution-detailed-design">Proposed Solution: Detailed Design<a class="headerlink" href="#proposed-solution-detailed-design" title="Permanent link">&para;</a></h3>
+<h4 id="base-environment-definitions-in-terraform">Base Environment Definitions in Terraform<a class="headerlink" href="#base-environment-definitions-in-terraform" title="Permanent link">&para;</a></h4>
+<p>The SDLC environment hierarchies are managed by a terraform module responsible for the base definition of each environment
+Environments that fall outside of the typical BFD SDLC process are managed similarly, but because the configuration in e.g. the <code>mgmt</code> environment has a wider, more global impact, values defined <em>there</em> may be consumed here to inform the deployment process
+Necessarily, they're managed externally to this process.</p>
+<p>The parameters are organized in two different, ultimately yaml-encoded files.
+Similar to the existing <code>ansible-vault</code> strategy, each hierarchy has encrypted and plaint-text variants for sensitive and nonsensitive values, respectively.
+Each file is named for its environment under a <code>./values</code> directory.
+The parameters are encoded as key:value mappings of fully-qualified SSM Parameter Name keys to Parameter values.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># from notional ./values/test.yaml</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nn">---</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nt">/bfd/test/common/nonsensitive/env_name_std</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># [..snipped..]</span>
+</code></pre></div>
+<p>The terraform-workspace enabled module derives the environment name from the workspace.
+For the <code>test</code> environment and <code>test</code> workspace, terraform finds <code>.values/test.eyaml</code> and <code>.values/test.yaml</code> for sensitive and nonsensitive values, respectively.</p>
+<p>For nonsensitive values exclusively stored in <code>.values/test.yaml</code>, terraform decodes the yaml and produces SSM Parameters.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a># from notional ./main.tf
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a># [..snipped..]
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>locals {
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>  env          = terraform.workspace
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>  nonsensitive = yamldecode(file(&quot;${path.module}/values/${local.env}.yaml&quot;)
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a># [..snipped..]
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>}
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>resource &quot;aws_ssm_parameter&quot; &quot;nonsensitive&quot; {
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>  for_each = local.nonsensitive
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>  name     = each.key
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>  type     = &quot;String&quot;
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>  value    = each.value
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>}
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a># [..snipped..]
+</code></pre></div>
+<p>For sensitive values exclusively stored in <code>.values/test.eyaml</code>, terraform relies on a script stored in <code>./scripts/read-and-decrypt-eyaml.sh</code> for in-process decryption.
+In turn, this script is used by an <a href="https://registry.terraform.io/providers/hashicorp/external/latest/docs/data-sources/data_source">External Provider</a> data source <code>data.external.sensitive</code>.</p>
+<p>Of course, the implementation details of <code>read-and-decrypt-eyaml.sh</code> depend on the encryption mechanism.
+For now, a decryption script that uses the existing <code>ansible-vault</code> strategy is not complicated, but it's not immediately obvious, either.
+The <code>read-and-decrypt-eyaml.sh</code> can be broken down into two steps:</p>
+<ol>
+<li>decrypt using <code>ansible-vault decrypt --output -</code> to pass data process-to-process</li>
+<li>format the yaml as json for the external provider by piping data to <code>yq eval -o=j</code></li>
+</ol>
+<p>Terraform iterates over this well-formatted sensitive data as <code>data.external.sensitive.result</code> and creates the appropriate SSM Parameters.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a># from notional ./main.tf
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a># [..snipped..]
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>data &quot;external&quot; &quot;sensitive&quot; {
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>  program = [&quot;${path.module}/scripts/read-and-decrypt-eyaml.sh, &quot;${localenv}.eyaml&quot;]
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>}
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>resource &quot;aws_ssm_parameter&quot; &quot;sensitive&quot; {
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>  for_each = data.external.sensitive.result
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>  type     = &quot;SecureString&quot;
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>  name     = each.key
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>  value    = each.value
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>}
+</code></pre></div>
+<p>The process for introducing or updating values is mainly CI-driven, with Jenkins supporting a new stage responsible for defining <em>or</em> redefining the base environment.
+The nonsensitive value updates are intuitive, requiring adjustments to the values in-place under plain-text yaml files.
+While <code>ansible-vault</code> remains the encryption mechanism, updating encrypted values remains a familiar process of fetching the encryption password, decrypting via e.g. <code>ansible edit</code>, and making necessary updates.</p>
+<p>Though a CI process is involved, the terraform module cooperates with some temporary, exceptional use-cases, such as those involving extra-terraform or manual, out-of-band changes.
+For nonsensitive values, this module supports temporary overrides and additional configuration.
+Further, this uses an <code>aws.ssm_parameters_by_path</code> data source to query nonsensitive hierarchies for the given environment.
+In so doing, it captures the state of the all parameters in the hierarchy for visibility.
+Together, the queried SSM hierarchies, environmental yaml, and any locally-defined overrides are merged to create a simple low, medium, high precedence, respectively.</p>
+<p>The happy path is depicted in the following sequence diagram:</p>
+<p><img alt="happy path ssm deployments with jenkins" src="./resources/0015-proposed-ssm-deployment.svg" /></p>
+<h4 id="access-controls">Access Controls<a class="headerlink" href="#access-controls" title="Permanent link">&para;</a></h4>
+<p>This solution manages both sensitive and nonsensitive values. This has a few areas concerning access control:
+1. AWS SSM Access
+  - General __write_ access to AWS SSM Parameter Store
+  - Read access to sensitive values under <code>arn:aws:ssm:us-east-1:${bfd_account_id}:parameter/bfd/*/*/sensitive/*</code>
+2. AWS Key Management Service (KMS) Access
+  - policies for encryption and parameter store write access
+  - policies for decryption and parameter store read access
+3. AWS S3 Access
+  - Specific access to terraform tfstate file under <code>s3://bfd-tf-state/env:/*/services/base/</code></p>
+<h5 id="aws-ssm-access">AWS SSM Access<a class="headerlink" href="#aws-ssm-access" title="Permanent link">&para;</a></h5>
+<p>Services in each environment are able to read from the nonsensitive common hierarchy as well as their respective group hierarchy.</p>
+<table>
+<thead>
+<tr>
+<th align="left">ssm policy</th>
+<th align="left">access</th>
+<th align="left">resources</th>
+<th>usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>bfd-${env}-migrator-ssm-read</code></td>
+<td align="left">read</td>
+<td align="left"><code>/bfd/${env}/common/nonsensitive/*</code>, <code>/bfd/${env}/migrator/*</code></td>
+<td>migrator role</td>
+</tr>
+<tr>
+<td align="left"><code>bfd-${env}-pipeline-ssm-read</code></td>
+<td align="left">read</td>
+<td align="left"><code>/bfd/${env}/common/nonsensitive/*</code>, <code>/bfd/${env}/pipeline/*</code></td>
+<td>pipeline role</td>
+</tr>
+<tr>
+<td align="left"><code>bfd-${env}-server-ssm-read</code></td>
+<td align="left">read</td>
+<td align="left"><code>/bfd/${env}/common/nonsensitive/*</code>, <code>/bfd/${env}/server/*</code></td>
+<td>server role</td>
+</tr>
+</tbody>
+</table>
+<p>Jenkins and BFD Engineers have wider, cross environment access in addition to write permissions:</p>
+<table>
+<thead>
+<tr>
+<th align="left">ssm policy</th>
+<th align="left">access</th>
+<th align="left">resources</th>
+<th align="left">usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><code>bfd-mgmt-bfd-ssm-read</code></td>
+<td align="left">read</td>
+<td align="left"><code>/bfd/*</code></td>
+<td align="left">jenkins, engineers</td>
+</tr>
+<tr>
+<td align="left"><code>bfd-mgmt-bfd-ssm-write</code></td>
+<td align="left">write</td>
+<td align="left"><code>/bfd/*</code></td>
+<td align="left">jenkins, on-call engineers</td>
+</tr>
+</tbody>
+</table>
+<h5 id="kms-access">KMS Access<a class="headerlink" href="#kms-access" title="Permanent link">&para;</a></h5>
+<p>Re-iterating the above, each parameter including a sensitive value, e.g. <code>/bfd/*/*/sensitive/*</code>, is stored as a <code>SecureString</code>.
+These values are encrypted by the appropriate Customer Managed Key.
+As result, personas regularly reading <em>or</em> writing sensitive hierarchies also require decrypt and encrypt permissions to each key at issue.</p>
+<h5 id="terraform-tfstate">Terraform tfstate<a class="headerlink" href="#terraform-tfstate" title="Permanent link">&para;</a></h5>
+<p>Access not just to <em>this</em> tfstate file, used by the base environment definition, but any tfstate file that uses a sensitive value in pursuing infrastructure-level changes needs to be restricted to personas executing terraform.</p>
+<h4 id="adoption-and-parameter-precedence">Adoption and Parameter Precedence<a class="headerlink" href="#adoption-and-parameter-precedence" title="Permanent link">&para;</a></h4>
+<p>So long as the configuration strategy for a given group or service is consistent across environments, even partial adoption of AWS SSM Parameter Store provides value.
+However, to reduce confusion and potential complexity, once we've started the process of transitioning, we endeavor to complete the transition as quickly as feasible.</p>
+<p>For this solution's adoption and implementation to be most obvious, we must have a clear stance on hierarchical configuration data and precedence at the tool level.
+This is especially important for <code>ansible</code> with its <a href="https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#variable-precedence-where-should-i-put-a-variable">support for &gt;20 levels of <em>variable precedence</em></a> as well as <code>terraform</code> where we have an number of required input variables.
+The desired end state is thus: <strong>automation tools and their respective configuration data are primarily informed by values derived from AWS SSM Parameter Store.</strong>
+This entails that this configuration strategy will have the following characteristics when fully implemented:
+- <code>ansible</code>: variables files defined as defaults in roles or variable files in playbooks no longer exist
+- <code>terraform</code>: required, non-null terraform variables are used only by exception</p>
+<h3 id="proposed-solution-unresolved-questions">Proposed Solution: Unresolved Questions<a class="headerlink" href="#proposed-solution-unresolved-questions" title="Permanent link">&para;</a></h3>
+<p>N/A</p>
+<h3 id="proposed-solution-drawbacks">Proposed Solution: Drawbacks<a class="headerlink" href="#proposed-solution-drawbacks" title="Permanent link">&para;</a></h3>
+<ul>
+<li>This solution continues to rely on <code>ansible-vault</code> as the encryption mechanism, which has known limitations.</li>
+</ul>
+<h3 id="proposed-solution-notable-alternatives">Proposed Solution: Notable Alternatives<a class="headerlink" href="#proposed-solution-notable-alternatives" title="Permanent link">&para;</a></h3>
+<h4 id="aws-ssm-appconfig">AWS SSM AppConfig<a class="headerlink" href="#aws-ssm-appconfig" title="Permanent link">&para;</a></h4>
+<p><a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/appconfig.html">AWS Systems Manager AppConfig</a> could be the next logical step in managing configuration, but adoption would mean less augmentation of the existing system and more replacement.</p>
+<p>Unlike Parameter Store where resources are single, configuration values stored as parameters, AppConfig's approach is more holistic with awareness and storage of whole configurations for applications across SDLC environments.
+It provides more sophistication surrounding validating application configuration and facilitates deployments when configurations are updated.
+AppConfig is an especially helpful service when configuration is highly dynamic with liberal use of feature flags.
+However, unlike Parameter Store, adopting AppConfig is a deeper investment into AWS Systems Manager and may require changes at the application-level to fully enable AppConfig.</p>
+<h4 id="hashicorp-vaultconsul">HashiCorp Vault+Consul<a class="headerlink" href="#hashicorp-vaultconsul" title="Permanent link">&para;</a></h4>
+<p><a href="https://www.vaultproject.io/">Vault by Hashicorp</a>, is a non-starter due to the cost associated with the solution, be it self-managed or third-party management.</p>
+<p>Along with <a href="https://www.consul.io/">Consul</a> as part of <a href="https://learn.hashicorp.com/tutorials/vault/reference-architecture">the reference Architecture</a>, a Vault+Consul strategy has a number of overlapping features with the proposed strategy.
+Because it supports a variety of authentication methods and secrets engines, the combination can be fashioned to be a near drop-in replacement for AWS SSM Parameter Store.
+However, unlike AWS SSM Parameter Store, this requires additional managed infrastructure or cost for third-party management of that infrastructure.
+The effort involved in self-managing a highly-available, secure system like this may rival the complexity in managing the existing BFD systems.
+Beyond the maintenance, the infrastructure footprint would require <em>at least</em> three EC2 instances for Vault and at least three nodes for Consul.
+While hourly billing for a production-worthy, managed HashiCorp Cloud Platform offering, pricing starts at $1.578/hr.
+In both cases, unlike usage-based pricing in AWS SSM Parameter Store, we'd be paying for the infrastructure or the management of the infrastructure, regardless of utilization.</p>
+<h2 id="prior-art">Prior Art<a class="headerlink" href="#prior-art" title="Permanent link">&para;</a></h2>
+<p>N/A</p>
+<h2 id="future-possibilities">Future Possibilities<a class="headerlink" href="#future-possibilities" title="Permanent link">&para;</a></h2>
+<h3 id="ergonomic-encryption-mechanism">Ergonomic Encryption Mechanism<a class="headerlink" href="#ergonomic-encryption-mechanism" title="Permanent link">&para;</a></h3>
+<p>We might consider adopting something like <code>hiera-eyaml</code> and <code>hiera-eyaml-kms</code> for encrypting and decrypting configuration values.</p>
+<p>This solution initially proposes the continued use of the existing <code>ansible-vault</code> for securing values in VCS.
+This isn't very ergonomic and it continues to represent a maintenance burden for the team in a few different ways:
+1. values are encrypted at the file level resulting in less meaningful change set diffs
+2. encrypt and decrypt functions requires a password in plain-text
+3. password requires rotation after certain personnel changes
+4. generally, access control for an encryption password is problematic
+  - it's difficult to answer who has access to the password
+  - it's impossible to know when files have been decrypted with the password
+  - onboarding engineers requires multiple steps</p>
+<p>We turn to the wider industry in configuration management to search for similar tools that might solve the challenges that motivated <em>this</em> RFC.
+In doing so, we re-discover that <a href="https://puppet.com">Puppet</a> does.
+Through its explicit separation of configuration logic (written in puppet) from its <em>hierarchical</em> configuration data or <em><a href="https://puppet.com/docs/puppet/7/hiera.html">Hiera</a></em>, Puppet strongly support code re-use.</p>
+<p>Hiera is a complex, Puppet-specific, pluggable software system that supports a variety of merge strategies for hiera data, helping operators apply relevant configuration hierarchies from the widest global contexts to the narrowest individual node-level contexts, and anything in between.
+Historically, the separation of hiera data from puppet code meant physical separation from the puppet code base, often outside of VCS all together.
+When savvier operators used VCS (or delivery teams adopted <em>DevOps</em>), they were forced to make a choice: accept sensitive data in their repository, support an alternative strategy for incorporating sensitive values out-of-band, or adopt a hiera backend like <a href="https://github.com/crayfishx/hiera-gpg"><code>hiera-gpg</code></a> for encryption and decryption.</p>
+<p>The <code>hiera-gpg</code> strategy moved operations in a positive direction, allowing teams to secure sensitive data with GPG keys.
+However, It's not without its own challenges, some of which are the same that face BFD today with our usage of <code>ansible-vault</code>.
+For those using puppet, things have gotten better with <code>hiera-eyaml</code>.</p>
+<p><a href="https://github.com/voxpupuli/hiera-eyaml"><code>hiera-eyaml</code></a> is a <em>pluggable</em>, software system that extends Hiera.
+By default, it supports encryption using general PKCS7 certificates.
+While it's ostensibly supported by the <a href="https://voxpupuli.org/">VoxPupuli</a> Puppet Community, it's the de facto standard for handling sensitive hiera data with Puppet.
+It enjoys some degree of first-party support from Puppet with both VoxPupuli and <code>hiera-eyaml</code> appearing in Puppet's official documentation.
+For our use, <code>hiera-eyaml</code> provides a general-purpose command line interface utility that supports field-level encryption of yaml files, which makes commit diffs much more meaningful.
+What's more, the <code>hiera-eyaml-kms</code> plugin allows operators to use keys stored in AWS KMS which have role based access control provided by Key and IAM policies.</p>
+<h3 id="future-automation-opportunities">Future Automation Opportunities<a class="headerlink" href="#future-automation-opportunities" title="Permanent link">&para;</a></h3>
+<p>We could consider adopting more AWS Systems Manager services to all but eliminate the lengthy deployments that only consist of configuration changes.</p>
+<p>Today, automation in BFD infrastructure is informed by an immutable pattern, which <em>generally</em> requires deploying new artifacts for even the most basic configuration changes.
+(It's important to note that a critical aspect of this strategy isn't as immutable as advertised: logic and configuration values in ansible are <strong>not</strong> part of the artifact)</p>
+<p>This pattern has been fairly successful.
+By effectively providing a single, happy path for change management along the path-to-production, it's simple to answer the question: "How do we get that change in?"
+You just rebuild and redeploy <strong>everything</strong>.
+The resources used in pursuing this strategy are quite modest, too.
+It's really just a single, build-deploy pipeline in Jenkins that does all the things.
+We're not supporting long-living instances that need to abide by patching cadence.
+No <a href="https://docs.ansible.com/ansible/2.3/tower.html">ansible tower</a> or similar with this strategy, and the maintenance thereof.
+BFD's orchestration needs are few.</p>
+<p>However, for exceptional use-cases, especially during incident response, this can be a frustrating process.
+Again, this would have operators rebuild and redeploy <strong>everything</strong>, even for a single line, configuration change.
+The appeal of out-of-band (OOB) changes is undeniable under these circumstances.
+While this process doesn't make those exceptional OOB changes any harder, it doesn't make them any easier, either.
+- reconstructing the time line for incident response when OOB changes are involved can be difficult
+- communicating while engaged in high-touch OOB change can be distracting and lead to errors
+- operators need to ensure they avoid other automation that might undo their change
+- sometimes, we forget to encode changes made this way into the enduring automation
+- OOB changes can temporary, but may persist well after the incident is considered resolved</p>
+<p>With AWS SSM Parameter Store engaged, we may be able to optimize for the OOB updates and make them more attractive to be done in a more observable, automated way.
+Using something like AWS SSM Documents, AWS SSM Run Command, and signaling via AWS EventBridge, we could craft automated routines to run on changes to specific parameters in AWS SSM Parameter Store.
+Another area of investigation would be incorporation of AWS SSM AppConfig, potentially a logical next step in configuration management for BFD.</p>
+<h2 id="addendums">Addendums<a class="headerlink" href="#addendums" title="Permanent link">&para;</a></h2>
+<p>The following addendums are required reading before voting on this proposal:</p>
+<ul>
+<li><a href="https://confluence.cms.gov/pages/viewpage.action?spaceKey=ODI&amp;title=AWS+Naming+and+Tagging+Conventions">AWS Naming and Tagging Conventions</a></li>
+</ul>
+<p>Please note that some of these addendums may be encrypted. If you are unable to decrypt the files, you are not authorized to vote on this proposal.</p>
+
+
+
+  
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.sections", "navigation.indexes", "header.autohide", "navigation.tracking"], "search": "../../assets/javascripts/workers/search.e5c33ebb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.ba449ae6.min.js"></script>
+      
+    
+  </body>
+</html>
